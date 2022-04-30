@@ -1,0 +1,11 @@
+.env
+.env.*
+assets/*
+.idea/*
+.sh
+docker-compose.yaml
+README.md
+.git/*
+.gitignore
+vendor/*
+*.ttf

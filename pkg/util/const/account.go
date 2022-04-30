@@ -1,0 +1,5 @@
+package _const
+
+const ACC_SCHEDULER = "SCHEDULER"
+const ACC_SUPER_ADMIN = "SUPER_ADMIN"
+const ROLE_SUPER = "SUPER"

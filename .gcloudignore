@@ -1,0 +1,14 @@
+.idea/*
+vendor/*
+*.pem
+*.pub
+.env
+*.db
+logs/*
+./cloudsql
+cloud_sql_proxy
+.vscode/*
+*.md
+*.sh
+docker-compose.yaml
+*.ttf

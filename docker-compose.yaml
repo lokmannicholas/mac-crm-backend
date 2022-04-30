@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  db:
+    platform: linux/x86_64
+    image: "mysql:5.7"
+    container_name: mac-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER: "mac"
+      MYSQL_PASSWORD: "mac"
+      MYSQL_DATABASE: "mac"
+      LANG: C.UTF-8
+      TZ: Asia/HongKong
+    command:
+      [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_general_ci'
+      ]
+    networks:
+      - mac-network
+    ports:
+      - 3306:3306
+
+  mac-backend:
+    image: golang:1.13.6
+    container_name: mac-backend
+    restart: always
+    working_dir: /app
+    env_file:
+      - .env
+    networks:
+      - mac-network
+    depends_on:
+      - db
+      - logger-db
+    links:
+      - "db:mac-mysql"
+    volumes:
+      - .:/app
+    ports:
+      - 8888:8888
+    command: go run main.go
+
+networks:
+  mac-network:
+    external: true

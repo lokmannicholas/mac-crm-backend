@@ -1,0 +1,10 @@
+.idea/*
+vendor/*
+*.pem
+*.pub
+.env
+*.db
+logs/*
+./cloudsql
+cloud_sql_proxy
+.vscode/*
