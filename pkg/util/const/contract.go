@@ -1,5 +1,0 @@
-package _const
-
-const CONTRACT_ACTIVE = "ACTIVE"
-const CONTRACT_COMPLETE = "COMPLETE"
-const CONTRACT_CANCEL = "CANCEL"

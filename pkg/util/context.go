@@ -52,14 +52,3 @@ func GetCtxAccount(ctx context.Context) (*models.Account, error) {
 	}
 	return nil, errors.New("no account in context")
 }
-
-func SetCtxStorage(ctx context.Context, storage *models.Storage) context.Context {
-	return context.WithValue(ctx, "Storage", storage)
-}
-func GetCtxStorage(ctx context.Context) (*models.Storage, error) {
-	db := ctx.Value("Storage").(*models.Storage)
-	if db != nil {
-		return db, nil
-	}
-	return nil, errors.New("no storage in context")
-}

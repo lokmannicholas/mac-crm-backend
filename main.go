@@ -8,7 +8,6 @@ import (
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/managers"
 	"dmglab.com/mac-crm/pkg/service"
-	notificationcenter "dmglab.com/mac-crm/pkg/service/notificationCenter"
 	"dmglab.com/mac-crm/pkg/util"
 	_const "dmglab.com/mac-crm/pkg/util/const"
 	"gorm.io/gorm"
@@ -21,7 +20,7 @@ func init() {
 func main() {
 	conf := config.GetConfig()
 	//get db information bylogin info
-	service.SysLog.Infoln("initializing BOXAPP ....")
+	service.SysLog.Infoln("initializing Mac ....")
 	service.SysLog.Infoln(_const.INIT_LOGO)
 	collections.GetCollection().Migrate(func(tx *gorm.DB) error {
 		collections.Migration(tx)
@@ -29,9 +28,7 @@ func main() {
 		collections.InitalAccount(tx)
 		return nil
 	})
-	notificationcenter.
-		GetNotificationCenter().
-		SetNotice()
+
 	settings, err := managers.GetSettingManager().GetAll(collections.GetCollection().DB)
 	if err != nil {
 		panic(err)

@@ -12,7 +12,6 @@ import (
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
 	"dmglab.com/mac-crm/pkg/util"
-	"github.com/google/uuid"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -87,8 +86,6 @@ type ICustomerManager interface {
 	Update(ctx context.Context, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
 	GetCustomers(ctx context.Context, param *CustomerQueryParam) ([]*models.Customer, *util.Pagination, error)
 	GetCustomer(ctx context.Context, customerID string) (*models.Customer, error)
-	GetCustomerStorages(ctx context.Context, customerID string) ([]*models.Storage, error)
-	GetCustomerSingleProduct(ctx context.Context, customerID string) ([]*models.SingleProduct, error)
 	Activate(ctx context.Context, customerID string) error
 	Disable(ctx context.Context, customerID string) error
 }
@@ -231,51 +228,6 @@ func (m *CustomerManager) Disable(ctx context.Context, customerID string) error 
 		}
 		cus.SetDisable()
 		return tx.Save(cus).Error
-	})
-}
-func (m *CustomerManager) GetCustomerStorages(ctx context.Context, customerID string) ([]*models.Storage, error) {
-	var storages []*models.Storage
-	return storages, util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		type customerStorage struct {
-			OrderID uuid.UUID
-			OrderNo string
-			Item    []byte
-		}
-		items := []*customerStorage{}
-		err := tx.Select("rental_order_items.order_id, rental_orders.order_no, rental_order_items.item").Model(models.RentalOrderItem{}).
-			Joins("JOIN rental_orders on rental_orders.id = rental_order_items.order_id").
-			Where("rental_orders.customer_id = ?", customerID).Scan(&items).Error
-		if err != nil {
-			return err
-		}
-		storages = make([]*models.Storage, len(items))
-		for i, item := range items {
-
-			storage := new(models.Storage)
-			err = json.Unmarshal(item.Item, storage)
-			if err != nil {
-				return err
-			}
-			storage.OrderID = &item.OrderID
-			storage.CurrentOrder = &models.RentalOrder{
-				ID:      item.OrderID,
-				OrderNo: item.OrderNo,
-			}
-			storages[i] = storage
-		}
-		return nil
-	})
-}
-
-func (m *CustomerManager) GetCustomerSingleProduct(ctx context.Context, customerID string) ([]*models.SingleProduct, error) {
-	singleProducts := []*models.SingleProduct{}
-	return singleProducts, util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		err := tx.Model(models.SingleProduct{}).
-			Where("customer_id = ?", customerID).Find(&singleProducts).Error
-		if err != nil {
-			return err
-		}
-		return nil
 	})
 }
 func (m *CustomerManager) Activate(ctx context.Context, customerID string) error {
