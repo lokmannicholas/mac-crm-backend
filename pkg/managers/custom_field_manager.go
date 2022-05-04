@@ -17,7 +17,7 @@ type CustomFieldCreateParam struct {
 	FieldName    *MultiLangText `json:"field_name,omitempty"`
 	FieldType    string         `json:"field_type,omitempty"`
 	Remarks      string         `json:"remarks,omitempty"`
-	Options      []*FieldOption `json:"field_option,omitempty"`
+	Options      []*FieldOption `json:"field_options,omitempty"`
 }
 type CustomFieldUpdateParam struct {
 	FieldName *MultiLangText `json:"field_name,omitempty"`
@@ -25,7 +25,7 @@ type CustomFieldUpdateParam struct {
 	FieldType *string        `json:"field_type,omitempty"`
 	Remarks   *string        `json:"remarks,omitempty"`
 	Status    *string        `json:"status,omitempty"`
-	Options   []*FieldOption `json:"field_option,omitempty"`
+	Options   []*FieldOption `json:"field_options,omitempty"`
 }
 
 type CustomFieldQueryParam struct {
