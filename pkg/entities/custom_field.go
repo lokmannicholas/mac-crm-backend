@@ -12,6 +12,7 @@ type CustomField struct {
 	FieldType    string         `json:"field_type"`
 	Status       string         `json:"status"`
 	Remarks      string         `json:"remarks"`
+	Options      []*FieldOption `json:"field_options"`
 }
 
 func NewCustomFieldEntity(cus *models.CustomField) *CustomField {
@@ -27,6 +28,7 @@ func NewCustomFieldEntity(cus *models.CustomField) *CustomField {
 		UniqueKey:    cus.UniqueKey,
 		Status:       cus.Status,
 		Remarks:      cus.Remarks,
+		Options:      NewFieldOptinoListEntity(cus.Options),
 	}
 }
 

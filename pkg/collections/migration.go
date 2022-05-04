@@ -20,8 +20,8 @@ func Migration(migration *gorm.DB) {
 		util.CheckAndCreate(migration.Migrator(), &models.Role{})
 		util.CheckAndCreate(migration.Migrator(), &models.Customer{})
 		util.CheckAndCreate(migration.Migrator(), &models.Attachment{})
-
 		util.CheckAndCreate(migration.Migrator(), &models.CustomField{})
+		util.CheckAndCreate(migration.Migrator(), &models.FieldOption{})
 
 		//meta table
 		migration.AutoMigrate(&models.Customer{})
