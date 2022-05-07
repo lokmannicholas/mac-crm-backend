@@ -15,9 +15,9 @@ import (
 
 func Migration(migration *gorm.DB) {
 	if config.GetConfig().DBDriver == "MYSQL" || config.GetConfig().DBDriver == "CLOUDMYSQL" {
-		util.CheckAndCreate(migration.Migrator(), &models.Account{})
 		util.CheckAndCreate(migration.Migrator(), &models.App{})
 		util.CheckAndCreate(migration.Migrator(), &models.Role{})
+		util.CheckAndCreate(migration.Migrator(), &models.Account{})
 		util.CheckAndCreate(migration.Migrator(), &models.Customer{})
 		util.CheckAndCreate(migration.Migrator(), &models.Attachment{})
 
