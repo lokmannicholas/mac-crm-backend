@@ -8,9 +8,9 @@ import (
 )
 
 type FieldOption struct {
-	ID      uuid.UUID      `gorm:"type:varchar(36);primaryKey;" json:"id"`
-	Name    *MultiLangText `gorm:"embedded;embeddedPrefix:name_" json:"name"`
-	FieldID *uuid.UUID     `gorm:"type:varchar(36);" json:"field_id"`
+	ID      uuid.UUID  `gorm:"type:varchar(36);primaryKey;" json:"id"`
+	Name    string     `json:"name"`
+	FieldID *uuid.UUID `gorm:"type:varchar(36);" json:"field_id"`
 }
 
 func (option *FieldOption) BeforeCreate(tx *gorm.DB) (err error) {
