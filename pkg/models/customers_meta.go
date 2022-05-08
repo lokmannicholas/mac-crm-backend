@@ -18,14 +18,22 @@ func (p CustomersMeta) TableName() string {
 
 func (m *CustomersMeta) BeforeCreate(tx *gorm.DB) (err error) {
 	c := new(CustomField)
-	m.DataType = "string"
-	return tx.Where("status = ?", "Active").Where("unique_key = ?", m.Key).First(c).Error
+	err = tx.Where("status = ?", "Active").Where("unique_key = ?", m.Key).First(c).Error
+	if err != nil {
+		return err
+	}
+	m.DataType = c.FieldType
+	return
 }
 
 func (m *CustomersMeta) BeforeSave(tx *gorm.DB) (err error) {
 	c := new(CustomField)
-	m.DataType = "string"
-	return tx.Where("status = ?", "Active").Where("unique_key = ?", m.Key).First(c).Error
+	err = tx.Where("status = ?", "Active").Where("unique_key = ?", m.Key).First(c).Error
+	if err != nil {
+		return err
+	}
+	m.DataType = c.FieldType
+	return
 }
 
 func (m *CustomersMeta) AfterCreate(tx *gorm.DB) (err error) {
