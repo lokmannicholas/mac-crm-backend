@@ -6,6 +6,7 @@ import (
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
 	"dmglab.com/mac-crm/pkg/util"
+	"github.com/google/uuid"
 
 	"gorm.io/gorm"
 )
@@ -16,6 +17,7 @@ type CustomFieldCreateParam struct {
 	FieldName    *MultiLangText `json:"field_name,omitempty"`
 	FieldType    string         `json:"field_type,omitempty"`
 	Remarks      string         `json:"remarks,omitempty"`
+	Options      []*FieldOption `json:"field_options,omitempty"`
 }
 type CustomFieldUpdateParam struct {
 	FieldName *MultiLangText `json:"field_name,omitempty"`
@@ -23,6 +25,7 @@ type CustomFieldUpdateParam struct {
 	FieldType *string        `json:"field_type,omitempty"`
 	Remarks   *string        `json:"remarks,omitempty"`
 	Status    *string        `json:"status,omitempty"`
+	Options   []*FieldOption `json:"field_options,omitempty"`
 }
 
 type CustomFieldQueryParam struct {
@@ -51,11 +54,11 @@ func GetCustomFieldManager() ICustomFieldManager {
 func (m *CustomFieldManager) Create(ctx context.Context, param *CustomFieldCreateParam) (*models.CustomField, error) {
 
 	cus := &models.CustomField{
+		ID:           uuid.New(),
 		CustomObject: param.CustomObject,
-
-		FieldType: param.FieldType,
-		Remarks:   param.Remarks,
-		UniqueKey: param.UniqueKey,
+		FieldType:    param.FieldType,
+		Remarks:      param.Remarks,
+		UniqueKey:    param.UniqueKey,
 	}
 	if param.FieldName != nil {
 		cus.FieldName = &models.MultiLangText{
@@ -66,6 +69,15 @@ func (m *CustomFieldManager) Create(ctx context.Context, param *CustomFieldCreat
 	}
 
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		for _, v := range param.Options {
+			if v != nil {
+				option := &models.FieldOption{
+					FieldID: &cus.ID,
+					Name:    v.Name,
+				}
+				cus.Options = append(cus.Options, option)
+			}
+		}
 		return tx.Create(cus).Error
 	})
 	if err != nil {
@@ -102,6 +114,18 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 		if param.Status != nil {
 			cus.Status = *param.Status
 		}
+		if param.Options != nil {
+			cus.Options = make([]*models.FieldOption, len(param.Options))
+			for i, v := range param.Options {
+				if v != nil {
+					option := &models.FieldOption{
+						FieldID: &cus.ID,
+						Name:    v.Name,
+					}
+					cus.Options[i] = option
+				}
+			}
+		}
 		err = tx.Save(cus).Error
 		if err != nil {
 			//log
@@ -126,7 +150,7 @@ func (m *CustomFieldManager) GetCustomFields(ctx context.Context, param *CustomF
 		if param.Status != nil {
 			tx = tx.Where("status = ?", param.Status)
 		}
-		err := tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Find(&cuss).Error
+		err := tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Preload("Options").Find(&cuss).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}

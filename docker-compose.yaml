@@ -18,7 +18,7 @@ services:
         '--collation-server=utf8mb4_general_ci'
       ]
     networks:
-      - mac-network
+      - boxapp-network
     ports:
       - 3306:3306
 
@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     networks:
-      - mac-network
+      - boxapp-network
     depends_on:
       - db
       - logger-db
@@ -39,9 +39,9 @@ services:
     volumes:
       - .:/app
     ports:
-      - 8888:8888
+      - 8080:8080
     command: go run main.go
 
 networks:
-  mac-network:
+  boxapp-network:
     external: true

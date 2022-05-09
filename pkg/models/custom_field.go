@@ -15,11 +15,19 @@ type CustomField struct {
 	FieldType    string
 	Remarks      string
 	Status       string
+	Options      []*FieldOption `gorm:"foreignKey:FieldID;references:ID" json:"field_options"`
 }
 
 func (cus *CustomField) BeforeCreate(tx *gorm.DB) (err error) {
-	cus.ID = uuid.New()
 	cus.Status = "Active"
+	return
+}
+
+func (cus *CustomField) BeforeSave(tx *gorm.DB) (err error) {
+	if cus.Options != nil {
+		option := new(FieldOption)
+		return tx.Where("field_id = ?", cus.ID).Delete(&option).Error
+	}
 	return
 }
 
