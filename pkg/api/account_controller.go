@@ -125,6 +125,14 @@ func (ctl *AccountController) Update(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// Login godoc
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param payload body managers.LoginParam true " "
+// @Success 200 {object} swagger.APIResponse{data=entities.LoginResponse}
+// @Failure 500 {object} swagger.APIErrorResponse
+// @Router /auth/login [post]
 func (ctl *AccountController) Login(c *gin.Context) {
 
 	param := &managers.LoginParam{}
