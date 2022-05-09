@@ -58,6 +58,15 @@ func (ctl *AccountController) SetRouter(r *gin.RouterGroup) *AccountController {
 	return ctl
 }
 
+// GetAccounts godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Accounts}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /accounts [get]
 func (ctl *AccountController) GetAccounts(c *gin.Context) {
 
 	accounts, err := ctl.accMgr.GetAccounts(c)
@@ -70,6 +79,16 @@ func (ctl *AccountController) GetAccounts(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// CreateAccount godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param payload body managers.AccountCreateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Account}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /accounts [post]
 func (ctl *AccountController) Create(c *gin.Context) {
 
 	param := &managers.AccountCreateParam{}
@@ -101,6 +120,17 @@ func (ctl *AccountController) Create(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// UpdateAccount godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Param payload body managers.AccountUpdateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Account}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /account/:id [put]
 func (ctl *AccountController) Update(c *gin.Context) {
 
 	id := c.Param("id")
@@ -130,8 +160,8 @@ func (ctl *AccountController) Update(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param payload body managers.LoginParam true " "
-// @Success 200 {object} swagger.APIResponse{data=entities.LoginResponse}
-// @Failure 500 {object} swagger.APIErrorResponse
+// @Success 200 {object} swagger.APIResponse{data=swagger.LoginResponse}
+// @Failure 500 {object} swagger.APIInternalServerError
 // @Router /auth/login [post]
 func (ctl *AccountController) Login(c *gin.Context) {
 
@@ -172,6 +202,15 @@ func (ctl *AccountController) Login(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// Auth godoc
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Account}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /auth [get]
 func (ctl *AccountController) GetAuthAccount(c *gin.Context) {
 
 	account, err := util.GetCtxAccount(c)
@@ -189,6 +228,16 @@ func (ctl *AccountController) GetAuthAccount(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// GetAccount godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Account}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /account/:id [get]
 func (ctl *AccountController) GetAccount(c *gin.Context) {
 
 	id := c.Param("id")
@@ -202,6 +251,13 @@ func (ctl *AccountController) GetAccount(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// Logout godoc
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /auth/logout [post]
 func (ctl *AccountController) Logout(c *gin.Context) {
 
 	err := ctl.accMgr.Logout(c)

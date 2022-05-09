@@ -1,19 +1,20 @@
 definitions:
-  entities.AuthUser:
+  entities.Account:
     properties:
-      companyID:
+      display_name:
+        type: string
+      id:
+        type: string
+      last_login:
+        type: integer
+      name:
         type: string
       role:
         $ref: '#/definitions/entities.Role'
+      status:
+        type: string
       username:
         type: string
-    type: object
-  entities.LoginResponse:
-    properties:
-      authUser:
-        $ref: '#/definitions/entities.AuthUser'
-      token:
-        $ref: '#/definitions/entities.Token'
     type: object
   entities.Role:
     properties:
@@ -24,12 +25,39 @@ definitions:
       permissions:
         type: string
     type: object
-  entities.Token:
+  managers.AccountCreateParam:
     properties:
-      access_token:
+      display_name:
         type: string
-      refresh_token:
+      password:
         type: string
+      role_id:
+        type: string
+      username:
+        type: string
+    required:
+    - display_name
+    - password
+    - role_id
+    - username
+    type: object
+  managers.AccountUpdateParam:
+    properties:
+      display_name:
+        type: string
+      password:
+        type: string
+      role_id:
+        type: string
+      status:
+        type: string
+      username:
+        type: string
+    required:
+    - display_name
+    - password
+    - role_id
+    - username
     type: object
   managers.LoginParam:
     properties:
@@ -38,7 +66,12 @@ definitions:
       username:
         type: string
     type: object
-  swagger.APIErrorResponse:
+  swagger.APIForbiddenError:
+    properties:
+      message:
+        type: string
+    type: object
+  swagger.APIInternalServerError:
     properties:
       detail:
         type: string
@@ -53,9 +86,235 @@ definitions:
       status:
         type: string
     type: object
+  swagger.Account:
+    properties:
+      account:
+        $ref: '#/definitions/entities.Account'
+    type: object
+  swagger.AccountList:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      data:
+        items:
+          $ref: '#/definitions/entities.Account'
+        type: array
+      total:
+        type: integer
+    type: object
+  swagger.Accounts:
+    properties:
+      accounts:
+        $ref: '#/definitions/swagger.AccountList'
+    type: object
+  swagger.AuthUser:
+    properties:
+      companyID:
+        type: string
+      role:
+        $ref: '#/definitions/entities.Role'
+      username:
+        type: string
+    type: object
+  swagger.LoginResponse:
+    properties:
+      authUser:
+        $ref: '#/definitions/swagger.AuthUser'
+      token:
+        $ref: '#/definitions/swagger.Token'
+    type: object
+  swagger.Token:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
+  /account/:id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Account'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.AccountUpdateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Account'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Accounts'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.AccountCreateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Account'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+  /auth:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Account'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Auth
   /auth/login:
     post:
       consumes:
@@ -77,12 +336,27 @@ paths:
             - $ref: '#/definitions/swagger.APIResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/entities.LoginResponse'
+                  $ref: '#/definitions/swagger.LoginResponse'
               type: object
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/swagger.APIErrorResponse'
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
       tags:
       - Auth
 swagger: "2.0"

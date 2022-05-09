@@ -191,7 +191,7 @@ func (m *AccountManager) GetSchedulerAccount() *models.Account {
 func (m *AccountManager) GetAccount(ctx context.Context, id string) (*models.Account, error) {
 	acc := new(models.Account)
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		err := tx.First(acc, "id = ?", acc.ID).Error
+		err := tx.First(acc, "id = ?", id).Error
 		if err != nil {
 			return err
 		}
