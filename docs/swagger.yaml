@@ -16,6 +16,80 @@ definitions:
       username:
         type: string
     type: object
+  entities.CustomField:
+    properties:
+      custom_object:
+        type: string
+      field_name:
+        $ref: '#/definitions/entities.MultiLangText'
+      field_options:
+        items:
+          $ref: '#/definitions/entities.FieldOption'
+        type: array
+      field_type:
+        type: string
+      id:
+        type: string
+      remarks:
+        type: string
+      status:
+        type: string
+      unique_key:
+        type: string
+    type: object
+  entities.Customer:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      id_no:
+        type: string
+      last_name:
+        type: string
+      meta:
+        items:
+          $ref: '#/definitions/entities.Meta'
+        type: array
+      other_name:
+        type: string
+      phone:
+        type: string
+      remarks:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+  entities.FieldOption:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  entities.Meta:
+    properties:
+      data_type:
+        type: string
+      key:
+        type: string
+      val: {}
+    type: object
+  entities.MultiLangText:
+    properties:
+      ch:
+        type: string
+      en:
+        type: string
+      zh:
+        type: string
+    type: object
   entities.Role:
     properties:
       id:
@@ -24,6 +98,15 @@ definitions:
         type: string
       permissions:
         type: string
+    type: object
+  entities.Setting:
+    properties:
+      setting:
+        type: string
+      value:
+        type: string
+      version:
+        type: integer
     type: object
   managers.AccountCreateParam:
     properties:
@@ -59,12 +142,125 @@ definitions:
     - role_id
     - username
     type: object
+  managers.CustomFieldCreateParam:
+    properties:
+      custom_object:
+        type: string
+      field_name:
+        $ref: '#/definitions/managers.MultiLangText'
+      field_options:
+        items:
+          $ref: '#/definitions/managers.FieldOption'
+        type: array
+      field_type:
+        type: string
+      remarks:
+        type: string
+      unique_key:
+        type: string
+    type: object
+  managers.CustomFieldUpdateParam:
+    properties:
+      field_name:
+        $ref: '#/definitions/managers.MultiLangText'
+      field_options:
+        items:
+          $ref: '#/definitions/managers.FieldOption'
+        type: array
+      field_type:
+        type: string
+      remarks:
+        type: string
+      status:
+        type: string
+      unique_key:
+        type: string
+    type: object
+  managers.CustomerCreateParam:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      first_name:
+        type: string
+      id_no:
+        type: string
+      last_name:
+        type: string
+      meta:
+        additionalProperties: true
+        type: object
+      other_name:
+        type: string
+      phone:
+        type: string
+      remarks:
+        type: string
+      title:
+        type: string
+    type: object
+  managers.CustomerUpdateParam:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      first_name:
+        type: string
+      id_no:
+        type: string
+      last_name:
+        type: string
+      meta:
+        additionalProperties: true
+        type: object
+      other_name:
+        type: string
+      phone:
+        type: string
+      remarks:
+        type: string
+      title:
+        type: string
+    type: object
+  managers.FieldOption:
+    properties:
+      name:
+        type: string
+    type: object
   managers.LoginParam:
     properties:
       password:
         type: string
       username:
         type: string
+    type: object
+  managers.MultiLangText:
+    properties:
+      ch:
+        type: string
+      en:
+        type: string
+      zh:
+        type: string
+    type: object
+  managers.RoleCreateParam:
+    properties:
+      name:
+        type: string
+      permissions:
+        type: string
+    type: object
+  managers.RoleUpdateParam:
+    properties:
+      name:
+        type: string
+      permissions:
+        type: string
+    type: object
+  managers.SettingSetParam:
+    additionalProperties: true
     type: object
   swagger.APIForbiddenError:
     properties:
@@ -118,12 +314,106 @@ definitions:
       username:
         type: string
     type: object
+  swagger.CustomField:
+    properties:
+      custom_field:
+        $ref: '#/definitions/entities.CustomField'
+    type: object
+  swagger.CustomFieldList:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      data:
+        items:
+          $ref: '#/definitions/entities.CustomField'
+        type: array
+      total:
+        type: integer
+    type: object
+  swagger.CustomFields:
+    properties:
+      custom_fields:
+        $ref: '#/definitions/swagger.CustomFieldList'
+    type: object
+  swagger.Customer:
+    properties:
+      customer:
+        $ref: '#/definitions/entities.Customer'
+    type: object
+  swagger.CustomerList:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      data:
+        items:
+          $ref: '#/definitions/entities.Customer'
+        type: array
+      total:
+        type: integer
+    type: object
+  swagger.Customers:
+    properties:
+      customers:
+        $ref: '#/definitions/swagger.CustomerList'
+    type: object
   swagger.LoginResponse:
     properties:
       authUser:
         $ref: '#/definitions/swagger.AuthUser'
       token:
         $ref: '#/definitions/swagger.Token'
+    type: object
+  swagger.Permissions:
+    properties:
+      permissions:
+        items:
+          type: string
+        type: array
+    type: object
+  swagger.Role:
+    properties:
+      role:
+        $ref: '#/definitions/entities.Role'
+    type: object
+  swagger.RoleList:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      data:
+        items:
+          $ref: '#/definitions/entities.Role'
+        type: array
+      total:
+        type: integer
+    type: object
+  swagger.Roles:
+    properties:
+      roles:
+        $ref: '#/definitions/swagger.RoleList'
+    type: object
+  swagger.SettingList:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      data:
+        items:
+          $ref: '#/definitions/entities.Setting'
+        type: array
+      total:
+        type: integer
+    type: object
+  swagger.Settings:
+    properties:
+      settings:
+        $ref: '#/definitions/swagger.SettingList'
     type: object
   swagger.Token:
     properties:
@@ -359,4 +649,517 @@ paths:
             $ref: '#/definitions/swagger.APIInternalServerError'
       tags:
       - Auth
+  /custom-field/:id:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.CustomFieldUpdateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.CustomField'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Custom Field
+  /custom-fields:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: query
+        name: custom_object
+        type: string
+      - description: ' '
+        in: query
+        name: status
+        type: string
+      - description: ' '
+        in: query
+        name: page
+        type: integer
+      - description: ' '
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.CustomFields'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Custom Field
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.CustomFieldCreateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.CustomField'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Custom Field
+  /customer/:id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Customer'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.CustomerUpdateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Customer'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+  /customers:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: query
+        name: search_mode
+        type: string
+      - description: ' '
+        in: query
+        name: code
+        type: string
+      - description: ' '
+        in: query
+        name: phone
+        type: string
+      - description: ' '
+        in: query
+        name: id_no
+        type: string
+      - description: ' '
+        in: query
+        name: page
+        type: integer
+      - description: ' '
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Customers'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.CustomerCreateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Customer'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+  /permissions:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Permissions'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Permission
+  /role/:id:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.RoleUpdateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Role'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Role
+  /roles:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Roles'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Role
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.RoleCreateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Role'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Role
+  /setting/general:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Settings'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Setting
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.SettingSetParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.Settings'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Setting
 swagger: "2.0"

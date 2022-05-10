@@ -22,6 +22,15 @@ func NewRoleController() IRoleController {
 	}
 }
 
+// GetRoles godoc
+// @Tags Role
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Roles}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /roles [get]
 func (ctl *RoleController) GetRoles(c *gin.Context) {
 
 	roles, err := ctl.rolMgr.GetRoles(c)
@@ -34,6 +43,17 @@ func (ctl *RoleController) GetRoles(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// UpdateRole godoc
+// @Tags Role
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Param payload body managers.RoleUpdateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Role}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /role/:id [put]
 func (ctl *RoleController) Update(c *gin.Context) {
 
 	id := c.Param("id")
@@ -62,6 +82,16 @@ func (ctl *RoleController) Update(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// CreateRole godoc
+// @Tags Role
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param payload body managers.RoleCreateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Role}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /roles [post]
 func (ctl *RoleController) Create(c *gin.Context) {
 
 	param := new(managers.RoleCreateParam)

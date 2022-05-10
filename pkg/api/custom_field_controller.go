@@ -36,6 +36,20 @@ func (ctl *CustomFieldController) SetRouter(r *gin.RouterGroup) *CustomFieldCont
 	}
 	return ctl
 }
+
+// GetCustomFields godoc
+// @Tags Custom Field
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param custom_object query string false " "
+// @Param status query string false " "
+// @Param page query int false " "
+// @Param limit query int false " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.CustomFields}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /custom-fields [get]
 func (ctl *CustomFieldController) GetCustomFields(c *gin.Context) {
 
 	param := new(managers.CustomFieldQueryParam)
@@ -55,6 +69,16 @@ func (ctl *CustomFieldController) GetCustomFields(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// CreateCustomFields godoc
+// @Tags Custom Field
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param payload body managers.CustomFieldCreateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.CustomField}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /custom-fields [post]
 func (ctl *CustomFieldController) Create(c *gin.Context) {
 
 	param := new(managers.CustomFieldCreateParam)
@@ -72,6 +96,17 @@ func (ctl *CustomFieldController) Create(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// UpdateCustomField godoc
+// @Tags Custom Field
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Param payload body managers.CustomFieldUpdateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.CustomField}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /custom-field/:id [put]
 func (ctl *CustomFieldController) Update(c *gin.Context) {
 
 	CustomFieldID := c.Param("id")

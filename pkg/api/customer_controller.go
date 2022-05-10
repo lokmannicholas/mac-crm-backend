@@ -23,6 +23,21 @@ func NewCustomerController() ICustomerController {
 	}
 }
 
+// GetCustomers godoc
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param search_mode query string false " "
+// @Param code query string false " "
+// @Param phone query string false " "
+// @Param id_no query string false " "
+// @Param page query int false " "
+// @Param limit query int false " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Customers}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /customers [get]
 func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 
 	param := new(managers.CustomerQueryParam)
@@ -41,6 +56,16 @@ func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// GetCustomer godoc
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Customer}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /customer/:id [get]
 func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 
 	customerID := c.Param("id")
@@ -56,6 +81,16 @@ func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// CreateCustomer godoc
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param payload body managers.CustomerCreateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Customer}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /customers [post]
 func (ctl *CustomerController) Create(c *gin.Context) {
 
 	param := new(managers.CustomerCreateParam)
@@ -73,6 +108,17 @@ func (ctl *CustomerController) Create(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// UpdateCustomer godoc
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Param payload body managers.CustomerUpdateParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Customer}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /customer/:id [put]
 func (ctl *CustomerController) Update(c *gin.Context) {
 
 	customerID := c.Param("id")

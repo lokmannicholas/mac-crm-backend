@@ -38,15 +38,15 @@ type Token struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type Account struct {
-	Account *entities.Account `json:"account"`
+type Settings struct {
+	Settings *SettingList `json:"settings"`
 }
 
-type Accounts struct {
-	Accounts *AccountList `json:"accounts"`
-}
-
-type AccountList struct {
+type SettingList struct {
 	List
-	Data []*entities.Account `json:"data"`
+	Data []*entities.Setting `json:"data"`
+}
+
+type Permissions struct {
+	Permissions []string `json:"permissions"`
 }

@@ -32,6 +32,16 @@ func (ctl *SettingController) SetRouter(r *gin.RouterGroup) *SettingController {
 	return ctl
 }
 
+// SetSetting godoc
+// @Tags Setting
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param payload body managers.SettingSetParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Settings}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /setting/general [post]
 func (ctl *SettingController) Set(c *gin.Context) {
 	param := &managers.SettingSetParam{}
 	err := controller.GetBody(c, param)
@@ -49,6 +59,15 @@ func (ctl *SettingController) Set(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// GetSettings godoc
+// @Tags Setting
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Settings}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /setting/general [get]
 func (ctl *SettingController) Get(c *gin.Context) {
 
 	param := &managers.SettingGetParam{}
