@@ -14,3 +14,7 @@ type AccountList struct {
 	List
 	Data []*entities.Account `json:"data"`
 }
+
+type ChangePasswordResponse struct {
+	Token *Token `json:"token"`
+}

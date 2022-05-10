@@ -158,6 +158,13 @@ definitions:
     - role_id
     - username
     type: object
+  managers.ChangePasswordParam:
+    properties:
+      old_password:
+        type: string
+      password:
+        type: string
+    type: object
   managers.CustomFieldCreateParam:
     properties:
       custom_object:
@@ -341,6 +348,11 @@ definitions:
       username:
         type: string
     type: object
+  swagger.ChangePasswordResponse:
+    properties:
+      token:
+        $ref: '#/definitions/swagger.Token'
+    type: object
   swagger.CustomField:
     properties:
       custom_field:
@@ -520,6 +532,123 @@ paths:
             - properties:
                 data:
                   $ref: '#/definitions/swagger.Account'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+  /account/:id/activate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+  /account/:id/disable:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Account
+  /account/:id/password/change:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.ChangePasswordParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.ChangePasswordResponse'
               type: object
         "403":
           description: Forbidden
@@ -894,6 +1023,9 @@ paths:
         required: true
         type: string
       - description: ' '
+        enum:
+        - eq
+        - like
         in: query
         name: search_mode
         type: string

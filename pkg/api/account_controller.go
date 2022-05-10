@@ -269,6 +269,17 @@ func (ctl *AccountController) Logout(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// ChangePassword godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Param payload body managers.ChangePasswordParam true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.ChangePasswordResponse}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /account/:id/password/change [put]
 func (ctl *AccountController) ChangePassword(c *gin.Context) {
 
 	id := c.Param("id")
@@ -297,6 +308,16 @@ func (ctl *AccountController) ChangePassword(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// Activate Account godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Success 200 {object} swagger.APIResponse{data=interface{}}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /account/:id/activate [post]
 func (ctl *AccountController) Activate(c *gin.Context) {
 
 	id := c.Param("id")
@@ -310,6 +331,16 @@ func (ctl *AccountController) Activate(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// Disable Account godoc
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Param id path string true " "
+// @Success 200 {object} swagger.APIResponse{data=interface{}}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /account/:id/disable [post]
 func (ctl *AccountController) Disable(c *gin.Context) {
 
 	id := c.Param("id")
