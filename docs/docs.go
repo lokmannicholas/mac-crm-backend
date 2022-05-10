@@ -1252,7 +1252,12 @@ const docTemplate = `{
                     "$ref": "#/definitions/entities.Role"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Active",
+                    "enum": [
+                        "Active",
+                        "Disable"
+                    ]
                 },
                 "username": {
                     "type": "string"
@@ -1275,7 +1280,11 @@ const docTemplate = `{
                     }
                 },
                 "field_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "multiple"
+                    ]
                 },
                 "id": {
                     "type": "string"
@@ -1284,7 +1293,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Active",
+                    "enum": [
+                        "Active",
+                        "Disable"
+                    ]
                 },
                 "unique_key": {
                     "type": "string"
@@ -1328,7 +1342,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Active",
+                    "enum": [
+                        "Active",
+                        "Disable"
+                    ]
                 },
                 "title": {
                     "type": "string"
@@ -1382,7 +1401,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "permissions": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ACCOUNT:U;CUSTOMER:U;ROLE:U"
                 }
             }
         },
@@ -1465,7 +1485,11 @@ const docTemplate = `{
                     }
                 },
                 "field_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "multiple"
+                    ]
                 },
                 "remarks": {
                     "type": "string"
@@ -1488,13 +1512,21 @@ const docTemplate = `{
                     }
                 },
                 "field_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "multiple"
+                    ]
                 },
                 "remarks": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "Active",
+                        "Disable"
+                    ]
                 },
                 "unique_key": {
                     "type": "string"
@@ -1613,7 +1645,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "permissions": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ACCOUNT:U;CUSTOMER:U;ROLE:U"
                 }
             }
         },
@@ -1624,7 +1657,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "permissions": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ACCOUNT:U;CUSTOMER:U;ROLE:U"
                 }
             }
         },

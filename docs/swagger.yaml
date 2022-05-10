@@ -12,6 +12,10 @@ definitions:
       role:
         $ref: '#/definitions/entities.Role'
       status:
+        default: Active
+        enum:
+        - Active
+        - Disable
         type: string
       username:
         type: string
@@ -27,12 +31,19 @@ definitions:
           $ref: '#/definitions/entities.FieldOption'
         type: array
       field_type:
+        enum:
+        - string
+        - multiple
         type: string
       id:
         type: string
       remarks:
         type: string
       status:
+        default: Active
+        enum:
+        - Active
+        - Disable
         type: string
       unique_key:
         type: string
@@ -62,6 +73,10 @@ definitions:
       remarks:
         type: string
       status:
+        default: Active
+        enum:
+        - Active
+        - Disable
         type: string
       title:
         type: string
@@ -97,6 +112,7 @@ definitions:
       name:
         type: string
       permissions:
+        example: ACCOUNT:U;CUSTOMER:U;ROLE:U
         type: string
     type: object
   entities.Setting:
@@ -153,6 +169,9 @@ definitions:
           $ref: '#/definitions/managers.FieldOption'
         type: array
       field_type:
+        enum:
+        - string
+        - multiple
         type: string
       remarks:
         type: string
@@ -168,10 +187,16 @@ definitions:
           $ref: '#/definitions/managers.FieldOption'
         type: array
       field_type:
+        enum:
+        - string
+        - multiple
         type: string
       remarks:
         type: string
       status:
+        enum:
+        - Active
+        - Disable
         type: string
       unique_key:
         type: string
@@ -250,6 +275,7 @@ definitions:
       name:
         type: string
       permissions:
+        example: ACCOUNT:U;CUSTOMER:U;ROLE:U
         type: string
     type: object
   managers.RoleUpdateParam:
@@ -257,6 +283,7 @@ definitions:
       name:
         type: string
       permissions:
+        example: ACCOUNT:U;CUSTOMER:U;ROLE:U
         type: string
     type: object
   managers.SettingSetParam:

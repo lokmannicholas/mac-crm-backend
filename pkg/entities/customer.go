@@ -18,7 +18,7 @@ type Customer struct {
 	IDNo      string `json:"id_no"`
 	Title     string `json:"title"`
 	Address   string `json:"address"`
-	Status    string `json:"status"`
+	Status    string `json:"status" enums:"Active,Disable" default:"Active"`
 	Remarks   string `json:"remarks"`
 	Meta      []Meta `json:"meta"`
 }

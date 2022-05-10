@@ -15,16 +15,16 @@ type CustomFieldCreateParam struct {
 	CustomObject string         `json:"custom_object,omitempty"`
 	UniqueKey    string         `json:"unique_key,omitempty"`
 	FieldName    *MultiLangText `json:"field_name,omitempty"`
-	FieldType    string         `json:"field_type,omitempty"`
+	FieldType    string         `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks      string         `json:"remarks,omitempty"`
 	Options      []*FieldOption `json:"field_options,omitempty"`
 }
 type CustomFieldUpdateParam struct {
 	FieldName *MultiLangText `json:"field_name,omitempty"`
 	UniqueKey *string        `json:"unique_key,omitempty"`
-	FieldType *string        `json:"field_type,omitempty"`
+	FieldType *string        `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks   *string        `json:"remarks,omitempty"`
-	Status    *string        `json:"status,omitempty"`
+	Status    *string        `json:"status,omitempty" enums:"Active,Disable"`
 	Options   []*FieldOption `json:"field_options,omitempty"`
 }
 

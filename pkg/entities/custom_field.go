@@ -9,8 +9,8 @@ type CustomField struct {
 	UniqueKey    string         `json:"unique_key"`
 	CustomObject string         `json:"custom_object"`
 	FieldName    *MultiLangText `json:"field_name"`
-	FieldType    string         `json:"field_type"`
-	Status       string         `json:"status"`
+	FieldType    string         `json:"field_type" enums:"string,multiple"`
+	Status       string         `json:"status" enums:"Active,Disable" default:"Active"`
 	Remarks      string         `json:"remarks"`
 	Options      []*FieldOption `json:"field_options"`
 }
