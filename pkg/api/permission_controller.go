@@ -16,6 +16,15 @@ func NewPermissionController() IPermissionController {
 	return &PermissionController{}
 }
 
+// GetPermissions godoc
+// @Tags Permission
+// @Accept json
+// @Produce json
+// @Param Authorization header string true " "
+// @Success 200 {object} swagger.APIResponse{data=swagger.Permissions}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router /permissions [get]
 func (ctl *PermissionController) GetPermissions(c *gin.Context) {
 	data := map[string]interface{}{}
 	data["permissions"] = []string{

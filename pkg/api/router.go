@@ -8,12 +8,15 @@ import (
 	"strconv"
 	"time"
 
+	docs "dmglab.com/mac-crm/docs"
 	DBMiddleware "dmglab.com/mac-crm/pkg/collections/middleware"
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/lib/auth/middleware"
 	_const "dmglab.com/mac-crm/pkg/util/const"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func GetRouter() *gin.Engine {
@@ -25,6 +28,15 @@ func GetRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(netMidWare.DBMiddleware())
 	router.Use(netMidWare.CORSMiddleware())
+
+	//swagger
+	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Description = "This is a sample server."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.BasePath = "/api/" + config.GetConfig().CompanyID
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	r := router.Group("/api/" + config.GetConfig().CompanyID)
 	{
 

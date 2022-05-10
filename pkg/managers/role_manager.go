@@ -14,11 +14,11 @@ import (
 
 type RoleCreateParam struct {
 	Name        string `json:"name"`
-	Permissions string `json:"permissions"`
+	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 }
 type RoleUpdateParam struct {
 	Name        string `json:"name"`
-	Permissions string `json:"permissions"`
+	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 }
 type IRoleManager interface {
 	Create(ctx context.Context, param *RoleCreateParam) (*models.Role, error)

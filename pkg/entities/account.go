@@ -12,7 +12,7 @@ type Account struct {
 	Username    string `json:"username"`
 	DisplayName string `json:"display_name"`
 	Role        *Role  `json:"role"`
-	Status      string `json:"status"`
+	Status      string `json:"status" enums:"Active,Disable" default:"Active"`
 	LastLogin   *int64 `json:"last_login"`
 }
 
@@ -51,7 +51,7 @@ func NewAccountListEntity(ctx context.Context, total int64, accounts []*models.A
 type Role struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
-	Permissions string `json:"permissions"`
+	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 }
 
 func NewRoleEntity(role *models.Role) *Role {
