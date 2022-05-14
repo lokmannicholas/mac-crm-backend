@@ -1557,7 +1557,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/entities.MultiLangText"
                 }
             }
         },
@@ -1816,7 +1816,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/managers.MultiLangText"
                 }
             }
         },

@@ -1,5 +1,5 @@
 package managers
 
 type FieldOption struct {
-	Name string `json:"name,omitempty"`
+	Name *MultiLangText `json:"name,omitempty"`
 }
