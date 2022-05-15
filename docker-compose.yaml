@@ -33,7 +33,6 @@ services:
       - boxapp-network
     depends_on:
       - db
-      - logger-db
     links:
       - "db:mac-mysql"
     volumes:
