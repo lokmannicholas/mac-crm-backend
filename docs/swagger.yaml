@@ -86,7 +86,7 @@ definitions:
       id:
         type: string
       name:
-        type: string
+        $ref: '#/definitions/entities.MultiLangText'
     type: object
   entities.Meta:
     properties:
@@ -259,7 +259,7 @@ definitions:
   managers.FieldOption:
     properties:
       name:
-        type: string
+        $ref: '#/definitions/managers.MultiLangText'
     type: object
   managers.LoginParam:
     properties:

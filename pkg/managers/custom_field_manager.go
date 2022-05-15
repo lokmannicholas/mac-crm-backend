@@ -73,7 +73,13 @@ func (m *CustomFieldManager) Create(ctx context.Context, param *CustomFieldCreat
 			if v != nil {
 				option := &models.FieldOption{
 					FieldID: &cus.ID,
-					Name:    v.Name,
+				}
+				if v.Name != nil {
+					option.Name = &models.MultiLangText{
+						En: v.Name.En,
+						Zh: v.Name.Zh,
+						Ch: v.Name.Ch,
+					}
 				}
 				cus.Options = append(cus.Options, option)
 			}
@@ -120,7 +126,13 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 				if v != nil {
 					option := &models.FieldOption{
 						FieldID: &cus.ID,
-						Name:    v.Name,
+					}
+					if v.Name != nil {
+						option.Name = &models.MultiLangText{
+							En: v.Name.En,
+							Zh: v.Name.Zh,
+							Ch: v.Name.Ch,
+						}
 					}
 					cus.Options[i] = option
 				}
