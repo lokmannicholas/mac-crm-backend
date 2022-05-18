@@ -83,6 +83,8 @@ definitions:
     type: object
   entities.FieldOption:
     properties:
+      field_id:
+        type: string
       id:
         type: string
       name:
@@ -189,10 +191,6 @@ definitions:
     properties:
       field_name:
         $ref: '#/definitions/managers.MultiLangText'
-      field_options:
-        items:
-          $ref: '#/definitions/managers.FieldOption'
-        type: array
       field_type:
         enum:
         - string
@@ -253,10 +251,24 @@ definitions:
         type: string
       remarks:
         type: string
+      status:
+        type: string
       title:
         type: string
     type: object
   managers.FieldOption:
+    properties:
+      name:
+        $ref: '#/definitions/managers.MultiLangText'
+    type: object
+  managers.FieldOptionCreateParam:
+    properties:
+      field_id:
+        type: string
+      name:
+        $ref: '#/definitions/managers.MultiLangText'
+    type: object
+  managers.FieldOptionUpdateParam:
     properties:
       name:
         $ref: '#/definitions/managers.MultiLangText'
@@ -398,6 +410,11 @@ definitions:
     properties:
       customers:
         $ref: '#/definitions/swagger.CustomerList'
+    type: object
+  swagger.FieldOption:
+    properties:
+      field_option:
+        $ref: '#/definitions/entities.FieldOption'
     type: object
   swagger.LoginResponse:
     properties:
@@ -1108,6 +1125,116 @@ paths:
             $ref: '#/definitions/swagger.APIInternalServerError'
       tags:
       - Customer
+  /field-option:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.FieldOptionCreateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.FieldOption'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Field Option
+  /field-option/:id:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Field Option
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' '
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/managers.FieldOptionUpdateParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/swagger.FieldOption'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Field Option
   /permissions:
     get:
       consumes:
