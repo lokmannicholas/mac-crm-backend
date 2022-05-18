@@ -23,14 +23,6 @@ func (cus *CustomField) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (cus *CustomField) BeforeSave(tx *gorm.DB) (err error) {
-	if cus.Options != nil {
-		option := new(FieldOption)
-		return tx.Where("field_id = ?", cus.ID).Delete(&option).Error
-	}
-	return
-}
-
 func (cus *CustomField) AfterCreate(tx *gorm.DB) (err error) {
 	service.GetAuditLogger().InfoLog(tx.Statement.Context, _const.AUDIT_CREATE, cus)
 	return

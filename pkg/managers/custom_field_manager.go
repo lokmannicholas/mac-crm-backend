@@ -25,7 +25,6 @@ type CustomFieldUpdateParam struct {
 	FieldType *string        `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks   *string        `json:"remarks,omitempty"`
 	Status    *string        `json:"status,omitempty" enums:"Active,Disable"`
-	Options   []*FieldOption `json:"field_options,omitempty"`
 }
 
 type CustomFieldQueryParam struct {
@@ -98,12 +97,9 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 
 		err := tx.First(cus, "id = ?", id).Error
 		if err != nil {
-			//log
 			return err
 		}
-		// if param.UniqueKey != nil {
-		// 	cus.UniqueKey = *param.UniqueKey
-		// }
+
 		if param.FieldName != nil {
 			cus.FieldName = &models.MultiLangText{
 				En: param.FieldName.En,
@@ -120,27 +116,8 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 		if param.Status != nil {
 			cus.Status = *param.Status
 		}
-		if param.Options != nil {
-			cus.Options = make([]*models.FieldOption, len(param.Options))
-			for i, v := range param.Options {
-				if v != nil {
-					option := &models.FieldOption{
-						FieldID: &cus.ID,
-					}
-					if v.Name != nil {
-						option.Name = &models.MultiLangText{
-							En: v.Name.En,
-							Zh: v.Name.Zh,
-							Ch: v.Name.Ch,
-						}
-					}
-					cus.Options[i] = option
-				}
-			}
-		}
 		err = tx.Save(cus).Error
 		if err != nil {
-			//log
 			return err
 		}
 		return nil

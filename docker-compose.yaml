@@ -22,24 +22,24 @@ services:
     ports:
       - 3306:3306
 
-  mac-backend:
-    image: golang:1.13.6
-    container_name: mac-backend
-    restart: always
-    working_dir: /app
-    env_file:
-      - .env
-    networks:
-      - boxapp-network
-    depends_on:
-      - db
-    links:
-      - "db:mac-mysql"
-    volumes:
-      - .:/app
-    ports:
-      - 8080:8080
-    command: go run main.go
+  # mac-backend:
+  #   image: golang:1.13.6
+  #   container_name: mac-backend
+  #   restart: always
+  #   working_dir: /app
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - boxapp-network
+  #   depends_on:
+  #     - db
+  #   links:
+  #     - "db:mac-mysql"
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - 8080:8080
+  #   command: go run main.go
 
 networks:
   boxapp-network:

@@ -5,8 +5,9 @@ import (
 )
 
 type FieldOption struct {
-	ID   string         `json:"id"`
-	Name *MultiLangText `json:"name"`
+	ID      string         `json:"id"`
+	Name    *MultiLangText `json:"name"`
+	FieldID string         `json:"field_id"`
 }
 
 func NewFieldOptinoEntity(option *models.FieldOption) *FieldOption {
@@ -14,8 +15,9 @@ func NewFieldOptinoEntity(option *models.FieldOption) *FieldOption {
 		return &FieldOption{}
 	}
 	return &FieldOption{
-		ID:   option.ID.String(),
-		Name: NewMultiLangTextEntity(option.Name),
+		ID:      option.ID.String(),
+		Name:    NewMultiLangTextEntity(option.Name),
+		FieldID: option.FieldID.String(),
 	}
 }
 
