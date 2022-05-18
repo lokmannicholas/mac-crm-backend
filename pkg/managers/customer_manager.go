@@ -39,6 +39,7 @@ type CustomerUpdateParam struct {
 	Code      *string                `json:"code"`
 	Adderess  *string                `json:"address"`
 	Title     *string                `json:"title"`
+	Status    *string                `json:"status"`
 	Meta      map[string]interface{} `json:"meta"`
 }
 
@@ -182,6 +183,9 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		}
 		if param.Adderess != nil {
 			cus.Adderess = *param.Adderess
+		}
+		if param.Status != nil {
+			cus.Status = *param.Status
 		}
 
 		err = tx.Save(cus).Error
