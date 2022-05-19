@@ -149,6 +149,7 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 		return nil
 	})
 
+	cus, err = GetCustomField(ctx, id)
 	return cus, err
 }
 
@@ -172,4 +173,13 @@ func (m *CustomFieldManager) GetCustomFields(ctx context.Context, param *CustomF
 		return err
 	})
 	return cuss, pagin, err
+}
+
+func GetCustomField(ctx context.Context, id string) (*models.CustomField, error) {
+	customField := new(models.CustomField)
+	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		return tx.Preload("Options").First(customField, "id = ?", id).Error
+	})
+
+	return customField, err
 }
