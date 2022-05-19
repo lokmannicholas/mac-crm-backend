@@ -1073,183 +1073,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/field-option": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Field Option"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": " ",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": " ",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/managers.FieldOptionCreateParam"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/swagger.APIResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/swagger.FieldOption"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIForbiddenError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIInternalServerError"
-                        }
-                    }
-                }
-            }
-        },
-        "/field-option/:id": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Field Option"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": " ",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": " ",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": " ",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/managers.FieldOptionUpdateParam"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/swagger.APIResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/swagger.FieldOption"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIForbiddenError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIInternalServerError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Field Option"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": " ",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": " ",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIForbiddenError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.APIInternalServerError"
-                        }
-                    }
-                }
-            }
-        },
         "/permissions": {
             "get": {
                 "consumes": [
@@ -1730,9 +1553,6 @@ const docTemplate = `{
         "entities.FieldOption": {
             "type": "object",
             "properties": {
-                "field_id": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
@@ -1868,7 +1688,7 @@ const docTemplate = `{
                 "field_options": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/managers.FieldOption"
+                        "$ref": "#/definitions/managers.FieldOptionParam"
                     }
                 },
                 "field_type": {
@@ -1891,6 +1711,12 @@ const docTemplate = `{
             "properties": {
                 "field_name": {
                     "$ref": "#/definitions/managers.MultiLangText"
+                },
+                "field_options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/managers.FieldOptionUpdate"
+                    }
                 },
                 "field_type": {
                     "type": "string",
@@ -1989,7 +1815,7 @@ const docTemplate = `{
                 }
             }
         },
-        "managers.FieldOption": {
+        "managers.FieldOptionParam": {
             "type": "object",
             "properties": {
                 "name": {
@@ -1997,20 +1823,23 @@ const docTemplate = `{
                 }
             }
         },
-        "managers.FieldOptionCreateParam": {
+        "managers.FieldOptionUpdate": {
             "type": "object",
+            "required": [
+                "action"
+            ],
             "properties": {
-                "field_id": {
+                "action": {
+                    "type": "string",
+                    "enum": [
+                        "CREATE",
+                        "UPDATE",
+                        "DELETE"
+                    ]
+                },
+                "id": {
                     "type": "string"
                 },
-                "name": {
-                    "$ref": "#/definitions/managers.MultiLangText"
-                }
-            }
-        },
-        "managers.FieldOptionUpdateParam": {
-            "type": "object",
-            "properties": {
                 "name": {
                     "$ref": "#/definitions/managers.MultiLangText"
                 }
@@ -2227,14 +2056,6 @@ const docTemplate = `{
             "properties": {
                 "customers": {
                     "$ref": "#/definitions/swagger.CustomerList"
-                }
-            }
-        },
-        "swagger.FieldOption": {
-            "type": "object",
-            "properties": {
-                "field_option": {
-                    "$ref": "#/definitions/entities.FieldOption"
                 }
             }
         },

@@ -12,19 +12,20 @@ import (
 )
 
 type CustomFieldCreateParam struct {
-	CustomObject string         `json:"custom_object,omitempty"`
-	UniqueKey    string         `json:"unique_key,omitempty"`
-	FieldName    *MultiLangText `json:"field_name,omitempty"`
-	FieldType    string         `json:"field_type,omitempty" enums:"string,multiple"`
-	Remarks      string         `json:"remarks,omitempty"`
-	Options      []*FieldOption `json:"field_options,omitempty"`
+	CustomObject string              `json:"custom_object,omitempty"`
+	UniqueKey    string              `json:"unique_key,omitempty"`
+	FieldName    *MultiLangText      `json:"field_name,omitempty"`
+	FieldType    string              `json:"field_type,omitempty" enums:"string,multiple"`
+	Remarks      string              `json:"remarks,omitempty"`
+	Options      []*FieldOptionParam `json:"field_options,omitempty"`
 }
 type CustomFieldUpdateParam struct {
-	FieldName *MultiLangText `json:"field_name,omitempty"`
-	UniqueKey *string        `json:"unique_key,omitempty"`
-	FieldType *string        `json:"field_type,omitempty" enums:"string,multiple"`
-	Remarks   *string        `json:"remarks,omitempty"`
-	Status    *string        `json:"status,omitempty" enums:"Active,Disable"`
+	FieldName *MultiLangText       `json:"field_name,omitempty"`
+	UniqueKey *string              `json:"unique_key,omitempty"`
+	FieldType *string              `json:"field_type,omitempty" enums:"string,multiple"`
+	Remarks   *string              `json:"remarks,omitempty"`
+	Status    *string              `json:"status,omitempty" enums:"Active,Disable"`
+	Options   *[]FieldOptionUpdate `json:"field_options,omitempty"`
 }
 
 type CustomFieldQueryParam struct {
@@ -120,6 +121,31 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 		if err != nil {
 			return err
 		}
+
+		// update option if not error
+		if param.Options != nil {
+			fieldOptMgr := GetFieldOptionManager()
+			for _, v := range *param.Options {
+				switch v.Action {
+				case "CREATE":
+					_, err := fieldOptMgr.Create(ctx, id, &FieldOptionParam{Name: v.Name})
+					if err != nil {
+						return err
+					}
+				case "UPDATE":
+					_, err := fieldOptMgr.Update(ctx, v.ID, &FieldOptionParam{Name: v.Name})
+					if err != nil {
+						return err
+					}
+				case "DELETE":
+					err := fieldOptMgr.Delete(ctx, v.ID)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+
 		return nil
 	})
 

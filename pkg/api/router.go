@@ -89,7 +89,6 @@ func apiPath(r *gin.RouterGroup) {
 	}
 	NewSettingController().SetRouter(r)
 	NewCustomFieldController().SetRouter(r)
-	NewFieldOptionController().SetRouter(r)
 	attCtl := NewAttachmentController()
 	rolCtl := NewRoleController()
 	cusCtl := NewCustomerController()
