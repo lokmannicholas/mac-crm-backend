@@ -954,6 +954,7 @@ paths:
     get:
       consumes:
       - application/json
+      description: meta value will be string or entities.FieldOption array
       parameters:
       - description: ' '
         in: header
@@ -990,6 +991,8 @@ paths:
     put:
       consumes:
       - application/json
+      description: 'Add the string meta by "meta": {"meta1": "meta value"}, multiple
+        meta by "meta": {"meta1": "optionId;optionId"}'
       parameters:
       - description: ' '
         in: header
@@ -1033,6 +1036,7 @@ paths:
     get:
       consumes:
       - application/json
+      description: meta value will be string or entities.FieldOption array
       parameters:
       - description: ' '
         in: header
@@ -1091,6 +1095,8 @@ paths:
     post:
       consumes:
       - application/json
+      description: 'Add the string meta by "meta": {"meta1": "meta value"}, multiple
+        meta by "meta": {"meta1": "optionId;optionId"}'
       parameters:
       - description: ' '
         in: header

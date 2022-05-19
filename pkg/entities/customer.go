@@ -2,9 +2,12 @@ package entities
 
 import (
 	"bytes"
+	"context"
 	"encoding/gob"
 	"reflect"
+	"strings"
 
+	"dmglab.com/mac-crm/pkg/managers"
 	"dmglab.com/mac-crm/pkg/models"
 )
 
@@ -32,7 +35,7 @@ func (b Customer) Fields() []string {
 	}
 	return fields
 }
-func NewCustomerEntity(customer *models.Customer) *Customer {
+func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer {
 	if customer == nil {
 		return &Customer{}
 	}
@@ -49,7 +52,15 @@ func NewCustomerEntity(customer *models.Customer) *Customer {
 		ent := *NewMetaEntity(meta.Meta)
 		ent.Val = ""
 		if err := dec.Decode(&v); err == nil {
-			ent.Val = v
+			if ent.DataType == "multiple" {
+				optionIds := strings.Split(v, ";")
+				options, err := managers.FindByIds(ctx, optionIds)
+				if err == nil {
+					ent.Val = NewFieldOptinoListEntity(options)
+				}
+			} else {
+				ent.Val = v
+			}
 		}
 		metaArray[i] = ent
 	}
@@ -69,10 +80,10 @@ func NewCustomerEntity(customer *models.Customer) *Customer {
 	}
 }
 
-func NewCustomerListEntity(total int64, customers []*models.Customer) *List {
+func NewCustomerListEntity(total int64, customers []*models.Customer, ctx context.Context) *List {
 	customerList := make([]*Customer, len(customers))
 	for i, customer := range customers {
-		customerList[i] = NewCustomerEntity(customer)
+		customerList[i] = NewCustomerEntity(customer, ctx)
 	}
 	return &List{
 		Columns: Customer{}.Fields(),

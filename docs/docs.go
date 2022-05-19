@@ -791,6 +791,7 @@ const docTemplate = `{
         },
         "/customer/:id": {
             "get": {
+                "description": "meta value will be string or entities.FieldOption array",
                 "consumes": [
                     "application/json"
                 ],
@@ -850,6 +851,7 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "description": "Add the string meta by \"meta\": {\"meta1\": \"meta value\"}, multiple meta by \"meta\": {\"meta1\": \"optionId;optionId\"}",
                 "consumes": [
                     "application/json"
                 ],
@@ -920,6 +922,7 @@ const docTemplate = `{
         },
         "/customers": {
             "get": {
+                "description": "meta value will be string or entities.FieldOption array",
                 "consumes": [
                     "application/json"
                 ],
@@ -1012,6 +1015,7 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "description": "Add the string meta by \"meta\": {\"meta1\": \"meta value\"}, multiple meta by \"meta\": {\"meta1\": \"optionId;optionId\"}",
                 "consumes": [
                     "application/json"
                 ],

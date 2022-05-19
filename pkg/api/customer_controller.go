@@ -25,6 +25,7 @@ func NewCustomerController() ICustomerController {
 
 // GetCustomers godoc
 // @Tags Customer
+// @Description meta value will be string or entities.FieldOption array
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
@@ -51,13 +52,14 @@ func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 		return
 	}
 	data := map[string]interface{}{}
-	data["customers"] = entities.NewCustomerListEntity(pagin.TotalCount, customers)
+	data["customers"] = entities.NewCustomerListEntity(pagin.TotalCount, customers, c)
 
 	controller.Response(c, 200, data)
 }
 
 // GetCustomer godoc
 // @Tags Customer
+// @Description meta value will be string or entities.FieldOption array
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
@@ -77,12 +79,13 @@ func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 	}
 	data := map[string]interface{}{}
 
-	data["customer"] = entities.NewCustomerEntity(customer)
+	data["customer"] = entities.NewCustomerEntity(customer, c)
 	controller.Response(c, 200, data)
 }
 
 // CreateCustomer godoc
 // @Tags Customer
+// @Description Add the string meta by "meta": {"meta1": "meta value"}, multiple meta by "meta": {"meta1": "optionId;optionId"}
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
@@ -104,12 +107,13 @@ func (ctl *CustomerController) Create(c *gin.Context) {
 		return
 	}
 	data := map[string]interface{}{}
-	data["customer"] = entities.NewCustomerEntity(customer)
+	data["customer"] = entities.NewCustomerEntity(customer, c)
 	controller.Response(c, 200, data)
 }
 
 // UpdateCustomer godoc
 // @Tags Customer
+// @Description Add the string meta by "meta": {"meta1": "meta value"}, multiple meta by "meta": {"meta1": "optionId;optionId"}
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
@@ -133,6 +137,6 @@ func (ctl *CustomerController) Update(c *gin.Context) {
 		return
 	}
 	data := map[string]interface{}{}
-	data["customer"] = entities.NewCustomerEntity(customer)
+	data["customer"] = entities.NewCustomerEntity(customer, c)
 	controller.Response(c, 200, data)
 }

@@ -87,3 +87,11 @@ func (m *FieldOptionManager) Delete(ctx context.Context, optionID string) error 
 	})
 	return err
 }
+
+func FindByIds(ctx context.Context, ids []string) ([]*models.FieldOption, error) {
+	options := []*models.FieldOption{}
+	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		return tx.Where("id IN ?", ids).Find(&options).Error
+	})
+	return options, err
+}
