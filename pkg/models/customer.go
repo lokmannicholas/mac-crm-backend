@@ -24,7 +24,7 @@ type Customer struct {
 	Phone2               string           `json:"phone2"`
 	Phone3               string           `json:"phone3"`
 	IDNo                 string           `gorm:"unique;" json:"id_no"`
-	Birth                time.Time        `json:"birth"`
+	Birth                *time.Time       `json:"birth"`
 	FbName               string           `json:"fb_name"`
 	IgName               string           `json:"ig_name"`
 	LinkedinName         string           `json:"linkedin_name"`
@@ -49,8 +49,8 @@ type Customer struct {
 	CollateralValue      string           `json:"collateral_value"`
 	Dti                  string           `json:"dti"`
 	Score                string           `json:"score"`
-	StatusDate           time.Time        `json:"status_date"`
-	OrderDate            time.Time        `json:"order_date"`
+	StatusDate           *time.Time       `json:"status_date"`
+	OrderDate            *time.Time       `json:"order_date"`
 	Status               string           `json:"status"`
 	Remarks              string           `json:"remarks"`
 	Meta                 []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`

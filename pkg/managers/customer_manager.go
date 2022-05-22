@@ -30,7 +30,7 @@ type CustomerCreateParam struct {
 	Phone2               string                 `json:"phone2"`
 	Phone3               string                 `json:"phone3"`
 	IDNo                 string                 `gorm:"unique;" json:"id_no"`
-	Birth                time.Time              `json:"birth"`
+	Birth                *time.Time             `json:"birth"`
 	FbName               string                 `json:"fb_name"`
 	IgName               string                 `json:"ig_name"`
 	LinkedinName         string                 `json:"linkedin_name"`
@@ -55,8 +55,8 @@ type CustomerCreateParam struct {
 	CollateralValue      string                 `json:"collateral_value"`
 	Dti                  string                 `json:"dti"`
 	Score                string                 `json:"score"`
-	StatusDate           time.Time              `json:"status_date"`
-	OrderDate            time.Time              `json:"order_date"`
+	StatusDate           *time.Time             `json:"status_date"`
+	OrderDate            *time.Time             `json:"order_date"`
 	Meta                 map[string]interface{} `json:"meta"`
 }
 type CustomerUpdateParam struct {
@@ -277,9 +277,6 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		if param.IDNo != nil {
 			cus.IDNo = *param.IDNo
 		}
-		if param.Birth != nil {
-			cus.Birth = *param.Birth
-		}
 		if param.FbName != nil {
 			cus.FbName = *param.FbName
 		}
@@ -352,18 +349,15 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		if param.Score != nil {
 			cus.Score = *param.Score
 		}
-		if param.StatusDate != nil {
-			cus.StatusDate = *param.StatusDate
-		}
-		if param.OrderDate != nil {
-			cus.OrderDate = *param.OrderDate
-		}
 		if param.Adderess != nil {
 			cus.Adderess = *param.Adderess
 		}
 		if param.Status != nil {
 			cus.Status = *param.Status
 		}
+		cus.Birth = param.Birth
+		cus.StatusDate = param.StatusDate
+		cus.OrderDate = param.OrderDate
 
 		err = tx.Save(cus).Error
 		if err != nil {

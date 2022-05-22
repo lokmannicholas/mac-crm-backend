@@ -1511,7 +1511,46 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "age": {
+                    "type": "integer"
+                },
+                "avg_month_income": {
+                    "type": "string"
+                },
+                "bank_ac_name": {
+                    "type": "string"
+                },
+                "bank_ac_number": {
+                    "type": "string"
+                },
+                "birth": {
+                    "type": "string"
+                },
                 "code": {
+                    "type": "string"
+                },
+                "collateral": {
+                    "type": "string"
+                },
+                "collateral_value": {
+                    "type": "string"
+                },
+                "debt_instalment_amount": {
+                    "type": "string"
+                },
+                "debt_outstanding": {
+                    "type": "string"
+                },
+                "debt_status": {
+                    "type": "string"
+                },
+                "debt_type": {
+                    "type": "string"
+                },
+                "dti": {
+                    "type": "string"
+                },
+                "fb_name": {
                     "type": "string"
                 },
                 "first_name": {
@@ -1523,7 +1562,25 @@ const docTemplate = `{
                 "id_no": {
                     "type": "string"
                 },
+                "ig_name": {
+                    "type": "string"
+                },
                 "last_name": {
+                    "type": "string"
+                },
+                "linkedin_name": {
+                    "type": "string"
+                },
+                "loan_amount": {
+                    "type": "string"
+                },
+                "loan_date": {
+                    "type": "string"
+                },
+                "loan_instalment_amount": {
+                    "type": "string"
+                },
+                "loan_tenor": {
                     "type": "string"
                 },
                 "meta": {
@@ -1532,13 +1589,37 @@ const docTemplate = `{
                         "$ref": "#/definitions/entities.Meta"
                     }
                 },
+                "office_address": {
+                    "type": "string"
+                },
+                "order_date": {
+                    "type": "string"
+                },
                 "other_name": {
                     "type": "string"
                 },
-                "phone": {
+                "phone1": {
+                    "type": "string"
+                },
+                "phone2": {
+                    "type": "string"
+                },
+                "phone3": {
                     "type": "string"
                 },
                 "remarks": {
+                    "type": "string"
+                },
+                "residential_address_1": {
+                    "type": "string"
+                },
+                "residential_address_2": {
+                    "type": "string"
+                },
+                "residential_address_3": {
+                    "type": "string"
+                },
+                "score": {
                     "type": "string"
                 },
                 "status": {
@@ -1549,7 +1630,16 @@ const docTemplate = `{
                         "Disable"
                     ]
                 },
+                "status_date": {
+                    "type": "string"
+                },
+                "tax_id_number": {
+                    "type": "string"
+                },
                 "title": {
+                    "type": "string"
+                },
+                "weibo_name": {
                     "type": "string"
                 }
             }
@@ -1750,7 +1840,43 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "avg_month_income": {
+                    "type": "string"
+                },
+                "bank_ac_name": {
+                    "type": "string"
+                },
+                "bank_ac_number": {
+                    "type": "string"
+                },
+                "birth": {
+                    "type": "string"
+                },
                 "code": {
+                    "type": "string"
+                },
+                "collateral": {
+                    "type": "string"
+                },
+                "collateral_value": {
+                    "type": "string"
+                },
+                "debt_instalment_amount": {
+                    "type": "string"
+                },
+                "debt_outstanding": {
+                    "type": "string"
+                },
+                "debt_status": {
+                    "type": "string"
+                },
+                "debt_type": {
+                    "type": "string"
+                },
+                "dti": {
+                    "type": "string"
+                },
+                "fb_name": {
                     "type": "string"
                 },
                 "first_name": {
@@ -1759,23 +1885,74 @@ const docTemplate = `{
                 "id_no": {
                     "type": "string"
                 },
+                "ig_name": {
+                    "type": "string"
+                },
                 "last_name": {
+                    "type": "string"
+                },
+                "linkedin_name": {
+                    "type": "string"
+                },
+                "loan_amount": {
+                    "type": "string"
+                },
+                "loan_date": {
+                    "type": "string"
+                },
+                "loan_instalment_amount": {
+                    "type": "string"
+                },
+                "loan_tenor": {
                     "type": "string"
                 },
                 "meta": {
                     "type": "object",
                     "additionalProperties": true
                 },
+                "office_address": {
+                    "type": "string"
+                },
+                "order_date": {
+                    "type": "string"
+                },
                 "other_name": {
                     "type": "string"
                 },
-                "phone": {
+                "phone1": {
+                    "type": "string"
+                },
+                "phone2": {
+                    "type": "string"
+                },
+                "phone3": {
                     "type": "string"
                 },
                 "remarks": {
                     "type": "string"
                 },
+                "residential_address_1": {
+                    "type": "string"
+                },
+                "residential_address_2": {
+                    "type": "string"
+                },
+                "residential_address_3": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "string"
+                },
+                "status_date": {
+                    "type": "string"
+                },
+                "tax_id_number": {
+                    "type": "string"
+                },
                 "title": {
+                    "type": "string"
+                },
+                "weibo_name": {
                     "type": "string"
                 }
             }
@@ -1786,7 +1963,43 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "avg_month_income": {
+                    "type": "string"
+                },
+                "bank_ac_name": {
+                    "type": "string"
+                },
+                "bank_ac_number": {
+                    "type": "string"
+                },
+                "birth": {
+                    "type": "string"
+                },
                 "code": {
+                    "type": "string"
+                },
+                "collateral": {
+                    "type": "string"
+                },
+                "collateral_value": {
+                    "type": "string"
+                },
+                "debt_instalment_amount": {
+                    "type": "string"
+                },
+                "debt_outstanding": {
+                    "type": "string"
+                },
+                "debt_status": {
+                    "type": "string"
+                },
+                "debt_type": {
+                    "type": "string"
+                },
+                "dti": {
+                    "type": "string"
+                },
+                "fb_name": {
                     "type": "string"
                 },
                 "first_name": {
@@ -1795,26 +2008,77 @@ const docTemplate = `{
                 "id_no": {
                     "type": "string"
                 },
+                "ig_name": {
+                    "type": "string"
+                },
                 "last_name": {
+                    "type": "string"
+                },
+                "linkedin_name": {
+                    "type": "string"
+                },
+                "loan_amount": {
+                    "type": "string"
+                },
+                "loan_date": {
+                    "type": "string"
+                },
+                "loan_instalment_amount": {
+                    "type": "string"
+                },
+                "loan_tenor": {
                     "type": "string"
                 },
                 "meta": {
                     "type": "object",
                     "additionalProperties": true
                 },
+                "office_address": {
+                    "type": "string"
+                },
+                "order_date": {
+                    "type": "string"
+                },
                 "other_name": {
                     "type": "string"
                 },
-                "phone": {
+                "phone1": {
+                    "type": "string"
+                },
+                "phone2": {
+                    "type": "string"
+                },
+                "phone3": {
                     "type": "string"
                 },
                 "remarks": {
                     "type": "string"
                 },
+                "residential_address_1": {
+                    "type": "string"
+                },
+                "residential_address_2": {
+                    "type": "string"
+                },
+                "residential_address_3": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 },
+                "status_date": {
+                    "type": "string"
+                },
+                "tax_id_number": {
+                    "type": "string"
+                },
                 "title": {
+                    "type": "string"
+                },
+                "weibo_name": {
                     "type": "string"
                 }
             }
