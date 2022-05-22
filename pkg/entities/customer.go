@@ -17,7 +17,6 @@ type Customer struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	OtherName string `json:"other_name"`
-	Phone     string `json:"phone"`
 	IDNo      string `json:"id_no"`
 	Title     string `json:"title"`
 	Address   string `json:"address"`
@@ -70,7 +69,6 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		FirstName: customer.FirstName,
 		LastName:  customer.LastName,
 		OtherName: customer.OtherName,
-		Phone:     customer.Phone,
 		IDNo:      idNo,
 		Title:     customer.Title,
 		Address:   customer.Adderess,

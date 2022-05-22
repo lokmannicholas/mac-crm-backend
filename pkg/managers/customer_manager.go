@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
@@ -18,29 +19,87 @@ import (
 )
 
 type CustomerCreateParam struct {
-	FirstName string                 `json:"first_name"`
-	LastName  string                 `json:"last_name"`
-	OtherName string                 `json:"other_name"`
-	Phone     string                 `json:"phone"`
-	IDNo      string                 `json:"id_no"`
-	Remarks   string                 `json:"remarks"`
-	Code      string                 `json:"code"`
-	Adderess  string                 `json:"address"`
-	Title     string                 `json:"title"`
-	Meta      map[string]interface{} `json:"meta"`
+	FirstName            string                 `json:"first_name"`
+	LastName             string                 `json:"last_name"`
+	OtherName            string                 `json:"other_name"`
+	Remarks              string                 `json:"remarks"`
+	Code                 string                 `json:"code"`
+	Adderess             string                 `json:"address"`
+	Title                string                 `json:"title"`
+	Phone1               string                 `json:"phone1"`
+	Phone2               string                 `json:"phone2"`
+	Phone3               string                 `json:"phone3"`
+	IDNo                 string                 `gorm:"unique;" json:"id_no"`
+	Birth                time.Time              `json:"birth"`
+	FbName               string                 `json:"fb_name"`
+	IgName               string                 `json:"ig_name"`
+	LinkedinName         string                 `json:"linkedin_name"`
+	WeiboName            string                 `json:"weibo_name"`
+	ResidentialAddress1  string                 `json:"residential_address_1"`
+	ResidentialAddress2  string                 `json:"residential_address_2"`
+	ResidentialAddress3  string                 `json:"residential_address_3"`
+	OfficeAddress        string                 `json:"office_address"`
+	AvgMonthIncome       string                 `json:"avg_month_income"`
+	BankAcName           string                 `json:"bank_ac_name"`
+	BankAcNumber         string                 `json:"bank_ac_number"`
+	TaxIdNumber          string                 `json:"tax_id_number"`
+	LoanAmount           string                 `json:"loan_amount"`
+	LoanTenor            string                 `json:"loan_tenor"`
+	LoanDate             string                 `json:"loan_date"`
+	LoanInstalmentAmount string                 `json:"loan_instalment_amount"`
+	DebtOutstanding      string                 `json:"debt_outstanding"`
+	DebtInstalmentAmount string                 `json:"debt_instalment_amount"`
+	DebtType             string                 `json:"debt_type"`
+	DebtStatus           string                 `json:"debt_status"`
+	Collateral           string                 `json:"collateral"`
+	CollateralValue      string                 `json:"collateral_value"`
+	Dti                  string                 `json:"dti"`
+	Score                string                 `json:"score"`
+	StatusDate           time.Time              `json:"status_date"`
+	OrderDate            time.Time              `json:"order_date"`
+	Meta                 map[string]interface{} `json:"meta"`
 }
 type CustomerUpdateParam struct {
-	FirstName *string                `json:"first_name"`
-	LastName  *string                `json:"last_name"`
-	OtherName *string                `json:"other_name"`
-	Phone     *string                `json:"phone"`
-	IDNo      *string                `json:"id_no"`
-	Remarks   *string                `json:"remarks"`
-	Code      *string                `json:"code"`
-	Adderess  *string                `json:"address"`
-	Title     *string                `json:"title"`
-	Status    *string                `json:"status"`
-	Meta      map[string]interface{} `json:"meta"`
+	FirstName            *string                `json:"first_name"`
+	LastName             *string                `json:"last_name"`
+	OtherName            *string                `json:"other_name"`
+	Remarks              *string                `json:"remarks"`
+	Code                 *string                `json:"code"`
+	Adderess             *string                `json:"address"`
+	Title                *string                `json:"title"`
+	Phone1               *string                `json:"phone1"`
+	Phone2               *string                `json:"phone2"`
+	Phone3               *string                `json:"phone3"`
+	IDNo                 *string                `gorm:"unique;" json:"id_no"`
+	Birth                *time.Time             `json:"birth"`
+	FbName               *string                `json:"fb_name"`
+	IgName               *string                `json:"ig_name"`
+	LinkedinName         *string                `json:"linkedin_name"`
+	WeiboName            *string                `json:"weibo_name"`
+	ResidentialAddress1  *string                `json:"residential_address_1"`
+	ResidentialAddress2  *string                `json:"residential_address_2"`
+	ResidentialAddress3  *string                `json:"residential_address_3"`
+	OfficeAddress        *string                `json:"office_address"`
+	AvgMonthIncome       *string                `json:"avg_month_income"`
+	BankAcName           *string                `json:"bank_ac_name"`
+	BankAcNumber         *string                `json:"bank_ac_number"`
+	TaxIdNumber          *string                `json:"tax_id_number"`
+	LoanAmount           *string                `json:"loan_amount"`
+	LoanTenor            *string                `json:"loan_tenor"`
+	LoanDate             *string                `json:"loan_date"`
+	LoanInstalmentAmount *string                `json:"loan_instalment_amount"`
+	DebtOutstanding      *string                `json:"debt_outstanding"`
+	DebtInstalmentAmount *string                `json:"debt_instalment_amount"`
+	DebtType             *string                `json:"debt_type"`
+	DebtStatus           *string                `json:"debt_status"`
+	Collateral           *string                `json:"collateral"`
+	CollateralValue      *string                `json:"collateral_value"`
+	Dti                  *string                `json:"dti"`
+	Score                *string                `json:"score"`
+	StatusDate           *time.Time             `json:"status_date"`
+	OrderDate            *time.Time             `json:"order_date"`
+	Status               *string                `json:"status"`
+	Meta                 map[string]interface{} `json:"meta"`
 }
 
 type CustomerQueryParam struct {
@@ -104,15 +163,44 @@ func GetCustomerManager() ICustomerManager {
 func (m *CustomerManager) Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error) {
 
 	cus := &models.Customer{
-		FirstName: param.FirstName,
-		LastName:  param.LastName,
-		OtherName: param.OtherName,
-		Phone:     param.Phone,
-		IDNo:      param.IDNo,
-		Remarks:   param.Remarks,
-		Code:      param.Code,
-		Adderess:  param.Adderess,
-		Title:     param.Title,
+		FirstName:            param.FirstName,
+		LastName:             param.LastName,
+		OtherName:            param.OtherName,
+		Remarks:              param.Remarks,
+		Code:                 param.Code,
+		Adderess:             param.Adderess,
+		Title:                param.Title,
+		Phone1:               param.Phone1,
+		Phone2:               param.Phone2,
+		Phone3:               param.Phone3,
+		IDNo:                 param.IDNo,
+		Birth:                param.Birth,
+		FbName:               param.FbName,
+		IgName:               param.IgName,
+		LinkedinName:         param.LinkedinName,
+		WeiboName:            param.WeiboName,
+		ResidentialAddress1:  param.ResidentialAddress1,
+		ResidentialAddress2:  param.ResidentialAddress2,
+		ResidentialAddress3:  param.ResidentialAddress3,
+		OfficeAddress:        param.OfficeAddress,
+		AvgMonthIncome:       param.AvgMonthIncome,
+		BankAcName:           param.BankAcName,
+		BankAcNumber:         param.BankAcNumber,
+		TaxIdNumber:          param.TaxIdNumber,
+		LoanAmount:           param.LoanAmount,
+		LoanTenor:            param.LoanTenor,
+		LoanDate:             param.LoanDate,
+		LoanInstalmentAmount: param.LoanInstalmentAmount,
+		DebtOutstanding:      param.DebtOutstanding,
+		DebtInstalmentAmount: param.DebtInstalmentAmount,
+		DebtType:             param.DebtType,
+		DebtStatus:           param.DebtStatus,
+		Collateral:           param.Collateral,
+		CollateralValue:      param.CollateralValue,
+		Dti:                  param.Dti,
+		Score:                param.Score,
+		StatusDate:           param.StatusDate,
+		OrderDate:            param.OrderDate,
 	}
 	if len(param.Code) == 0 {
 		return nil, errors.New("customer code error")
@@ -165,21 +253,110 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		if param.OtherName != nil {
 			cus.OtherName = *param.OtherName
 		}
-		if param.Phone != nil {
-			cus.Phone = *param.Phone
-		}
 		if param.IDNo != nil {
 			cus.SetIDNo(*param.IDNo)
 		}
 		if param.Remarks != nil {
 			cus.Remarks = *param.Remarks
 		}
-
 		if param.Code != nil {
 			cus.Code = *param.Code
 		}
 		if param.Title != nil {
 			cus.Title = *param.Title
+		}
+		if param.Phone1 != nil {
+			cus.Phone1 = *param.Phone1
+		}
+		if param.Phone2 != nil {
+			cus.Phone2 = *param.Phone2
+		}
+		if param.Phone3 != nil {
+			cus.Phone3 = *param.Phone3
+		}
+		if param.IDNo != nil {
+			cus.IDNo = *param.IDNo
+		}
+		if param.Birth != nil {
+			cus.Birth = *param.Birth
+		}
+		if param.FbName != nil {
+			cus.FbName = *param.FbName
+		}
+		if param.IgName != nil {
+			cus.IgName = *param.IgName
+		}
+		if param.LinkedinName != nil {
+			cus.LinkedinName = *param.LinkedinName
+		}
+		if param.WeiboName != nil {
+			cus.WeiboName = *param.WeiboName
+		}
+		if param.ResidentialAddress1 != nil {
+			cus.ResidentialAddress1 = *param.ResidentialAddress1
+		}
+		if param.ResidentialAddress2 != nil {
+			cus.ResidentialAddress2 = *param.ResidentialAddress2
+		}
+		if param.ResidentialAddress3 != nil {
+			cus.ResidentialAddress3 = *param.ResidentialAddress3
+		}
+		if param.OfficeAddress != nil {
+			cus.OfficeAddress = *param.OfficeAddress
+		}
+		if param.AvgMonthIncome != nil {
+			cus.AvgMonthIncome = *param.AvgMonthIncome
+		}
+		if param.BankAcName != nil {
+			cus.BankAcName = *param.BankAcName
+		}
+		if param.BankAcNumber != nil {
+			cus.BankAcNumber = *param.BankAcNumber
+		}
+		if param.TaxIdNumber != nil {
+			cus.TaxIdNumber = *param.TaxIdNumber
+		}
+		if param.LoanAmount != nil {
+			cus.LoanAmount = *param.LoanAmount
+		}
+		if param.LoanTenor != nil {
+			cus.LoanTenor = *param.LoanTenor
+		}
+		if param.LoanDate != nil {
+			cus.LoanDate = *param.LoanDate
+		}
+		if param.LoanInstalmentAmount != nil {
+			cus.LoanInstalmentAmount = *param.LoanInstalmentAmount
+		}
+		if param.DebtOutstanding != nil {
+			cus.DebtOutstanding = *param.DebtOutstanding
+		}
+		if param.DebtInstalmentAmount != nil {
+			cus.DebtInstalmentAmount = *param.DebtInstalmentAmount
+		}
+		if param.DebtType != nil {
+			cus.DebtType = *param.DebtType
+		}
+		if param.DebtStatus != nil {
+			cus.DebtStatus = *param.DebtStatus
+		}
+		if param.Collateral != nil {
+			cus.Collateral = *param.Collateral
+		}
+		if param.CollateralValue != nil {
+			cus.CollateralValue = *param.CollateralValue
+		}
+		if param.Dti != nil {
+			cus.Dti = *param.Dti
+		}
+		if param.Score != nil {
+			cus.Score = *param.Score
+		}
+		if param.StatusDate != nil {
+			cus.StatusDate = *param.StatusDate
+		}
+		if param.OrderDate != nil {
+			cus.OrderDate = *param.OrderDate
 		}
 		if param.Adderess != nil {
 			cus.Adderess = *param.Adderess
