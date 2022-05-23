@@ -53,11 +53,11 @@ type Customer struct {
 	OrderDate            *time.Time       `json:"order_date"`
 	Status               string           `json:"status"`
 	Remarks              string           `json:"remarks"`
+	Levels               string           `json:"levels"`
 	Meta                 []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`
 }
 
 func (cus *Customer) BeforeCreate(tx *gorm.DB) (err error) {
-	cus.ID = uuid.New()
 	cus.SetActive()
 	cus.SetIDNo(cus.IDNo)
 	return

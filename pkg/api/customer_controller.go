@@ -54,7 +54,13 @@ func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 	}
 	fieldPermissions := v.(string)
 
-	customers, pagin, err := ctl.cusMgr.GetCustomers(c, param, fieldPermissions)
+	levels := ""
+	v, ok = c.Get("Levels")
+	if ok {
+		levels = v.(string)
+	}
+
+	customers, pagin, err := ctl.cusMgr.GetCustomers(c, param, fieldPermissions, levels)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "get customers failed", err.Error())
 		return
@@ -88,7 +94,13 @@ func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 	}
 	fieldPermissions := v.(string)
 
-	customer, err := ctl.cusMgr.GetCustomer(c, customerID, fieldPermissions)
+	levels := ""
+	v, ok = c.Get("Levels")
+	if ok {
+		levels = v.(string)
+	}
+
+	customer, err := ctl.cusMgr.GetCustomer(c, customerID, fieldPermissions, levels)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "get customer failed", err.Error())
 		return

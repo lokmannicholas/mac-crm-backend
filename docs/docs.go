@@ -1133,7 +1133,7 @@ const docTemplate = `{
         },
         "/role/:id": {
             "put": {
-                "description": "Set field_permissions to \"*\" to review all fields",
+                "description": "Set field_permissions or levels to \"*\" to review all fields or all levels",
                 "consumes": [
                     "application/json"
                 ],
@@ -1256,7 +1256,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Set field_permissions to \"*\" to review all fields",
+                "description": "Set field_permissions or levels to \"*\" to review all fields or all levels",
                 "consumes": [
                     "application/json"
                 ],
@@ -1570,6 +1570,9 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
+                "levels": {
+                    "type": "string"
+                },
                 "linkedin_name": {
                     "type": "string"
                 },
@@ -1691,6 +1694,9 @@ const docTemplate = `{
                     "example": "id_no;birth"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "levels": {
                     "type": "string"
                 },
                 "name": {
@@ -1897,6 +1903,10 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
+                "levels": {
+                    "type": "string",
+                    "example": "|1|2|"
+                },
                 "linkedin_name": {
                     "type": "string"
                 },
@@ -2019,6 +2029,10 @@ const docTemplate = `{
                 },
                 "last_name": {
                     "type": "string"
+                },
+                "levels": {
+                    "type": "string",
+                    "example": "|1|2|"
                 },
                 "linkedin_name": {
                     "type": "string"
@@ -2151,6 +2165,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "id_no;birth"
                 },
+                "levels": {
+                    "type": "string",
+                    "example": "1;2"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2166,6 +2184,10 @@ const docTemplate = `{
                 "field_permissions": {
                     "type": "string",
                     "example": "id_no;birth"
+                },
+                "levels": {
+                    "type": "string",
+                    "example": "1;2"
                 },
                 "name": {
                     "type": "string"

@@ -53,6 +53,7 @@ type Role struct {
 	Name             string `json:"name"`
 	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 	FieldPermissions string ` json:"field_permissions" example:"id_no;birth"`
+	Levels           string ` json:"levels"`
 }
 
 func NewRoleEntity(role *models.Role) *Role {
@@ -62,6 +63,7 @@ func NewRoleEntity(role *models.Role) *Role {
 		Name:             role.Name,
 		Permissions:      role.GetPermissions(),
 		FieldPermissions: role.FieldPermissions,
+		Levels:           role.Levels,
 	}
 }
 

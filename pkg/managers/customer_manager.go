@@ -15,6 +15,7 @@ import (
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
 	"dmglab.com/mac-crm/pkg/util"
+	"github.com/google/uuid"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -59,6 +60,7 @@ type CustomerCreateParam struct {
 	Score                string                 `json:"score"`
 	StatusDate           *time.Time             `json:"status_date"`
 	OrderDate            *time.Time             `json:"order_date"`
+	Levels               string                 `json:"levels" example:"|1|2|"`
 	Meta                 map[string]interface{} `json:"meta"`
 }
 type CustomerUpdateParam struct {
@@ -101,6 +103,7 @@ type CustomerUpdateParam struct {
 	StatusDate           *time.Time             `json:"status_date"`
 	OrderDate            *time.Time             `json:"order_date"`
 	Status               *string                `json:"status"`
+	Levels               *string                `json:"levels" example:"|1|2|"`
 	Meta                 map[string]interface{} `json:"meta"`
 }
 
@@ -146,8 +149,8 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 type ICustomerManager interface {
 	Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error)
 	Update(ctx context.Context, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
-	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string) ([]*models.Customer, *util.Pagination, error)
-	GetCustomer(ctx context.Context, customerID string, fieldPermissions string) (*models.Customer, error)
+	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, *util.Pagination, error)
+	GetCustomer(ctx context.Context, customerID string, fieldPermissions string, levels string) (*models.Customer, error)
 	Activate(ctx context.Context, customerID string) error
 	Disable(ctx context.Context, customerID string) error
 }
@@ -165,6 +168,7 @@ func GetCustomerManager() ICustomerManager {
 func (m *CustomerManager) Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error) {
 
 	cus := &models.Customer{
+		ID:                   uuid.New(),
 		FirstName:            param.FirstName,
 		LastName:             param.LastName,
 		OtherName:            param.OtherName,
@@ -203,6 +207,7 @@ func (m *CustomerManager) Create(ctx context.Context, param *CustomerCreateParam
 		Score:                param.Score,
 		StatusDate:           param.StatusDate,
 		OrderDate:            param.OrderDate,
+		Levels:               param.Levels,
 	}
 	if len(param.Code) == 0 {
 		return nil, errors.New("customer code error")
@@ -357,6 +362,9 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		if param.Status != nil {
 			cus.Status = *param.Status
 		}
+		if param.Levels != nil {
+			cus.Levels = *param.Levels
+		}
 		cus.Birth = param.Birth
 		cus.StatusDate = param.StatusDate
 		cus.OrderDate = param.OrderDate
@@ -419,7 +427,7 @@ func (m *CustomerManager) Activate(ctx context.Context, customerID string) error
 	})
 }
 
-func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string) ([]*models.Customer, *util.Pagination, error) {
+func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, *util.Pagination, error) {
 	pagin := &util.Pagination{
 		Limit: param.Limit,
 		Page:  param.Page,
@@ -493,10 +501,10 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 
 		}
 
+		// check field permission
 		fields := strings.Split(fieldPermissions, ";")
-		customerFields, metaFields := []string{}, []string{}
+		customerFields, metaFields := []string{"id"}, []string{}
 		if fieldPermissions == "*" {
-			customerFields = append(customerFields, "*")
 			tx = tx.Preload("Meta")
 		} else {
 			customerFieldsAllow, metaFieldsAllow := GetCustomerFields(ctx), GetMetaFields(ctx)
@@ -508,10 +516,20 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 					metaFields = append(metaFields, field)
 				}
 			}
-			tx = tx.Preload("Meta", "`key` IN ?", metaFields)
+			tx = tx.Preload("Meta", "`key` IN ?", metaFields).Select(customerFields)
 		}
 
-		err = tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Select(customerFields).Find(&cuss).Error
+		// check level permission
+		userLevels := strings.Split(levels, ";")
+		if levels != "*" {
+			query := "levels = ''"
+			for _, v := range userLevels {
+				query = query + " OR levels LIKE '%|" + v + "|%'"
+			}
+			tx = tx.Where(query)
+		}
+
+		err = tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Find(&cuss).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}
@@ -520,13 +538,13 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	return cuss, pagin, err
 }
 
-func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fieldPermissions string) (*models.Customer, error) {
+func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fieldPermissions string, levels string) (*models.Customer, error) {
 	cus := new(models.Customer)
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		// check field permission
 		fields := strings.Split(fieldPermissions, ";")
-		customerFields, metaFields := []string{}, []string{}
+		customerFields, metaFields := []string{"id"}, []string{}
 		if fieldPermissions == "*" {
-			customerFields = append(customerFields, "*")
 			tx = tx.Preload("Meta")
 		} else {
 			customerFieldsAllow, metaFieldsAllow := GetCustomerFields(ctx), GetMetaFields(ctx)
@@ -538,9 +556,20 @@ func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fi
 					metaFields = append(metaFields, field)
 				}
 			}
-			tx = tx.Preload("Meta", "`key` IN ?", metaFields)
+			tx = tx.Preload("Meta", "`key` IN ?", metaFields).Select(customerFields)
 		}
-		return tx.Select(customerFields).First(cus, "id = ?", customerID).Error
+
+		// check level permission
+		userLevels := strings.Split(levels, ";")
+		if levels != "*" {
+			query := "levels = ''"
+			for _, v := range userLevels {
+				query = query + " OR levels LIKE '%|" + v + "|%'"
+			}
+			tx = tx.Where(query)
+		}
+
+		return tx.Where("id = ?", customerID).First(cus).Error
 	})
 
 	return cus, err
@@ -553,7 +582,7 @@ func GetCustomerFields(ctx context.Context) []string {
 	fields := []string{}
 	for i := 0; i < noOfFields; i++ {
 		fieldName := val.Type().Field(i).Tag.Get("json")
-		if fieldName != "meta" {
+		if fieldName != "meta" && fieldName != "level" {
 			fields = append(fields, fieldName)
 		}
 	}

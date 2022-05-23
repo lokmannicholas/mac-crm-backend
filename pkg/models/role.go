@@ -13,6 +13,7 @@ type Role struct {
 	Name             string    `gorm:"unique" json:"name"`
 	Permissions      string    ` json:"permissions"`
 	FieldPermissions string    ` json:"field_permissions"`
+	Levels           string    ` json:"levels"`
 }
 
 func (rol *Role) GetPermissions() string {

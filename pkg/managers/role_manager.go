@@ -16,11 +16,13 @@ type RoleCreateParam struct {
 	Name             string `json:"name"`
 	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 	FieldPermissions string `json:"field_permissions" example:"id_no;birth"`
+	Levels           string ` json:"levels" example:"1;2"`
 }
 type RoleUpdateParam struct {
 	Name             string `json:"name"`
 	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
 	FieldPermissions string `json:"field_permissions" example:"id_no;birth"`
+	Levels           string ` json:"levels" example:"1;2"`
 }
 type IRoleManager interface {
 	Create(ctx context.Context, param *RoleCreateParam) (*models.Role, error)
@@ -89,6 +91,7 @@ func (m *RoleManager) Update(ctx context.Context, id string, param *RoleUpdatePa
 			roleNew.Name = param.Name
 			roleNew.Permissions = param.Permissions
 			roleNew.FieldPermissions = param.FieldPermissions
+			roleNew.Levels = param.Levels
 		}
 		return tx.Save(roleNew).Error
 	})
@@ -103,6 +106,7 @@ func (m *RoleManager) Create(ctx context.Context, param *RoleCreateParam) (*mode
 		roleNew.Name = param.Name
 		roleNew.Permissions = param.Permissions
 		roleNew.FieldPermissions = param.FieldPermissions
+		roleNew.Levels = param.Levels
 	}
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		return tx.Create(roleNew).Error

@@ -53,6 +53,7 @@ type Customer struct {
 	OrderDate            *time.Time `json:"order_date"`
 	Status               string     `json:"status" enums:"Active,Disable" default:"Active"`
 	Remarks              string     `json:"remarks"`
+	Levels               string     `json:"levels"`
 	Meta                 []Meta     `json:"meta"`
 }
 
@@ -132,6 +133,7 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		OrderDate:            customer.OrderDate,
 		Status:               customer.Status,
 		Remarks:              customer.Remarks,
+		Levels:               customer.Levels,
 		Meta:                 metaArray,
 	}
 }

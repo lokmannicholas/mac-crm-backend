@@ -25,7 +25,6 @@ func Migration(migration *gorm.DB) {
 		//meta table
 		migration.AutoMigrate(&models.Customer{})
 		migration.AutoMigrate(&models.CustomersMeta{})
-
 		migration.AutoMigrate(&models.FieldOption{})
 
 	}
@@ -38,6 +37,7 @@ func InitalSystemAcc(migration *gorm.DB) {
 			Name:             _const.ACC_SUPER_ADMIN,
 			Permissions:      _const.ROLE_SUPER,
 			FieldPermissions: "*",
+			Levels:           "*",
 		}).Error; err != nil {
 			service.SysLog.Fatalln(err)
 		}

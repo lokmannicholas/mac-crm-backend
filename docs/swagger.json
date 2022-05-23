@@ -1121,7 +1121,7 @@
         },
         "/role/:id": {
             "put": {
-                "description": "Set field_permissions to \"*\" to review all fields",
+                "description": "Set field_permissions or levels to \"*\" to review all fields or all levels",
                 "consumes": [
                     "application/json"
                 ],
@@ -1244,7 +1244,7 @@
                 }
             },
             "post": {
-                "description": "Set field_permissions to \"*\" to review all fields",
+                "description": "Set field_permissions or levels to \"*\" to review all fields or all levels",
                 "consumes": [
                     "application/json"
                 ],
@@ -1558,6 +1558,9 @@
                 "last_name": {
                     "type": "string"
                 },
+                "levels": {
+                    "type": "string"
+                },
                 "linkedin_name": {
                     "type": "string"
                 },
@@ -1679,6 +1682,9 @@
                     "example": "id_no;birth"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "levels": {
                     "type": "string"
                 },
                 "name": {
@@ -1885,6 +1891,10 @@
                 "last_name": {
                     "type": "string"
                 },
+                "levels": {
+                    "type": "string",
+                    "example": "|1|2|"
+                },
                 "linkedin_name": {
                     "type": "string"
                 },
@@ -2007,6 +2017,10 @@
                 },
                 "last_name": {
                     "type": "string"
+                },
+                "levels": {
+                    "type": "string",
+                    "example": "|1|2|"
                 },
                 "linkedin_name": {
                     "type": "string"
@@ -2139,6 +2153,10 @@
                     "type": "string",
                     "example": "id_no;birth"
                 },
+                "levels": {
+                    "type": "string",
+                    "example": "1;2"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2154,6 +2172,10 @@
                 "field_permissions": {
                     "type": "string",
                     "example": "id_no;birth"
+                },
+                "levels": {
+                    "type": "string",
+                    "example": "1;2"
                 },
                 "name": {
                     "type": "string"

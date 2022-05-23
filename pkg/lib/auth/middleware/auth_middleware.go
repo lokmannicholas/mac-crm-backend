@@ -85,6 +85,7 @@ func (m *AuthMiddleware) AuthRequired() gin.HandlerFunc {
 		}
 		c.Set("Account", acc)
 		c.Set("FieldPermissions", acc.Role.FieldPermissions)
+		c.Set("Levels", acc.Role.Levels)
 		if acc.IsSystem {
 			c.Set("Permissions", _const.ROLE_SUPER)
 		} else {
