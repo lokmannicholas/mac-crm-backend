@@ -4,14 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/gob"
-	"reflect"
 	"strings"
 	"time"
 
 	"dmglab.com/mac-crm/pkg/managers"
 	"dmglab.com/mac-crm/pkg/models"
-	"dmglab.com/mac-crm/pkg/util"
-	"gorm.io/gorm"
 )
 
 type Customer struct {
@@ -57,33 +54,6 @@ type Customer struct {
 	Status               string     `json:"status" enums:"Active,Disable" default:"Active"`
 	Remarks              string     `json:"remarks"`
 	Meta                 []Meta     `json:"meta"`
-}
-
-func GetFields(ctx context.Context) []string {
-	var customer interface{} = Customer{}
-	val := reflect.ValueOf(customer)
-	noOfFields := val.Type().NumField()
-	fields := []string{}
-	for i := 0; i < noOfFields; i++ {
-		fieldName := val.Type().Field(i).Tag.Get("json")
-		if fieldName != "meta" {
-			fields = append(fields, fieldName)
-		}
-	}
-	customFields := []*models.CustomField{}
-	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		err := tx.Find(&customFields).Error
-		if err == gorm.ErrRecordNotFound {
-			return nil
-		}
-		return err
-	})
-	if err == nil {
-		for _, meta := range customFields {
-			fields = append(fields, meta.UniqueKey)
-		}
-	}
-	return fields
 }
 
 func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer {
@@ -168,11 +138,13 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 
 func NewCustomerListEntity(total int64, customers []*models.Customer, ctx context.Context) *List {
 	customerList := make([]*Customer, len(customers))
+	columns := managers.GetCustomerFields(ctx)
+	columns = append(columns, managers.GetMetaFields(ctx)...)
 	for i, customer := range customers {
 		customerList[i] = NewCustomerEntity(customer, ctx)
 	}
 	return &List{
-		Columns: GetFields(ctx),
+		Columns: columns,
 		Total:   total,
 		Data:    customerList,
 	}

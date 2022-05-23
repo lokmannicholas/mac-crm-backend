@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -419,7 +420,6 @@ func (m *CustomerManager) Activate(ctx context.Context, customerID string) error
 }
 
 func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string) ([]*models.Customer, *util.Pagination, error) {
-	fields := strings.Split(fieldPermissions, ";")
 	pagin := &util.Pagination{
 		Limit: param.Limit,
 		Page:  param.Page,
@@ -493,7 +493,25 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 
 		}
 
-		err = tx.Preload("Meta").Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Select(fields).Find(&cuss).Error
+		fields := strings.Split(fieldPermissions, ";")
+		customerFields, metaFields := []string{}, []string{}
+		if fieldPermissions == "*" {
+			customerFields = append(customerFields, "*")
+			tx = tx.Preload("Meta")
+		} else {
+			customerFieldsAllow, metaFieldsAllow := GetCustomerFields(ctx), GetMetaFields(ctx)
+			for _, field := range fields {
+				if util.Contain(customerFieldsAllow, field) {
+					customerFields = append(customerFields, field)
+				}
+				if util.Contain(metaFieldsAllow, field) {
+					metaFields = append(metaFields, field)
+				}
+			}
+			tx = tx.Preload("Meta", "`key` IN ?", metaFields)
+		}
+
+		err = tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Select(customerFields).Find(&cuss).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}
@@ -503,11 +521,60 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 }
 
 func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fieldPermissions string) (*models.Customer, error) {
-	fields := strings.Split(fieldPermissions, ";")
 	cus := new(models.Customer)
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		return tx.Preload("Meta").Select(fields).First(cus, "id = ?", customerID).Error
+		fields := strings.Split(fieldPermissions, ";")
+		customerFields, metaFields := []string{}, []string{}
+		if fieldPermissions == "*" {
+			customerFields = append(customerFields, "*")
+			tx = tx.Preload("Meta")
+		} else {
+			customerFieldsAllow, metaFieldsAllow := GetCustomerFields(ctx), GetMetaFields(ctx)
+			for _, field := range fields {
+				if util.Contain(customerFieldsAllow, field) {
+					customerFields = append(customerFields, field)
+				}
+				if util.Contain(metaFieldsAllow, field) {
+					metaFields = append(metaFields, field)
+				}
+			}
+			tx = tx.Preload("Meta", "`key` IN ?", metaFields)
+		}
+		return tx.Select(customerFields).First(cus, "id = ?", customerID).Error
 	})
 
 	return cus, err
+}
+
+func GetCustomerFields(ctx context.Context) []string {
+	var customer interface{} = models.Customer{}
+	val := reflect.ValueOf(customer)
+	noOfFields := val.Type().NumField()
+	fields := []string{}
+	for i := 0; i < noOfFields; i++ {
+		fieldName := val.Type().Field(i).Tag.Get("json")
+		if fieldName != "meta" {
+			fields = append(fields, fieldName)
+		}
+	}
+	return fields
+}
+
+func GetMetaFields(ctx context.Context) []string {
+
+	fields := []string{}
+	customFields := []*models.CustomField{}
+	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		err := tx.Find(&customFields).Error
+		if err == gorm.ErrRecordNotFound {
+			return nil
+		}
+		return err
+	})
+	if err == nil {
+		for _, meta := range customFields {
+			fields = append(fields, meta.UniqueKey)
+		}
+	}
+	return fields
 }
