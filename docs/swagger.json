@@ -1121,6 +1121,7 @@
         },
         "/role/:id": {
             "put": {
+                "description": "Set field_permissions to \"*\" to review all fields",
                 "consumes": [
                     "application/json"
                 ],
@@ -1243,6 +1244,7 @@
                 }
             },
             "post": {
+                "description": "Set field_permissions to \"*\" to review all fields",
                 "consumes": [
                     "application/json"
                 ],
@@ -1672,6 +1674,10 @@
         "entities.Role": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2129,6 +2135,10 @@
         "managers.RoleCreateParam": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2141,6 +2151,10 @@
         "managers.RoleUpdateParam": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "name": {
                     "type": "string"
                 },

@@ -167,6 +167,9 @@ definitions:
     type: object
   entities.Role:
     properties:
+      field_permissions:
+        example: id_no;birth
+        type: string
       id:
         type: string
       name:
@@ -472,6 +475,9 @@ definitions:
     type: object
   managers.RoleCreateParam:
     properties:
+      field_permissions:
+        example: id_no;birth
+        type: string
       name:
         type: string
       permissions:
@@ -480,6 +486,9 @@ definitions:
     type: object
   managers.RoleUpdateParam:
     properties:
+      field_permissions:
+        example: id_no;birth
+        type: string
       name:
         type: string
       permissions:
@@ -1343,6 +1352,7 @@ paths:
     put:
       consumes:
       - application/json
+      description: Set field_permissions to "*" to review all fields
       parameters:
       - description: ' '
         in: header
@@ -1417,6 +1427,7 @@ paths:
     post:
       consumes:
       - application/json
+      description: Set field_permissions to "*" to review all fields
       parameters:
       - description: ' '
         in: header

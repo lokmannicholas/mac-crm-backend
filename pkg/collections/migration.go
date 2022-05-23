@@ -34,9 +34,10 @@ func Migration(migration *gorm.DB) {
 func InitalSystemAcc(migration *gorm.DB) {
 	if migration.Migrator().HasTable(&models.Role{}) {
 		if err := migration.Clauses(clause.OnConflict{DoNothing: true}).Model(&models.Role{}).Create(&models.Role{
-			ID:          uuid.UUID{},
-			Name:        _const.ACC_SUPER_ADMIN,
-			Permissions: _const.ROLE_SUPER,
+			ID:               uuid.UUID{},
+			Name:             _const.ACC_SUPER_ADMIN,
+			Permissions:      _const.ROLE_SUPER,
+			FieldPermissions: "*",
 		}).Error; err != nil {
 			service.SysLog.Fatalln(err)
 		}

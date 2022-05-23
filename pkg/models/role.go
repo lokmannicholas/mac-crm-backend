@@ -9,9 +9,10 @@ import (
 
 type Role struct {
 	gorm.Model
-	ID          uuid.UUID `gorm:"type:varchar(36);primaryKey;"  json:"id"`
-	Name        string    `gorm:"unique" json:"name"`
-	Permissions string    ` json:"permissions"`
+	ID               uuid.UUID `gorm:"type:varchar(36);primaryKey;"  json:"id"`
+	Name             string    `gorm:"unique" json:"name"`
+	Permissions      string    ` json:"permissions"`
+	FieldPermissions string    ` json:"field_permissions"`
 }
 
 func (rol *Role) GetPermissions() string {

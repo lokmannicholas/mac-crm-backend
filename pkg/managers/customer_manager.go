@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"dmglab.com/mac-crm/pkg/config"
@@ -144,8 +145,8 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 type ICustomerManager interface {
 	Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error)
 	Update(ctx context.Context, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
-	GetCustomers(ctx context.Context, param *CustomerQueryParam) ([]*models.Customer, *util.Pagination, error)
-	GetCustomer(ctx context.Context, customerID string) (*models.Customer, error)
+	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string) ([]*models.Customer, *util.Pagination, error)
+	GetCustomer(ctx context.Context, customerID string, fieldPermissions string) (*models.Customer, error)
 	Activate(ctx context.Context, customerID string) error
 	Disable(ctx context.Context, customerID string) error
 }
@@ -417,7 +418,8 @@ func (m *CustomerManager) Activate(ctx context.Context, customerID string) error
 	})
 }
 
-func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam) ([]*models.Customer, *util.Pagination, error) {
+func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string) ([]*models.Customer, *util.Pagination, error) {
+	fields := strings.Split(fieldPermissions, ";")
 	pagin := &util.Pagination{
 		Limit: param.Limit,
 		Page:  param.Page,
@@ -491,7 +493,7 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 
 		}
 
-		err = tx.Preload("Meta").Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Find(&cuss).Error
+		err = tx.Preload("Meta").Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Select(fields).Find(&cuss).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}
@@ -500,10 +502,11 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	return cuss, pagin, err
 }
 
-func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string) (*models.Customer, error) {
+func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fieldPermissions string) (*models.Customer, error) {
+	fields := strings.Split(fieldPermissions, ";")
 	cus := new(models.Customer)
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
-		return tx.Preload("Meta").First(cus, "id = ?", customerID).Error
+		return tx.Preload("Meta").Select(fields).First(cus, "id = ?", customerID).Error
 	})
 
 	return cus, err

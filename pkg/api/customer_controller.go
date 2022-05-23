@@ -46,7 +46,15 @@ func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 		controller.ErrorResponse(c, 500, "000000", "get customers failed", err.Error())
 		return
 	}
-	customers, pagin, err := ctl.cusMgr.GetCustomers(c, param)
+
+	v, ok := c.Get("FieldPermissions")
+	if !ok {
+		c.AbortWithStatusJSON(403, gin.H{"message": "Permission denied"})
+		return
+	}
+	fieldPermissions := v.(string)
+
+	customers, pagin, err := ctl.cusMgr.GetCustomers(c, param, fieldPermissions)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "get customers failed", err.Error())
 		return
@@ -72,7 +80,15 @@ func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 
 	customerID := c.Param("id")
 	var err error
-	customer, err := ctl.cusMgr.GetCustomer(c, customerID)
+
+	v, ok := c.Get("FieldPermissions")
+	if !ok {
+		c.AbortWithStatusJSON(403, gin.H{"message": "Permission denied"})
+		return
+	}
+	fieldPermissions := v.(string)
+
+	customer, err := ctl.cusMgr.GetCustomer(c, customerID, fieldPermissions)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "get customer failed", err.Error())
 		return

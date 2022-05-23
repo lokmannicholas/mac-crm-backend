@@ -49,17 +49,19 @@ func NewAccountListEntity(ctx context.Context, total int64, accounts []*models.A
 }
 
 type Role struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	ID               string `json:"id"`
+	Name             string `json:"name"`
+	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	FieldPermissions string ` json:"field_permissions" example:"id_no;birth"`
 }
 
 func NewRoleEntity(role *models.Role) *Role {
 
 	return &Role{
-		ID:          role.ID.String(),
-		Name:        role.Name,
-		Permissions: role.GetPermissions(),
+		ID:               role.ID.String(),
+		Name:             role.Name,
+		Permissions:      role.GetPermissions(),
+		FieldPermissions: role.FieldPermissions,
 	}
 }
 

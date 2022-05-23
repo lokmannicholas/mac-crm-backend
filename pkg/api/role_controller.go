@@ -45,6 +45,7 @@ func (ctl *RoleController) GetRoles(c *gin.Context) {
 
 // UpdateRole godoc
 // @Tags Role
+// @Description Set field_permissions to "*" to review all fields
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
@@ -84,6 +85,7 @@ func (ctl *RoleController) Update(c *gin.Context) {
 
 // CreateRole godoc
 // @Tags Role
+// @Description Set field_permissions to "*" to review all fields
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "

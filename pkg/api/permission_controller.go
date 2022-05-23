@@ -27,7 +27,7 @@ func NewPermissionController() IPermissionController {
 // @Router /permissions [get]
 func (ctl *PermissionController) GetPermissions(c *gin.Context) {
 	data := map[string]interface{}{}
-	data["permissions"] = []string{
+	permissions := []string{
 		_const.PERMISSION_ACCOUNT.Read(),
 		_const.PERMISSION_ACCOUNT.Create(),
 		_const.PERMISSION_ACCOUNT.Update(),
@@ -48,5 +48,6 @@ func (ctl *PermissionController) GetPermissions(c *gin.Context) {
 		_const.PERMISSION_SETTING.Update(),
 	}
 
+	data["permissions"] = permissions
 	controller.Response(c, 200, data)
 }

@@ -1133,6 +1133,7 @@ const docTemplate = `{
         },
         "/role/:id": {
             "put": {
+                "description": "Set field_permissions to \"*\" to review all fields",
                 "consumes": [
                     "application/json"
                 ],
@@ -1255,6 +1256,7 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "description": "Set field_permissions to \"*\" to review all fields",
                 "consumes": [
                     "application/json"
                 ],
@@ -1684,6 +1686,10 @@ const docTemplate = `{
         "entities.Role": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2141,6 +2147,10 @@ const docTemplate = `{
         "managers.RoleCreateParam": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2153,6 +2163,10 @@ const docTemplate = `{
         "managers.RoleUpdateParam": {
             "type": "object",
             "properties": {
+                "field_permissions": {
+                    "type": "string",
+                    "example": "id_no;birth"
+                },
                 "name": {
                     "type": "string"
                 },

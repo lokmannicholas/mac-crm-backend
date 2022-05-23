@@ -13,12 +13,14 @@ import (
 )
 
 type RoleCreateParam struct {
-	Name        string `json:"name"`
-	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	Name             string `json:"name"`
+	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	FieldPermissions string `json:"field_permissions" example:"id_no;birth"`
 }
 type RoleUpdateParam struct {
-	Name        string `json:"name"`
-	Permissions string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	Name             string `json:"name"`
+	Permissions      string `json:"permissions" example:"ACCOUNT:U;CUSTOMER:U;ROLE:U"`
+	FieldPermissions string `json:"field_permissions" example:"id_no;birth"`
 }
 type IRoleManager interface {
 	Create(ctx context.Context, param *RoleCreateParam) (*models.Role, error)
@@ -86,6 +88,7 @@ func (m *RoleManager) Update(ctx context.Context, id string, param *RoleUpdatePa
 		if param != nil {
 			roleNew.Name = param.Name
 			roleNew.Permissions = param.Permissions
+			roleNew.FieldPermissions = param.FieldPermissions
 		}
 		return tx.Save(roleNew).Error
 	})
@@ -99,6 +102,7 @@ func (m *RoleManager) Create(ctx context.Context, param *RoleCreateParam) (*mode
 	if param != nil {
 		roleNew.Name = param.Name
 		roleNew.Permissions = param.Permissions
+		roleNew.FieldPermissions = param.FieldPermissions
 	}
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		return tx.Create(roleNew).Error
