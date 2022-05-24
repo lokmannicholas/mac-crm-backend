@@ -582,7 +582,7 @@ func GetCustomerFields(ctx context.Context) []string {
 	fields := []string{}
 	for i := 0; i < noOfFields; i++ {
 		fieldName := val.Type().Field(i).Tag.Get("json")
-		if fieldName != "meta" && fieldName != "level" {
+		if fieldName != "meta" {
 			fields = append(fields, fieldName)
 		}
 	}
