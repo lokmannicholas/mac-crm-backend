@@ -281,9 +281,6 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		if param.Phone3 != nil {
 			cus.Phone3 = *param.Phone3
 		}
-		if param.IDNo != nil {
-			cus.IDNo = *param.IDNo
-		}
 		if param.FbName != nil {
 			cus.FbName = *param.FbName
 		}
