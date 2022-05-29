@@ -9,9 +9,14 @@ import (
 
 	"dmglab.com/mac-crm/pkg/managers"
 	"dmglab.com/mac-crm/pkg/models"
+	"github.com/google/uuid"
 )
 
 type Customer struct {
+	CreatedAt            time.Time  `json:"created_at"`
+	UpdatedAt            time.Time  `json:"updated_at"`
+	CreatedBy            *uuid.UUID `json:"created_by"`
+	UpdatedBy            *uuid.UUID `json:"updated_by"`
 	ID                   string     `json:"id"`
 	Code                 string     `json:"code"`
 	FirstName            string     `json:"first_name"`
@@ -92,6 +97,10 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		metaArray[i] = ent
 	}
 	return &Customer{
+		CreatedAt:            customer.CreatedAt,
+		UpdatedAt:            customer.UpdatedAt,
+		CreatedBy:            customer.CreatedBy,
+		UpdatedBy:            customer.UpdatedBy,
 		ID:                   customer.ID.String(),
 		Code:                 customer.Code,
 		FirstName:            customer.FirstName,

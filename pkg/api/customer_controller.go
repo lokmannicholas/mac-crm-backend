@@ -5,6 +5,7 @@ import (
 	controller "dmglab.com/mac-crm/pkg/lib/controller"
 	"dmglab.com/mac-crm/pkg/managers"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type ICustomerController interface {
@@ -124,12 +125,19 @@ func (ctl *CustomerController) GetCustomer(c *gin.Context) {
 // @Router /customers [post]
 func (ctl *CustomerController) Create(c *gin.Context) {
 
+	v, ok := c.Get("AccountID")
+	if !ok {
+		c.AbortWithStatusJSON(403, gin.H{"message": "Permission denied"})
+		return
+	}
+	accountID := v.(uuid.UUID)
+
 	param := new(managers.CustomerCreateParam)
 	err := controller.GetBody(c, param)
 	if err != nil {
 		return
 	}
-	customer, err := ctl.cusMgr.Create(c, param)
+	customer, err := ctl.cusMgr.Create(c, accountID, param)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "create customers failed", err.Error())
 		return
@@ -153,13 +161,20 @@ func (ctl *CustomerController) Create(c *gin.Context) {
 // @Router /customer/:id [put]
 func (ctl *CustomerController) Update(c *gin.Context) {
 
+	v, ok := c.Get("AccountID")
+	if !ok {
+		c.AbortWithStatusJSON(403, gin.H{"message": "Permission denied"})
+		return
+	}
+	accountID := v.(uuid.UUID)
+
 	customerID := c.Param("id")
 	param := new(managers.CustomerUpdateParam)
 	err := controller.GetBody(c, param)
 	if err != nil {
 		return
 	}
-	customer, err := ctl.cusMgr.Update(c, customerID, param)
+	customer, err := ctl.cusMgr.Update(c, accountID, customerID, param)
 	if err != nil {
 		controller.ErrorResponse(c, 500, "000000", "create customers failed", err.Error())
 		return

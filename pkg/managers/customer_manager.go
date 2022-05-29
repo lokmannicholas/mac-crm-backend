@@ -147,8 +147,8 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 }
 
 type ICustomerManager interface {
-	Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error)
-	Update(ctx context.Context, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
+	Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error)
+	Update(ctx context.Context, accountID uuid.UUID, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
 	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, *util.Pagination, error)
 	GetCustomer(ctx context.Context, customerID string, fieldPermissions string, levels string) (*models.Customer, error)
 	Activate(ctx context.Context, customerID string) error
@@ -165,9 +165,10 @@ func GetCustomerManager() ICustomerManager {
 	}
 }
 
-func (m *CustomerManager) Create(ctx context.Context, param *CustomerCreateParam) (*models.Customer, error) {
+func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error) {
 
 	cus := &models.Customer{
+		CreatedBy:            &accountID,
 		ID:                   uuid.New(),
 		FirstName:            param.FirstName,
 		LastName:             param.LastName,
@@ -240,7 +241,7 @@ func (m *CustomerManager) Create(ctx context.Context, param *CustomerCreateParam
 	}
 	return cus, nil
 }
-func (m *CustomerManager) Update(ctx context.Context, customerID string, param *CustomerUpdateParam) (*models.Customer, error) {
+func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, customerID string, param *CustomerUpdateParam) (*models.Customer, error) {
 
 	if param.Code == nil {
 		return nil, errors.New("customer code error")
@@ -365,6 +366,7 @@ func (m *CustomerManager) Update(ctx context.Context, customerID string, param *
 		cus.Birth = param.Birth
 		cus.StatusDate = param.StatusDate
 		cus.OrderDate = param.OrderDate
+		cus.UpdatedBy = &accountID
 
 		err = tx.Save(cus).Error
 		if err != nil {

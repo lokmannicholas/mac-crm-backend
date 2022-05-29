@@ -84,6 +84,7 @@ func (m *AuthMiddleware) AuthRequired() gin.HandlerFunc {
 			// 	service.GetCache().Set(bearToken, acc, time.Minute*15)
 		}
 		c.Set("Account", acc)
+		c.Set("AccountID", acc.ID)
 		c.Set("FieldPermissions", acc.Role.FieldPermissions)
 		c.Set("Levels", acc.Role.Levels)
 		if acc.IsSystem {

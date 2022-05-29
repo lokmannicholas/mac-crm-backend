@@ -13,6 +13,8 @@ import (
 
 type Customer struct {
 	gorm.Model
+	CreatedBy            *uuid.UUID       `json:"created_by"`
+	UpdatedBy            *uuid.UUID       `json:"updated_by"`
 	ID                   uuid.UUID        `gorm:"type:varchar(36);primaryKey;" json:"id"`
 	Code                 string           `gorm:"<-:create;unique;" json:"code"`
 	Adderess             string           `json:"address"`

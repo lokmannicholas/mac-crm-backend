@@ -1537,6 +1537,12 @@ const docTemplate = `{
                 "collateral_value": {
                     "type": "string"
                 },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
                 "debt_instalment_amount": {
                     "type": "string"
                 },
@@ -1642,6 +1648,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
                     "type": "string"
                 },
                 "weibo_name": {

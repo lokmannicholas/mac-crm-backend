@@ -68,6 +68,10 @@ definitions:
         type: string
       collateral_value:
         type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
       debt_instalment_amount:
         type: string
       debt_outstanding:
@@ -139,6 +143,10 @@ definitions:
       tax_id_number:
         type: string
       title:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
         type: string
       weibo_name:
         type: string
