@@ -31,7 +31,7 @@ func NewCustomerController() ICustomerController {
 // @Produce json
 // @Param Authorization header string true " "
 // @Param search_mode query string false " " Enums(eq, like)
-// @Param code query string false " "
+// @Param name query string false " "
 // @Param phone query string false " "
 // @Param id_no query string false " "
 // @Param page query int false " "

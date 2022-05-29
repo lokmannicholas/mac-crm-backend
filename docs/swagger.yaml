@@ -1261,7 +1261,7 @@ paths:
         type: string
       - description: ' '
         in: query
-        name: code
+        name: name
         type: string
       - description: ' '
         in: query

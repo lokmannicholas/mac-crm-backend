@@ -6,7 +6,6 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
@@ -109,7 +108,7 @@ type CustomerUpdateParam struct {
 
 type CustomerQueryParam struct {
 	SearchMode string  `form:"search_mode" json:"search_mode"`
-	Code       *string `form:"code" json:"code"`
+	Name       *string `form:"name" json:"name"`
 	Phone      *string `form:"phone" json:"phone"`
 	IDNo       *string `form:"id_no" json:"id_no"`
 	Page       int     `form:"page" json:"page"`
@@ -125,8 +124,8 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 	if len(v["search_mode"]) > 0 {
 		q.SearchMode = v["search_mode"][0]
 	}
-	if len(v["code"]) > 0 {
-		q.Code = &v["code"][0]
+	if len(v["name"]) > 0 {
+		q.Name = &v["name"][0]
 	}
 	if len(v["phone"]) > 0 {
 		q.Phone = &v["phone"][0]
@@ -434,70 +433,23 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	cuss := []*models.Customer{}
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		var err error
-		whereExist := false
 		if param.SearchMode == "eq" {
 			if param.Phone != nil {
-				tx = tx.Where("phone = ?", *param.Phone)
+				tx = tx.Where("phone1 = ? OR phone2 = ? OR phone3 = ?", *param.Phone, *param.Phone, *param.Phone)
 			}
-			if param.IDNo != nil {
-				tx = tx.Where("id_no = ?", *param.IDNo)
+			if param.Name != nil {
+				tx = tx.Where("first_name = ? OR last_name = ? OR other_name = ?", *param.Name, *param.Name, *param.Name)
 			}
-			if param.Code != nil {
-				tx = tx.Where("code = ?", *param.Code)
-			}
+		}
+		if param.SearchMode == "like" {
 			if param.Phone != nil {
-				tx = tx.Where("phone = ?", *param.Phone)
+				phoneSearch := "%" + *param.Phone + "%"
+				tx = tx.Where("phone1 LIKE ? OR phone2 LIKE ? OR phone3 LIKE ?", phoneSearch, phoneSearch, phoneSearch)
 			}
-			if param.IDNo != nil {
-				tx = tx.Where("id_no = ?", *param.IDNo)
+			if param.Name != nil {
+				nameSearch := "%" + *param.Name + "%"
+				tx = tx.Where("first_name LIKE ? OR last_name LIKE ? OR other_name LIKE ?", nameSearch, nameSearch, nameSearch)
 			}
-		} else {
-			if param.Phone != nil {
-				p := fmt.Sprintf("(.*%s)", *param.Phone)
-				if !whereExist {
-					tx = tx.Where("phone RLIKE ?", p)
-					whereExist = true
-				} else {
-					tx = tx.Or("phone RLIKE ?", p)
-				}
-			}
-			if param.IDNo != nil {
-				p := fmt.Sprintf("(.*%s)", *param.IDNo)
-				if !whereExist {
-					tx = tx.Where("id_no RLIKE ?", p)
-					whereExist = true
-				} else {
-					tx = tx.Or("id_no RLIKE ?", p)
-				}
-			}
-		}
-		if param.Code != nil {
-			p := fmt.Sprintf("(.*%s)", *param.Code)
-			if !whereExist {
-				tx = tx.Where("code RLIKE ?", p)
-				whereExist = true
-			} else {
-				tx = tx.Or("code RLIKE ?", p)
-			}
-		}
-		if param.Phone != nil {
-			p := fmt.Sprintf("(.*%s)", *param.Phone)
-			if !whereExist {
-				tx = tx.Where("phone RLIKE ?", p)
-				whereExist = true
-			} else {
-				tx = tx.Or("phone RLIKE ?", p)
-			}
-		}
-		if param.IDNo != nil {
-			p := fmt.Sprintf("(.*%s)", *param.IDNo)
-			if !whereExist {
-				tx = tx.Where("id_no RLIKE ?", p)
-				whereExist = true
-			} else {
-				tx = tx.Or("id_no RLIKE ?", p)
-			}
-
 		}
 
 		// check field permission

@@ -953,7 +953,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": " ",
-                        "name": "code",
+                        "name": "name",
                         "in": "query"
                     },
                     {
