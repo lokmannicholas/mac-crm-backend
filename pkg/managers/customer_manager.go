@@ -1,9 +1,7 @@
 package managers
 
 import (
-	"bytes"
 	"context"
-	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -21,89 +19,89 @@ import (
 )
 
 type CustomerCreateParam struct {
-	FirstName            string                 `json:"first_name"`
-	LastName             string                 `json:"last_name"`
-	OtherName            string                 `json:"other_name"`
-	Remarks              string                 `json:"remarks"`
-	Code                 string                 `json:"code"`
-	Adderess             string                 `json:"address"`
-	Title                string                 `json:"title"`
-	Phone1               string                 `json:"phone1"`
-	Phone2               string                 `json:"phone2"`
-	Phone3               string                 `json:"phone3"`
-	IDNo                 string                 `gorm:"unique;" json:"id_no"`
-	Birth                *time.Time             `json:"birth"`
-	FbName               string                 `json:"fb_name"`
-	IgName               string                 `json:"ig_name"`
-	LinkedinName         string                 `json:"linkedin_name"`
-	WeiboName            string                 `json:"weibo_name"`
-	ResidentialAddress1  string                 `json:"residential_address_1"`
-	ResidentialAddress2  string                 `json:"residential_address_2"`
-	ResidentialAddress3  string                 `json:"residential_address_3"`
-	OfficeAddress        string                 `json:"office_address"`
-	AvgMonthIncome       string                 `json:"avg_month_income"`
-	BankAcName           string                 `json:"bank_ac_name"`
-	BankAcNumber         string                 `json:"bank_ac_number"`
-	TaxIdNumber          string                 `json:"tax_id_number"`
-	LoanAmount           string                 `json:"loan_amount"`
-	LoanTenor            string                 `json:"loan_tenor"`
-	LoanDate             string                 `json:"loan_date"`
-	LoanInstalmentAmount string                 `json:"loan_instalment_amount"`
-	DebtOutstanding      string                 `json:"debt_outstanding"`
-	DebtInstalmentAmount string                 `json:"debt_instalment_amount"`
-	DebtType             string                 `json:"debt_type"`
-	DebtStatus           string                 `json:"debt_status"`
-	Collateral           string                 `json:"collateral"`
-	CollateralValue      string                 `json:"collateral_value"`
-	Dti                  string                 `json:"dti"`
-	Score                string                 `json:"score"`
-	StatusDate           *time.Time             `json:"status_date"`
-	OrderDate            *time.Time             `json:"order_date"`
-	Levels               string                 `json:"levels" example:"|1|2|"`
-	Meta                 map[string]interface{} `json:"meta"`
+	FirstName            string            `json:"first_name"`
+	LastName             string            `json:"last_name"`
+	OtherName            string            `json:"other_name"`
+	Remarks              string            `json:"remarks"`
+	Code                 string            `json:"code"`
+	Adderess             string            `json:"address"`
+	Title                string            `json:"title"`
+	Phone1               string            `json:"phone1"`
+	Phone2               string            `json:"phone2"`
+	Phone3               string            `json:"phone3"`
+	IDNo                 string            `gorm:"unique;" json:"id_no"`
+	Birth                *time.Time        `json:"birth"`
+	FbName               string            `json:"fb_name"`
+	IgName               string            `json:"ig_name"`
+	LinkedinName         string            `json:"linkedin_name"`
+	WeiboName            string            `json:"weibo_name"`
+	ResidentialAddress1  string            `json:"residential_address_1"`
+	ResidentialAddress2  string            `json:"residential_address_2"`
+	ResidentialAddress3  string            `json:"residential_address_3"`
+	OfficeAddress        string            `json:"office_address"`
+	AvgMonthIncome       string            `json:"avg_month_income"`
+	BankAcName           string            `json:"bank_ac_name"`
+	BankAcNumber         string            `json:"bank_ac_number"`
+	TaxIdNumber          string            `json:"tax_id_number"`
+	LoanAmount           string            `json:"loan_amount"`
+	LoanTenor            string            `json:"loan_tenor"`
+	LoanDate             string            `json:"loan_date"`
+	LoanInstalmentAmount string            `json:"loan_instalment_amount"`
+	DebtOutstanding      string            `json:"debt_outstanding"`
+	DebtInstalmentAmount string            `json:"debt_instalment_amount"`
+	DebtType             string            `json:"debt_type"`
+	DebtStatus           string            `json:"debt_status"`
+	Collateral           string            `json:"collateral"`
+	CollateralValue      string            `json:"collateral_value"`
+	Dti                  string            `json:"dti"`
+	Score                string            `json:"score"`
+	StatusDate           *time.Time        `json:"status_date"`
+	OrderDate            *time.Time        `json:"order_date"`
+	Levels               string            `json:"levels" example:"|1|2|"`
+	Meta                 map[string]string `json:"meta"`
 }
 type CustomerUpdateParam struct {
-	FirstName            *string                `json:"first_name"`
-	LastName             *string                `json:"last_name"`
-	OtherName            *string                `json:"other_name"`
-	Remarks              *string                `json:"remarks"`
-	Code                 *string                `json:"code"`
-	Adderess             *string                `json:"address"`
-	Title                *string                `json:"title"`
-	Phone1               *string                `json:"phone1"`
-	Phone2               *string                `json:"phone2"`
-	Phone3               *string                `json:"phone3"`
-	IDNo                 *string                `gorm:"unique;" json:"id_no"`
-	Birth                *time.Time             `json:"birth"`
-	FbName               *string                `json:"fb_name"`
-	IgName               *string                `json:"ig_name"`
-	LinkedinName         *string                `json:"linkedin_name"`
-	WeiboName            *string                `json:"weibo_name"`
-	ResidentialAddress1  *string                `json:"residential_address_1"`
-	ResidentialAddress2  *string                `json:"residential_address_2"`
-	ResidentialAddress3  *string                `json:"residential_address_3"`
-	OfficeAddress        *string                `json:"office_address"`
-	AvgMonthIncome       *string                `json:"avg_month_income"`
-	BankAcName           *string                `json:"bank_ac_name"`
-	BankAcNumber         *string                `json:"bank_ac_number"`
-	TaxIdNumber          *string                `json:"tax_id_number"`
-	LoanAmount           *string                `json:"loan_amount"`
-	LoanTenor            *string                `json:"loan_tenor"`
-	LoanDate             *string                `json:"loan_date"`
-	LoanInstalmentAmount *string                `json:"loan_instalment_amount"`
-	DebtOutstanding      *string                `json:"debt_outstanding"`
-	DebtInstalmentAmount *string                `json:"debt_instalment_amount"`
-	DebtType             *string                `json:"debt_type"`
-	DebtStatus           *string                `json:"debt_status"`
-	Collateral           *string                `json:"collateral"`
-	CollateralValue      *string                `json:"collateral_value"`
-	Dti                  *string                `json:"dti"`
-	Score                *string                `json:"score"`
-	StatusDate           *time.Time             `json:"status_date"`
-	OrderDate            *time.Time             `json:"order_date"`
-	Status               *string                `json:"status"`
-	Levels               *string                `json:"levels" example:"|1|2|"`
-	Meta                 map[string]interface{} `json:"meta"`
+	FirstName            *string           `json:"first_name"`
+	LastName             *string           `json:"last_name"`
+	OtherName            *string           `json:"other_name"`
+	Remarks              *string           `json:"remarks"`
+	Code                 *string           `json:"code"`
+	Adderess             *string           `json:"address"`
+	Title                *string           `json:"title"`
+	Phone1               *string           `json:"phone1"`
+	Phone2               *string           `json:"phone2"`
+	Phone3               *string           `json:"phone3"`
+	IDNo                 *string           `gorm:"unique;" json:"id_no"`
+	Birth                *time.Time        `json:"birth"`
+	FbName               *string           `json:"fb_name"`
+	IgName               *string           `json:"ig_name"`
+	LinkedinName         *string           `json:"linkedin_name"`
+	WeiboName            *string           `json:"weibo_name"`
+	ResidentialAddress1  *string           `json:"residential_address_1"`
+	ResidentialAddress2  *string           `json:"residential_address_2"`
+	ResidentialAddress3  *string           `json:"residential_address_3"`
+	OfficeAddress        *string           `json:"office_address"`
+	AvgMonthIncome       *string           `json:"avg_month_income"`
+	BankAcName           *string           `json:"bank_ac_name"`
+	BankAcNumber         *string           `json:"bank_ac_number"`
+	TaxIdNumber          *string           `json:"tax_id_number"`
+	LoanAmount           *string           `json:"loan_amount"`
+	LoanTenor            *string           `json:"loan_tenor"`
+	LoanDate             *string           `json:"loan_date"`
+	LoanInstalmentAmount *string           `json:"loan_instalment_amount"`
+	DebtOutstanding      *string           `json:"debt_outstanding"`
+	DebtInstalmentAmount *string           `json:"debt_instalment_amount"`
+	DebtType             *string           `json:"debt_type"`
+	DebtStatus           *string           `json:"debt_status"`
+	Collateral           *string           `json:"collateral"`
+	CollateralValue      *string           `json:"collateral_value"`
+	Dti                  *string           `json:"dti"`
+	Score                *string           `json:"score"`
+	StatusDate           *time.Time        `json:"status_date"`
+	OrderDate            *time.Time        `json:"order_date"`
+	Status               *string           `json:"status"`
+	Levels               *string           `json:"levels" example:"|1|2|"`
+	Meta                 map[string]string `json:"meta"`
 }
 
 type CustomerQueryParam struct {
@@ -215,23 +213,14 @@ func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		// save meta
 		for k, v := range param.Meta {
-			if v != nil {
-				var buf bytes.Buffer
-				enc := gob.NewEncoder(&buf)
-				err := enc.Encode(v)
-				if err != nil {
-					return err
-				}
-				data := buf.Bytes()
-				meta := &models.CustomersMeta{
-					Meta: &models.Meta{
-						Key: k,
-						Val: data,
-					},
-					CustomerID: cus.ID,
-				}
-				cus.Meta = append(cus.Meta, meta)
+			meta := &models.CustomersMeta{
+				Meta: &models.Meta{
+					Key: k,
+					Val: v,
+				},
+				CustomerID: cus.ID,
 			}
+			cus.Meta = append(cus.Meta, meta)
 		}
 		return tx.Create(cus).Error
 	})
@@ -374,23 +363,15 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 
 		// save meta
 		for k, v := range param.Meta {
-			if v != nil {
-				var buf bytes.Buffer
-				enc := gob.NewEncoder(&buf)
-				err := enc.Encode(v)
-				if err != nil {
-					return err
-				}
-				data := buf.Bytes()
-				meta := &models.CustomersMeta{
-					Meta: &models.Meta{
-						Key: k,
-						Val: data,
-					},
-					CustomerID: cus.ID,
-				}
-				cus.Meta = append(cus.Meta, meta)
+			meta := &models.CustomersMeta{
+				Meta: &models.Meta{
+					Key: k,
+					Val: v,
+				},
+				CustomerID: cus.ID,
 			}
+			cus.Meta = append(cus.Meta, meta)
+
 		}
 		return tx.Model(cus.Meta).Clauses(clause.OnConflict{
 			Columns:   []clause.Column{{Name: "customer_id"}, {Name: "key"}},

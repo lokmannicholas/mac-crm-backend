@@ -335,7 +335,8 @@ definitions:
       loan_tenor:
         type: string
       meta:
-        additionalProperties: true
+        additionalProperties:
+          type: string
         type: object
       office_address:
         type: string
@@ -420,7 +421,8 @@ definitions:
       loan_tenor:
         type: string
       meta:
-        additionalProperties: true
+        additionalProperties:
+          type: string
         type: object
       office_address:
         type: string

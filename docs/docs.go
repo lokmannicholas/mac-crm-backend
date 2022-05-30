@@ -1936,7 +1936,9 @@ const docTemplate = `{
                 },
                 "meta": {
                     "type": "object",
-                    "additionalProperties": true
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "office_address": {
                     "type": "string"
@@ -2063,7 +2065,9 @@ const docTemplate = `{
                 },
                 "meta": {
                     "type": "object",
-                    "additionalProperties": true
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "office_address": {
                     "type": "string"

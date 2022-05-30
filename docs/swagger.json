@@ -1924,7 +1924,9 @@
                 },
                 "meta": {
                     "type": "object",
-                    "additionalProperties": true
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "office_address": {
                     "type": "string"
@@ -2051,7 +2053,9 @@
                 },
                 "meta": {
                     "type": "object",
-                    "additionalProperties": true
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "office_address": {
                     "type": "string"

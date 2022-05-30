@@ -1,9 +1,7 @@
 package entities
 
 import (
-	"bytes"
 	"context"
-	"encoding/gob"
 	"strings"
 	"time"
 
@@ -73,22 +71,16 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 	}
 	metaArray := make([]Meta, len(customer.Meta))
 	for i, meta := range customer.Meta {
-		buf := bytes.NewBuffer(meta.Val)
-		dec := gob.NewDecoder(buf)
-		v := ""
 		ent := *NewMetaEntity(meta.Meta)
-		ent.Val = ""
-		if err := dec.Decode(&v); err == nil {
-			if ent.DataType == "multiple" {
-				optionIds := strings.Split(v, ";")
-				options, err := managers.FindByIds(ctx, optionIds)
-				if err == nil {
-					ent.Val = NewFieldOptinoListEntity(options)
-				}
-			} else {
-				ent.Val = v
+
+		if ent.DataType == "multiple" {
+			optionIds := strings.Split(meta.Val, ";")
+			options, err := managers.FindByIds(ctx, optionIds)
+			if err == nil {
+				ent.Val = NewFieldOptinoListEntity(options)
 			}
 		}
+
 		metaArray[i] = ent
 	}
 	return &Customer{
