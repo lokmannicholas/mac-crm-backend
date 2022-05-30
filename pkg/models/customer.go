@@ -3,10 +3,8 @@ package models
 import (
 	"time"
 
-	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/service"
 	_const "dmglab.com/mac-crm/pkg/util/const"
-	"dmglab.com/mac-crm/pkg/util/encrypt"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -61,7 +59,6 @@ type Customer struct {
 
 func (cus *Customer) BeforeCreate(tx *gorm.DB) (err error) {
 	cus.SetActive()
-	cus.SetIDNo(cus.IDNo)
 	return
 }
 
@@ -82,19 +79,4 @@ func (cus *Customer) SetDisable() *Customer {
 func (cus *Customer) SetActive() *Customer {
 	cus.Status = "Active"
 	return cus
-}
-
-func (cus *Customer) SetIDNo(idNo string) *Customer {
-	cus.IDNo = encrypt.ASEEncrypt(idNo, config.GetConfig().ASEKey)
-	return cus
-}
-func (cus *Customer) GetIDNo() string {
-	if len(cus.IDNo) == 0 {
-		return ""
-	}
-	decrypted := encrypt.ASEDecrypt(cus.IDNo, config.GetConfig().ASEKey)
-	if len(decrypted) == 0 {
-		return ""
-	}
-	return decrypted
 }

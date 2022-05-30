@@ -66,11 +66,6 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 	if customer == nil {
 		return &Customer{}
 	}
-
-	idNo := "******"
-	if len(customer.GetIDNo()) > 4 {
-		idNo = customer.GetIDNo()[0:4] + "******"
-	}
 	var age *int = nil
 	if customer.Birth != nil {
 		ageRes := calAge(*customer.Birth)
@@ -111,7 +106,7 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		Phone1:               customer.Phone1,
 		Phone2:               customer.Phone2,
 		Phone3:               customer.Phone3,
-		IDNo:                 idNo,
+		IDNo:                 customer.IDNo,
 		Birth:                customer.Birth,
 		Age:                  age,
 		FbName:               customer.FbName,

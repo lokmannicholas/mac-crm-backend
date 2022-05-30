@@ -261,7 +261,7 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 			cus.OtherName = *param.OtherName
 		}
 		if param.IDNo != nil {
-			cus.SetIDNo(*param.IDNo)
+			cus.IDNo = *param.IDNo
 		}
 		if param.Remarks != nil {
 			cus.Remarks = *param.Remarks
@@ -437,6 +437,9 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			if param.Phone != nil {
 				tx = tx.Where("phone1 = ? OR phone2 = ? OR phone3 = ?", *param.Phone, *param.Phone, *param.Phone)
 			}
+			if param.IDNo != nil {
+				tx = tx.Where("id_no = ?", *param.IDNo)
+			}
 			if param.Name != nil {
 				tx = tx.Where("first_name = ? OR last_name = ? OR other_name = ?", *param.Name, *param.Name, *param.Name)
 			}
@@ -445,6 +448,10 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			if param.Phone != nil {
 				phoneSearch := "%" + *param.Phone + "%"
 				tx = tx.Where("phone1 LIKE ? OR phone2 LIKE ? OR phone3 LIKE ?", phoneSearch, phoneSearch, phoneSearch)
+			}
+			if param.IDNo != nil {
+				idSearch := "%" + *param.IDNo + "%"
+				tx = tx.Where("id_no LIKE ?", idSearch)
 			}
 			if param.Name != nil {
 				nameSearch := "%" + *param.Name + "%"
