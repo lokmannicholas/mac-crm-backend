@@ -12,6 +12,7 @@ type CustomField struct {
 	FieldType    string         `json:"field_type" enums:"string,multiple"`
 	Status       string         `json:"status" enums:"Active,Disable" default:"Active"`
 	Remarks      string         `json:"remarks"`
+	Sorting      int32          `json:"sorting"`
 	Options      []*FieldOption `json:"field_options"`
 }
 
@@ -28,6 +29,7 @@ func NewCustomFieldEntity(cus *models.CustomField) *CustomField {
 		UniqueKey:    cus.UniqueKey,
 		Status:       cus.Status,
 		Remarks:      cus.Remarks,
+		Sorting:      cus.Sorting,
 		Options:      NewFieldOptinoListEntity(cus.Options),
 	}
 }

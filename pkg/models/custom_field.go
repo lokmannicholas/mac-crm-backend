@@ -12,6 +12,7 @@ type CustomField struct {
 	CustomObject string
 	UniqueKey    string         `gorm:"type:varchar(18);unique;"`
 	FieldName    *MultiLangText `gorm:"embedded;embeddedPrefix:field_name_"`
+	Sorting      int32
 	FieldType    string
 	Remarks      string
 	Status       string
