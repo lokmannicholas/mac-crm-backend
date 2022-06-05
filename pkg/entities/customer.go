@@ -134,7 +134,7 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 	}
 }
 
-func NewCustomerListEntity(total int64, customers []*models.Customer, ctx context.Context) *List {
+func NewCustomerListEntity(customers []*models.Customer, ctx context.Context) *List {
 	customerList := make([]*Customer, len(customers))
 	columns := managers.GetCustomerFields(ctx)
 	columns = append(columns, managers.GetMetaFields(ctx)...)
@@ -143,7 +143,6 @@ func NewCustomerListEntity(total int64, customers []*models.Customer, ctx contex
 	}
 	return &List{
 		Columns: columns,
-		Total:   total,
 		Data:    customerList,
 	}
 

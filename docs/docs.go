@@ -941,16 +941,6 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "enum": [
-                            "eq",
-                            "like"
-                        ],
-                        "type": "string",
-                        "description": " ",
-                        "name": "search_mode",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
                         "description": " ",
                         "name": "name",
@@ -966,18 +956,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": " ",
                         "name": "id_no",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": " ",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": " ",
-                        "name": "limit",
                         "in": "query"
                     }
                 ],

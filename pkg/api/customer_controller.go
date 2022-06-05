@@ -30,12 +30,9 @@ func NewCustomerController() ICustomerController {
 // @Accept json
 // @Produce json
 // @Param Authorization header string true " "
-// @Param search_mode query string false " " Enums(eq, like)
 // @Param name query string false " "
 // @Param phone query string false " "
 // @Param id_no query string false " "
-// @Param page query int false " "
-// @Param limit query int false " "
 // @Success 200 {object} swagger.APIResponse{data=swagger.Customers}
 // @Failure 403 {object} swagger.APIForbiddenError
 // @Failure 500 {object} swagger.APIInternalServerError
@@ -61,14 +58,14 @@ func (ctl *CustomerController) GetCustomers(c *gin.Context) {
 		levels = v.(string)
 	}
 
-	customers, pagin, err := ctl.cusMgr.GetCustomers(c, param, fieldPermissions, levels)
+	customers, err := ctl.cusMgr.GetCustomers(c, param, fieldPermissions, levels)
 	if err != nil {
-		controller.ErrorResponse(c, 500, "000000", "get customers failed", err.Error())
+		controller.ErrorResponse(c, 500, "000000", "get customer failed", err.Error())
 		return
 	}
 	data := map[string]interface{}{}
-	data["customers"] = entities.NewCustomerListEntity(pagin.TotalCount, customers, c)
 
+	data["customers"] = entities.NewCustomerListEntity(customers, c)
 	controller.Response(c, 200, data)
 }
 

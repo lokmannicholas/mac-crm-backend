@@ -1255,13 +1255,6 @@ paths:
         required: true
         type: string
       - description: ' '
-        enum:
-        - eq
-        - like
-        in: query
-        name: search_mode
-        type: string
-      - description: ' '
         in: query
         name: name
         type: string
@@ -1273,14 +1266,6 @@ paths:
         in: query
         name: id_no
         type: string
-      - description: ' '
-        in: query
-        name: page
-        type: integer
-      - description: ' '
-        in: query
-        name: limit
-        type: integer
       produces:
       - application/json
       responses:

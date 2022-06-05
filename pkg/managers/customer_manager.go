@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"reflect"
-	"strconv"
 	"strings"
 	"time"
 
@@ -105,12 +104,9 @@ type CustomerUpdateParam struct {
 }
 
 type CustomerQueryParam struct {
-	SearchMode string  `form:"search_mode" json:"search_mode"`
-	Name       *string `form:"name" json:"name"`
-	Phone      *string `form:"phone" json:"phone"`
-	IDNo       *string `form:"id_no" json:"id_no"`
-	Page       int     `form:"page" json:"page"`
-	Limit      int     `form:"limit" json:"limit"`
+	Name  *string `form:"name" json:"name"`
+	Phone *string `form:"phone" json:"phone"`
+	IDNo  *string `form:"id_no" json:"id_no"`
 }
 
 func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
@@ -118,9 +114,6 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 	var v map[string][]string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
-	}
-	if len(v["search_mode"]) > 0 {
-		q.SearchMode = v["search_mode"][0]
 	}
 	if len(v["name"]) > 0 {
 		q.Name = &v["name"][0]
@@ -131,22 +124,13 @@ func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
 	if len(v["id_no"]) > 0 {
 		q.IDNo = &v["id_no"][0]
 	}
-	if len(v["page"]) > 0 {
-		i, err := strconv.ParseInt(v["page"][0], 10, 64)
-		if err != nil {
-			return err
-		}
-		q.Page = int(i)
-	} else {
-		q.Page = 0
-	}
 	return nil
 }
 
 type ICustomerManager interface {
 	Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error)
 	Update(ctx context.Context, accountID uuid.UUID, customerID string, param *CustomerUpdateParam) (*models.Customer, error)
-	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, *util.Pagination, error)
+	GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, error)
 	GetCustomer(ctx context.Context, customerID string, fieldPermissions string, levels string) (*models.Customer, error)
 	Activate(ctx context.Context, customerID string) error
 	Disable(ctx context.Context, customerID string) error
@@ -406,38 +390,22 @@ func (m *CustomerManager) Activate(ctx context.Context, customerID string) error
 	})
 }
 
-func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, *util.Pagination, error) {
-	pagin := &util.Pagination{
-		Limit: param.Limit,
-		Page:  param.Page,
-	}
+func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQueryParam, fieldPermissions string, levels string) ([]*models.Customer, error) {
 	cuss := []*models.Customer{}
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		var err error
-		if param.SearchMode == "eq" {
-			if param.Phone != nil {
-				tx = tx.Where("phone1 = ? OR phone2 = ? OR phone3 = ?", *param.Phone, *param.Phone, *param.Phone)
-			}
-			if param.IDNo != nil {
-				tx = tx.Where("id_no = ?", *param.IDNo)
-			}
-			if param.Name != nil {
-				tx = tx.Where("first_name = ? OR last_name = ? OR other_name = ?", *param.Name, *param.Name, *param.Name)
-			}
+
+		if param.Phone != nil {
+			phoneSearch := "%" + *param.Phone + "%"
+			tx = tx.Where("phone1 LIKE ? OR phone2 LIKE ? OR phone3 LIKE ?", phoneSearch, phoneSearch, phoneSearch)
 		}
-		if param.SearchMode == "like" {
-			if param.Phone != nil {
-				phoneSearch := "%" + *param.Phone + "%"
-				tx = tx.Where("phone1 LIKE ? OR phone2 LIKE ? OR phone3 LIKE ?", phoneSearch, phoneSearch, phoneSearch)
-			}
-			if param.IDNo != nil {
-				idSearch := "%" + *param.IDNo + "%"
-				tx = tx.Where("id_no LIKE ?", idSearch)
-			}
-			if param.Name != nil {
-				nameSearch := "%" + *param.Name + "%"
-				tx = tx.Where("first_name LIKE ? OR last_name LIKE ? OR other_name LIKE ?", nameSearch, nameSearch, nameSearch)
-			}
+		if param.IDNo != nil {
+			idSearch := "%" + *param.IDNo + "%"
+			tx = tx.Where("id_no LIKE ?", idSearch)
+		}
+		if param.Name != nil {
+			nameSearch := "%" + *param.Name + "%"
+			tx = tx.Where("first_name LIKE ? OR last_name LIKE ? OR other_name LIKE ?", nameSearch, nameSearch, nameSearch)
 		}
 
 		// check field permission
@@ -468,13 +436,13 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			tx = tx.Where(query)
 		}
 
-		err = tx.Distinct().Scopes(util.PaginationScope(cuss, pagin, tx)).Find(&cuss).Error
+		err = tx.Distinct().Find(&cuss).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}
 		return err
 	})
-	return cuss, pagin, err
+	return cuss, err
 }
 
 func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fieldPermissions string, levels string) (*models.Customer, error) {
