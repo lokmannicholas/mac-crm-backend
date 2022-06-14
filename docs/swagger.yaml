@@ -50,87 +50,31 @@ definitions:
     type: object
   entities.Customer:
     properties:
-      address:
-        type: string
       age:
         type: integer
-      avg_month_income:
-        type: string
-      bank_ac_name:
-        type: string
-      bank_ac_number:
-        type: string
       birth:
         type: string
-      code:
+      court_filing_date:
         type: string
-      collateral:
+      court_order_date:
         type: string
-      collateral_value:
+      court_release_date:
         type: string
       created_at:
         type: string
       created_by:
         type: string
-      debt_instalment_amount:
-        type: string
-      debt_outstanding:
-        type: string
-      debt_status:
-        type: string
-      debt_type:
-        type: string
-      dti:
-        type: string
-      fb_name:
-        type: string
-      first_name:
-        type: string
       id:
         type: string
       id_no:
         type: string
-      ig_name:
-        type: string
-      last_name:
-        type: string
       levels:
-        type: string
-      linkedin_name:
-        type: string
-      loan_amount:
-        type: string
-      loan_date:
-        type: string
-      loan_instalment_amount:
-        type: string
-      loan_tenor:
         type: string
       meta:
         items:
           $ref: '#/definitions/entities.Meta'
         type: array
-      office_address:
-        type: string
-      order_date:
-        type: string
-      other_name:
-        type: string
-      phone1:
-        type: string
-      phone2:
-        type: string
-      phone3:
-        type: string
-      remarks:
-        type: string
-      residential_address_1:
-        type: string
-      residential_address_2:
-        type: string
-      residential_address_3:
-        type: string
-      score:
+      name:
         type: string
       status:
         default: Active
@@ -138,17 +82,9 @@ definitions:
         - Active
         - Disable
         type: string
-      status_date:
-        type: string
-      tax_id_number:
-        type: string
-      title:
-        type: string
       updated_at:
         type: string
       updated_by:
-        type: string
-      weibo_name:
         type: string
     type: object
   entities.FieldOption:
@@ -285,176 +221,48 @@ definitions:
     type: object
   managers.CustomerCreateParam:
     properties:
-      address:
-        type: string
-      avg_month_income:
-        type: string
-      bank_ac_name:
-        type: string
-      bank_ac_number:
-        type: string
       birth:
         type: string
-      code:
+      court_filing_date:
         type: string
-      collateral:
+      court_order_date:
         type: string
-      collateral_value:
-        type: string
-      debt_instalment_amount:
-        type: string
-      debt_outstanding:
-        type: string
-      debt_status:
-        type: string
-      debt_type:
-        type: string
-      dti:
-        type: string
-      fb_name:
-        type: string
-      first_name:
+      court_release_date:
         type: string
       id_no:
         type: string
-      ig_name:
-        type: string
-      last_name:
-        type: string
       levels:
         example: '|1|2|'
-        type: string
-      linkedin_name:
-        type: string
-      loan_amount:
-        type: string
-      loan_date:
-        type: string
-      loan_instalment_amount:
-        type: string
-      loan_tenor:
         type: string
       meta:
         additionalProperties:
           type: string
         type: object
-      office_address:
-        type: string
-      order_date:
-        type: string
-      other_name:
-        type: string
-      phone1:
-        type: string
-      phone2:
-        type: string
-      phone3:
-        type: string
-      remarks:
-        type: string
-      residential_address_1:
-        type: string
-      residential_address_2:
-        type: string
-      residential_address_3:
-        type: string
-      score:
-        type: string
-      status_date:
-        type: string
-      tax_id_number:
-        type: string
-      title:
-        type: string
-      weibo_name:
+      name:
         type: string
     type: object
   managers.CustomerUpdateParam:
     properties:
-      address:
-        type: string
-      avg_month_income:
-        type: string
-      bank_ac_name:
-        type: string
-      bank_ac_number:
-        type: string
       birth:
         type: string
-      code:
+      court_filing_date:
         type: string
-      collateral:
+      court_order_date:
         type: string
-      collateral_value:
-        type: string
-      debt_instalment_amount:
-        type: string
-      debt_outstanding:
-        type: string
-      debt_status:
-        type: string
-      debt_type:
-        type: string
-      dti:
-        type: string
-      fb_name:
-        type: string
-      first_name:
+      court_release_date:
         type: string
       id_no:
         type: string
-      ig_name:
-        type: string
-      last_name:
-        type: string
       levels:
         example: '|1|2|'
-        type: string
-      linkedin_name:
-        type: string
-      loan_amount:
-        type: string
-      loan_date:
-        type: string
-      loan_instalment_amount:
-        type: string
-      loan_tenor:
         type: string
       meta:
         additionalProperties:
           type: string
         type: object
-      office_address:
-        type: string
-      order_date:
-        type: string
-      other_name:
-        type: string
-      phone1:
-        type: string
-      phone2:
-        type: string
-      phone3:
-        type: string
-      remarks:
-        type: string
-      residential_address_1:
-        type: string
-      residential_address_2:
-        type: string
-      residential_address_3:
-        type: string
-      score:
+      name:
         type: string
       status:
-        type: string
-      status_date:
-        type: string
-      tax_id_number:
-        type: string
-      title:
-        type: string
-      weibo_name:
         type: string
     type: object
   managers.FieldOptionParam:
@@ -1260,11 +1068,17 @@ paths:
         type: string
       - description: ' '
         in: query
-        name: phone
+        name: id_no
         type: string
       - description: ' '
+        example: 2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z
         in: query
-        name: id_no
+        name: court_order_date
+        type: string
+      - description: ' '
+        example: 2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z
+        in: query
+        name: court_release_date
         type: string
       produces:
       - application/json

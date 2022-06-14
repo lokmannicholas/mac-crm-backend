@@ -2,7 +2,6 @@ package managers
 
 import (
 	"context"
-	"encoding/json"
 	"reflect"
 	"strings"
 	"time"
@@ -39,27 +38,10 @@ type CustomerUpdateParam struct {
 }
 
 type CustomerQueryParam struct {
-	Name  *string `form:"name" json:"name"`
-	Phone *string `form:"phone" json:"phone"`
-	IDNo  *string `form:"id_no" json:"id_no"`
-}
-
-func (q *CustomerQueryParam) UnmarshalJSON(data []byte) error {
-
-	var v map[string][]string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	if len(v["name"]) > 0 {
-		q.Name = &v["name"][0]
-	}
-	if len(v["phone"]) > 0 {
-		q.Phone = &v["phone"][0]
-	}
-	if len(v["id_no"]) > 0 {
-		q.IDNo = &v["id_no"][0]
-	}
-	return nil
+	Name             *string `form:"name" json:"name"`
+	IDNo             *string `form:"id_no" json:"id_no"`
+	CourtOrderDate   *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
+	CourtReleaseDate *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
 }
 
 type ICustomerManager interface {
@@ -193,17 +175,21 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		var err error
 
-		if param.Phone != nil {
-			phoneSearch := "%" + *param.Phone + "%"
-			tx = tx.Where("phone1 LIKE ? OR phone2 LIKE ? OR phone3 LIKE ?", phoneSearch, phoneSearch, phoneSearch)
-		}
 		if param.IDNo != nil {
 			idSearch := "%" + *param.IDNo + "%"
 			tx = tx.Where("id_no LIKE ?", idSearch)
 		}
 		if param.Name != nil {
 			nameSearch := "%" + *param.Name + "%"
-			tx = tx.Where("first_name LIKE ? OR last_name LIKE ? OR other_name LIKE ?", nameSearch, nameSearch, nameSearch)
+			tx = tx.Where("name LIKE ?", nameSearch)
+		}
+		if param.CourtOrderDate != nil {
+			dateSplit := strings.Split(*param.CourtOrderDate, "#")
+			tx = tx.Where("court_order_date BETWEEN ? AND ?", dateSplit[0], dateSplit[1])
+		}
+		if param.CourtReleaseDate != nil {
+			dateSplit := strings.Split(*param.CourtReleaseDate, "#")
+			tx = tx.Where("court_release_date BETWEEN ? AND ?", dateSplit[0], dateSplit[1])
 		}
 
 		// check field permission

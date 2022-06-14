@@ -31,8 +31,9 @@ func NewCustomerController() ICustomerController {
 // @Produce json
 // @Param Authorization header string true " "
 // @Param name query string false " "
-// @Param phone query string false " "
 // @Param id_no query string false " "
+// @Param court_order_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
+// @Param court_release_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
 // @Success 200 {object} swagger.APIResponse{data=swagger.Customers}
 // @Failure 403 {object} swagger.APIForbiddenError
 // @Failure 500 {object} swagger.APIInternalServerError

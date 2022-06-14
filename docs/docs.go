@@ -949,13 +949,21 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": " ",
-                        "name": "phone",
+                        "name": "id_no",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "example": "2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z",
                         "description": " ",
-                        "name": "id_no",
+                        "name": "court_order_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z",
+                        "description": " ",
+                        "name": "court_release_date",
                         "in": "query"
                     }
                 ],
@@ -1488,31 +1496,19 @@ const docTemplate = `{
         "entities.Customer": {
             "type": "object",
             "properties": {
-                "address": {
-                    "type": "string"
-                },
                 "age": {
                     "type": "integer"
-                },
-                "avg_month_income": {
-                    "type": "string"
-                },
-                "bank_ac_name": {
-                    "type": "string"
-                },
-                "bank_ac_number": {
-                    "type": "string"
                 },
                 "birth": {
                     "type": "string"
                 },
-                "code": {
+                "court_filing_date": {
                     "type": "string"
                 },
-                "collateral": {
+                "court_order_date": {
                     "type": "string"
                 },
-                "collateral_value": {
+                "court_release_date": {
                     "type": "string"
                 },
                 "created_at": {
@@ -1521,55 +1517,13 @@ const docTemplate = `{
                 "created_by": {
                     "type": "string"
                 },
-                "debt_instalment_amount": {
-                    "type": "string"
-                },
-                "debt_outstanding": {
-                    "type": "string"
-                },
-                "debt_status": {
-                    "type": "string"
-                },
-                "debt_type": {
-                    "type": "string"
-                },
-                "dti": {
-                    "type": "string"
-                },
-                "fb_name": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
                 "id_no": {
                     "type": "string"
                 },
-                "ig_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
                 "levels": {
-                    "type": "string"
-                },
-                "linkedin_name": {
-                    "type": "string"
-                },
-                "loan_amount": {
-                    "type": "string"
-                },
-                "loan_date": {
-                    "type": "string"
-                },
-                "loan_instalment_amount": {
-                    "type": "string"
-                },
-                "loan_tenor": {
                     "type": "string"
                 },
                 "meta": {
@@ -1578,37 +1532,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/entities.Meta"
                     }
                 },
-                "office_address": {
-                    "type": "string"
-                },
-                "order_date": {
-                    "type": "string"
-                },
-                "other_name": {
-                    "type": "string"
-                },
-                "phone1": {
-                    "type": "string"
-                },
-                "phone2": {
-                    "type": "string"
-                },
-                "phone3": {
-                    "type": "string"
-                },
-                "remarks": {
-                    "type": "string"
-                },
-                "residential_address_1": {
-                    "type": "string"
-                },
-                "residential_address_2": {
-                    "type": "string"
-                },
-                "residential_address_3": {
-                    "type": "string"
-                },
-                "score": {
+                "name": {
                     "type": "string"
                 },
                 "status": {
@@ -1619,22 +1543,10 @@ const docTemplate = `{
                         "Disable"
                     ]
                 },
-                "status_date": {
-                    "type": "string"
-                },
-                "tax_id_number": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
                 "updated_at": {
                     "type": "string"
                 },
                 "updated_by": {
-                    "type": "string"
-                },
-                "weibo_name": {
                     "type": "string"
                 }
             }
@@ -1839,78 +1751,24 @@ const docTemplate = `{
         "managers.CustomerCreateParam": {
             "type": "object",
             "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "avg_month_income": {
-                    "type": "string"
-                },
-                "bank_ac_name": {
-                    "type": "string"
-                },
-                "bank_ac_number": {
-                    "type": "string"
-                },
                 "birth": {
                     "type": "string"
                 },
-                "code": {
+                "court_filing_date": {
                     "type": "string"
                 },
-                "collateral": {
+                "court_order_date": {
                     "type": "string"
                 },
-                "collateral_value": {
-                    "type": "string"
-                },
-                "debt_instalment_amount": {
-                    "type": "string"
-                },
-                "debt_outstanding": {
-                    "type": "string"
-                },
-                "debt_status": {
-                    "type": "string"
-                },
-                "debt_type": {
-                    "type": "string"
-                },
-                "dti": {
-                    "type": "string"
-                },
-                "fb_name": {
-                    "type": "string"
-                },
-                "first_name": {
+                "court_release_date": {
                     "type": "string"
                 },
                 "id_no": {
                     "type": "string"
                 },
-                "ig_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
                 "levels": {
                     "type": "string",
                     "example": "|1|2|"
-                },
-                "linkedin_name": {
-                    "type": "string"
-                },
-                "loan_amount": {
-                    "type": "string"
-                },
-                "loan_date": {
-                    "type": "string"
-                },
-                "loan_instalment_amount": {
-                    "type": "string"
-                },
-                "loan_tenor": {
-                    "type": "string"
                 },
                 "meta": {
                     "type": "object",
@@ -1918,49 +1776,7 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
-                "office_address": {
-                    "type": "string"
-                },
-                "order_date": {
-                    "type": "string"
-                },
-                "other_name": {
-                    "type": "string"
-                },
-                "phone1": {
-                    "type": "string"
-                },
-                "phone2": {
-                    "type": "string"
-                },
-                "phone3": {
-                    "type": "string"
-                },
-                "remarks": {
-                    "type": "string"
-                },
-                "residential_address_1": {
-                    "type": "string"
-                },
-                "residential_address_2": {
-                    "type": "string"
-                },
-                "residential_address_3": {
-                    "type": "string"
-                },
-                "score": {
-                    "type": "string"
-                },
-                "status_date": {
-                    "type": "string"
-                },
-                "tax_id_number": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "weibo_name": {
+                "name": {
                     "type": "string"
                 }
             }
@@ -1968,78 +1784,24 @@ const docTemplate = `{
         "managers.CustomerUpdateParam": {
             "type": "object",
             "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "avg_month_income": {
-                    "type": "string"
-                },
-                "bank_ac_name": {
-                    "type": "string"
-                },
-                "bank_ac_number": {
-                    "type": "string"
-                },
                 "birth": {
                     "type": "string"
                 },
-                "code": {
+                "court_filing_date": {
                     "type": "string"
                 },
-                "collateral": {
+                "court_order_date": {
                     "type": "string"
                 },
-                "collateral_value": {
-                    "type": "string"
-                },
-                "debt_instalment_amount": {
-                    "type": "string"
-                },
-                "debt_outstanding": {
-                    "type": "string"
-                },
-                "debt_status": {
-                    "type": "string"
-                },
-                "debt_type": {
-                    "type": "string"
-                },
-                "dti": {
-                    "type": "string"
-                },
-                "fb_name": {
-                    "type": "string"
-                },
-                "first_name": {
+                "court_release_date": {
                     "type": "string"
                 },
                 "id_no": {
                     "type": "string"
                 },
-                "ig_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
                 "levels": {
                     "type": "string",
                     "example": "|1|2|"
-                },
-                "linkedin_name": {
-                    "type": "string"
-                },
-                "loan_amount": {
-                    "type": "string"
-                },
-                "loan_date": {
-                    "type": "string"
-                },
-                "loan_instalment_amount": {
-                    "type": "string"
-                },
-                "loan_tenor": {
-                    "type": "string"
                 },
                 "meta": {
                     "type": "object",
@@ -2047,52 +1809,10 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
-                "office_address": {
-                    "type": "string"
-                },
-                "order_date": {
-                    "type": "string"
-                },
-                "other_name": {
-                    "type": "string"
-                },
-                "phone1": {
-                    "type": "string"
-                },
-                "phone2": {
-                    "type": "string"
-                },
-                "phone3": {
-                    "type": "string"
-                },
-                "remarks": {
-                    "type": "string"
-                },
-                "residential_address_1": {
-                    "type": "string"
-                },
-                "residential_address_2": {
-                    "type": "string"
-                },
-                "residential_address_3": {
-                    "type": "string"
-                },
-                "score": {
+                "name": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
-                },
-                "status_date": {
-                    "type": "string"
-                },
-                "tax_id_number": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "weibo_name": {
                     "type": "string"
                 }
             }
