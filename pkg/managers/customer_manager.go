@@ -38,10 +38,18 @@ type CustomerUpdateParam struct {
 }
 
 type CustomerQueryParam struct {
-	Name             *string `form:"name" json:"name"`
-	IDNo             *string `form:"id_no" json:"id_no"`
-	CourtOrderDate   *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
-	CourtReleaseDate *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
+	Name              *string `form:"name" json:"name"`
+	IDNo              *string `form:"id_no" json:"id_no"`
+	CourtOrderDate    *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
+	CourtReleaseDate  *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
+	Email             *string `form:"email" json:"email"`
+	Phone             *string `form:"phone" json:"phone"`
+	LoanType          *string `form:"loan_type" json:"loan_type"`
+	IsBankrupt        *string `form:"is_bankrupt" json:"is_bankrupt"`
+	IsDRP             *string `form:"is_drp" json:"is_drp"`
+	IsIVA             *string `form:"is_iva" json:"is_iva"`
+	CourtCaseInvolved *string `form:"court_case_involved" json:"court_case_involved"`
+	Department        *string `form:"department" json:"department"`
 }
 
 type ICustomerManager interface {
@@ -175,13 +183,19 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		var err error
 
+		customerIds, err := GetCustomerIdsByMetas(ctx, param)
+		if err != nil {
+			return err
+		}
+		tx = tx.Where("id IN ?", customerIds)
+
 		if param.IDNo != nil {
-			idSearch := "%" + *param.IDNo + "%"
-			tx = tx.Where("id_no LIKE ?", idSearch)
+			keyword := "%" + *param.IDNo + "%"
+			tx = tx.Where("id_no LIKE ?", keyword)
 		}
 		if param.Name != nil {
-			nameSearch := "%" + *param.Name + "%"
-			tx = tx.Where("name LIKE ?", nameSearch)
+			keyword := "%" + *param.Name + "%"
+			tx = tx.Where("name LIKE ?", keyword)
 		}
 		if param.CourtOrderDate != nil {
 			dateSplit := strings.Split(*param.CourtOrderDate, "#")
@@ -264,6 +278,69 @@ func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fi
 	})
 
 	return cus, err
+}
+
+func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uuid.UUID, error) {
+	customersMetas := []*models.CustomersMeta{}
+	paramCount := 0
+	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+		if param.Email != nil {
+			paramCount += 1
+			keyword := "%" + *param.Email + "%"
+			tx = tx.Or("`key` = 'email' AND val LIKE ?", keyword)
+		}
+		if param.Phone != nil {
+			paramCount += 1
+			keyword := "%" + *param.Phone + "%"
+			tx = tx.Or("(`key` = 'phone1' OR `key` = 'phone2' OR `key` = 'phone3') AND val LIKE ?", keyword)
+		}
+		if param.LoanType != nil {
+			paramCount += 1
+			keyword := "%" + *param.LoanType + "%"
+			tx = tx.Or("`key` = 'loan_type' AND val LIKE ?", keyword)
+		}
+		if param.IsBankrupt != nil {
+			paramCount += 1
+			keyword := "%" + *param.IsBankrupt + "%"
+			tx = tx.Or("`key` = 'is_bankrupt' AND val LIKE ?", keyword)
+		}
+		if param.IsDRP != nil {
+			paramCount += 1
+			keyword := "%" + *param.IsDRP + "%"
+			tx = tx.Or("`key` = 'is_drp' AND val LIKE ?", keyword)
+		}
+		if param.IsIVA != nil {
+			paramCount += 1
+			keyword := "%" + *param.IsIVA + "%"
+			tx = tx.Or("`key` = 'is_iva' AND val LIKE ?", keyword)
+		}
+		if param.CourtCaseInvolved != nil {
+			paramCount += 1
+			keyword := "%" + *param.CourtCaseInvolved + "%"
+			tx = tx.Or("`key` = 'court_case_involved' AND val LIKE ?", keyword)
+		}
+		if param.Department != nil {
+			paramCount += 1
+			keyword := "%" + *param.Department + "%"
+			tx = tx.Or("`key` = 'department' AND val LIKE ?", keyword)
+		}
+
+		err := tx.Select("customer_id").Group("customer_id").Having("COUNT(*) >= ?", paramCount).Find(&customersMetas).Error
+		if err == gorm.ErrRecordNotFound {
+			return nil
+		}
+		return err
+	})
+
+	customerIds := make([]uuid.UUID, 0)
+	if err != nil {
+		return customerIds, err
+	}
+
+	for _, customersMeta := range customersMetas {
+		customerIds = append(customerIds, customersMeta.CustomerID)
+	}
+	return customerIds, err
 }
 
 func GetCustomerFields(ctx context.Context) []string {

@@ -34,6 +34,12 @@ func NewCustomerController() ICustomerController {
 // @Param id_no query string false " "
 // @Param court_order_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
 // @Param court_release_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
+// @Param loan_type query string false " "
+// @Param is_bankrupt query string false " "
+// @Param is_drp query string false " "
+// @Param is_iva query string false " "
+// @Param court_case_involved query string false " "
+// @Param department query string false " "
 // @Success 200 {object} swagger.APIResponse{data=swagger.Customers}
 // @Failure 403 {object} swagger.APIForbiddenError
 // @Failure 500 {object} swagger.APIInternalServerError

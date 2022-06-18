@@ -965,6 +965,42 @@ const docTemplate = `{
                         "description": " ",
                         "name": "court_release_date",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "loan_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "is_bankrupt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "is_drp",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "is_iva",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "court_case_involved",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "department",
+                        "in": "query"
                     }
                 ],
                 "responses": {

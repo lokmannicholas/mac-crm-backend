@@ -1080,6 +1080,30 @@ paths:
         in: query
         name: court_release_date
         type: string
+      - description: ' '
+        in: query
+        name: loan_type
+        type: string
+      - description: ' '
+        in: query
+        name: is_bankrupt
+        type: string
+      - description: ' '
+        in: query
+        name: is_drp
+        type: string
+      - description: ' '
+        in: query
+        name: is_iva
+        type: string
+      - description: ' '
+        in: query
+        name: court_case_involved
+        type: string
+      - description: ' '
+        in: query
+        name: department
+        type: string
       produces:
       - application/json
       responses:
