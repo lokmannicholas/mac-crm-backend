@@ -969,6 +969,30 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": " ",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "phone1",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "phone2",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "phone3",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
                         "name": "loan_type",
                         "in": "query"
                     },

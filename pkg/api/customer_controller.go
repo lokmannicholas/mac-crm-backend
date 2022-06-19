@@ -34,6 +34,10 @@ func NewCustomerController() ICustomerController {
 // @Param id_no query string false " "
 // @Param court_order_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
 // @Param court_release_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
+// @Param email query string false " "
+// @Param phone1 query string false " "
+// @Param phone2 query string false " "
+// @Param phone3 query string false " "
 // @Param loan_type query string false " "
 // @Param is_bankrupt query string false " "
 // @Param is_drp query string false " "

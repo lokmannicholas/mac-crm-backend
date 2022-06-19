@@ -1082,6 +1082,22 @@ paths:
         type: string
       - description: ' '
         in: query
+        name: email
+        type: string
+      - description: ' '
+        in: query
+        name: phone1
+        type: string
+      - description: ' '
+        in: query
+        name: phone2
+        type: string
+      - description: ' '
+        in: query
+        name: phone3
+        type: string
+      - description: ' '
+        in: query
         name: loan_type
         type: string
       - description: ' '

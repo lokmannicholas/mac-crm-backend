@@ -43,7 +43,9 @@ type CustomerQueryParam struct {
 	CourtOrderDate    *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
 	CourtReleaseDate  *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
 	Email             *string `form:"email" json:"email"`
-	Phone             *string `form:"phone" json:"phone"`
+	Phone1            *string `form:"phone1" json:"phone1"`
+	Phone2            *string `form:"phone2" json:"phone2"`
+	Phone3            *string `form:"phone3" json:"phone3"`
 	LoanType          *string `form:"loan_type" json:"loan_type"`
 	IsBankrupt        *string `form:"is_bankrupt" json:"is_bankrupt"`
 	IsDRP             *string `form:"is_drp" json:"is_drp"`
@@ -289,10 +291,20 @@ func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uu
 			keyword := "%" + *param.Email + "%"
 			tx = tx.Or("`key` = 'email' AND val LIKE ?", keyword)
 		}
-		if param.Phone != nil {
+		if param.Phone1 != nil {
 			paramCount += 1
-			keyword := "%" + *param.Phone + "%"
-			tx = tx.Or("(`key` = 'phone1' OR `key` = 'phone2' OR `key` = 'phone3') AND val LIKE ?", keyword)
+			keyword := "%" + *param.Phone1 + "%"
+			tx = tx.Or("`key` = 'phone1' AND val LIKE ?", keyword)
+		}
+		if param.Phone2 != nil {
+			paramCount += 1
+			keyword := "%" + *param.Phone2 + "%"
+			tx = tx.Or("`key` = 'phone2' AND val LIKE ?", keyword)
+		}
+		if param.Phone3 != nil {
+			paramCount += 1
+			keyword := "%" + *param.Phone3 + "%"
+			tx = tx.Or("`key` = 'phone3' AND val LIKE ?", keyword)
 		}
 		if param.LoanType != nil {
 			paramCount += 1
