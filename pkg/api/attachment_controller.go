@@ -32,16 +32,14 @@ func NewAttachmentController() IAttachmentController {
 	}
 }
 
-// Attachment
-// @Summary      Attachments
-// @Description
-// @Tags         Attachments
-// @Produce      json
+// GetAttachment godoc
+// @Tags Attachment
+// @Accept json
+// @Produce json
 // @param 		Authorization header string true "Authorization"
 // @Success      200
-// @Failure      400  {object}  controller.APIErrorResponseBody
-// @Failure      404  {object}  controller.APIErrorResponseBody
-// @Failure      500  {object}  controller.APIErrorResponseBody
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure      500  {object}  swagger.APIInternalServerError
 // @Router       /attachment/:id [get]
 func (ctl *AttachmentController) GetAttachment(c *gin.Context) {
 	attID := c.Param("id")
@@ -84,7 +82,7 @@ func (ctl *AttachmentController) Delete(c *gin.Context) {
 // @Produce      json
 // @param Authorization header string true "Authorization"
 // @Param file formData file true "file"
-// @Success 200 {object} swagger.APIResponse{data=swagger.Attachment}
+// @Success 200 {object} swagger.APIResponse{data=entities.Attachment}
 // @Failure 403 {object} swagger.APIForbiddenError
 // @Failure 500 {object} swagger.APIInternalServerError
 // @Router       /customer/:id/attachments [post]
@@ -107,6 +105,15 @@ func (ctl *AttachmentController) Upload(c *gin.Context) {
 	controller.Response(c, 200, data)
 }
 
+// GetAttachments godoc
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @param 		Authorization header string true "Authorization"
+// @Success      200
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router       /customer/:id/attachments [get]
 func (ctl *AttachmentController) GetAttachments(c *gin.Context) {
 
 	path := strings.TrimPrefix(c.Request.URL.Path, filepath.Join("/api", config.GetConfig().CompanyID))

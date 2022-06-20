@@ -99,9 +99,8 @@ func apiPath(r *gin.RouterGroup) {
 	customer := r.Group("/customer", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Read()))
 	{
 		customer.GET("/:id", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Read()), cusCtl.GetCustomer)
-		r.GET("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.GetAttachments)
-		r.POST("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.Upload)
-
+		customer.GET("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.GetAttachments)
+		customer.POST("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.Upload)
 		customer.PUT("/:id", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), cusCtl.Update)
 	}
 

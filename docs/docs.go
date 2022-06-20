@@ -452,6 +452,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/attachment/:id": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Attachment"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIForbiddenError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/auth": {
             "get": {
                 "consumes": [
@@ -899,6 +938,106 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/swagger.Customer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIForbiddenError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/customer/:id/attachments": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIForbiddenError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.APIInternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Upload attachment",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Upload attachment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/swagger.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.Attachment"
                                         }
                                     }
                                 }
@@ -1512,6 +1651,32 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.Attachment": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "file_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.CustomField": {
             "type": "object",
             "properties": {
@@ -1539,6 +1704,9 @@ const docTemplate = `{
                 },
                 "remarks": {
                     "type": "string"
+                },
+                "sorting": {
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",
@@ -1769,6 +1937,9 @@ const docTemplate = `{
                 "remarks": {
                     "type": "string"
                 },
+                "sorting": {
+                    "type": "integer"
+                },
                 "unique_key": {
                     "type": "string"
                 }
@@ -1795,6 +1966,9 @@ const docTemplate = `{
                 },
                 "remarks": {
                     "type": "string"
+                },
+                "sorting": {
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string",

@@ -8,3 +8,4 @@ logs/*
 ./cloudsql
 cloud_sql_proxy
 .vscode/*
+asset/*

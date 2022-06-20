@@ -20,6 +20,23 @@ definitions:
       username:
         type: string
     type: object
+  entities.Attachment:
+    properties:
+      created_at:
+        type: integer
+      file_name:
+        type: string
+      id:
+        type: string
+      mime_type:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      status:
+        type: string
+    type: object
   entities.CustomField:
     properties:
       custom_object:
@@ -39,6 +56,8 @@ definitions:
         type: string
       remarks:
         type: string
+      sorting:
+        type: integer
       status:
         default: Active
         enum:
@@ -193,6 +212,8 @@ definitions:
         type: string
       remarks:
         type: string
+      sorting:
+        type: integer
       unique_key:
         type: string
     type: object
@@ -211,6 +232,8 @@ definitions:
         type: string
       remarks:
         type: string
+      sorting:
+        type: integer
       status:
         enum:
         - Active
@@ -765,6 +788,31 @@ paths:
             $ref: '#/definitions/swagger.APIInternalServerError'
       tags:
       - Account
+  /attachment/:id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Attachment
   /auth:
     get:
       consumes:
@@ -1049,6 +1097,69 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+  /customer/:id/attachments:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      tags:
+      - Customer
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload attachment
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.Attachment'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.APIForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.APIInternalServerError'
+      summary: Upload attachment
       tags:
       - Customer
   /customers:
