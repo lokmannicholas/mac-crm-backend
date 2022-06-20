@@ -17,6 +17,7 @@ type CustomFieldCreateParam struct {
 	FieldName    *MultiLangText      `json:"field_name,omitempty"`
 	FieldType    string              `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks      string              `json:"remarks,omitempty"`
+	Sorting      int32               `json:"sorting,omitempty"`
 	Options      []*FieldOptionParam `json:"field_options,omitempty"`
 }
 type CustomFieldUpdateParam struct {
@@ -24,6 +25,7 @@ type CustomFieldUpdateParam struct {
 	UniqueKey *string              `json:"unique_key,omitempty"`
 	FieldType *string              `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks   *string              `json:"remarks,omitempty"`
+	Sorting   *int32               `json:"sorting,omitempty"`
 	Status    *string              `json:"status,omitempty" enums:"Active,Disable"`
 	Options   *[]FieldOptionUpdate `json:"field_options,omitempty"`
 }
@@ -59,6 +61,7 @@ func (m *CustomFieldManager) Create(ctx context.Context, param *CustomFieldCreat
 		FieldType:    param.FieldType,
 		Remarks:      param.Remarks,
 		UniqueKey:    param.UniqueKey,
+		Sorting:      param.Sorting,
 	}
 	if param.FieldName != nil {
 		cus.FieldName = &models.MultiLangText{
@@ -107,6 +110,9 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 				Zh: param.FieldName.Zh,
 				Ch: param.FieldName.Ch,
 			}
+		}
+		if param.Sorting != nil {
+			cus.Sorting = *param.Sorting
 		}
 		if param.FieldType != nil {
 			cus.FieldType = *param.FieldType

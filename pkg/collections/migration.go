@@ -23,8 +23,10 @@ func Migration(migration *gorm.DB) {
 		util.CheckAndCreate(migration.Migrator(), &models.CustomField{})
 
 		//meta table
+		migration.AutoMigrate(&models.CustomField{})
 		migration.AutoMigrate(&models.Customer{})
 		migration.AutoMigrate(&models.CustomersMeta{})
+		migration.AutoMigrate(&models.Role{})
 		migration.AutoMigrate(&models.FieldOption{})
 
 	}
