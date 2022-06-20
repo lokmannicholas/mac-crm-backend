@@ -7,7 +7,6 @@ import (
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
 	"dmglab.com/mac-crm/pkg/util"
-	_const "dmglab.com/mac-crm/pkg/util/const"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -77,18 +76,10 @@ func (m *SettingManager) GetByKey(ctx context.Context, param *SettingGetParam) (
 }
 
 func (m *SettingManager) GetAll(db *gorm.DB) ([]*models.App, error) {
-	companyField := []string{
-		_const.IMAGE_COMPANY_NAME,
-		_const.IMAGE_COMPANY_SHORT_NAME,
-		_const.IMAGE_COMPANY_ADDRESS,
-		_const.IMAGE_COMPANY_CODE,
-		_const.IMAGE_COMPANY_PHONE,
-		_const.IMAGE_COMPANY_EMAIL,
-		_const.IMAGE_COMPANY_LOGO,
-	}
+
 	settings := []*models.App{}
 	return settings, db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Model(&settings).Where("setting not in (?)", companyField).Find(&settings).Error
+		err := tx.Model(&settings).Find(&settings).Error
 		if err == gorm.ErrRecordNotFound {
 			return nil
 		}

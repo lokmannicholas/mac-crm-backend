@@ -49,13 +49,9 @@ func GetRouter() *gin.Engine {
 
 }
 func nonAuthPath(r *gin.RouterGroup) {
-	authMethod := config.GetConfig().Auth
-	if authMethod == "onpremise" {
-		accCtl := NewAccountController()
-		r.POST("/auth/login", accCtl.Login)
-		r.POST("/auth/logout", accCtl.Logout)
-	} else if authMethod == "firebase" {
-	}
+	accCtl := NewAccountController()
+	r.POST("/auth/login", accCtl.Login)
+	r.POST("/auth/logout", accCtl.Logout)
 	r.GET("/config", gin.HandlerFunc(func(c *gin.Context) {
 		conf := config.GetConfig()
 		licenceValid := "APPROVED"
@@ -81,12 +77,7 @@ func nonAuthPath(r *gin.RouterGroup) {
 func apiPath(r *gin.RouterGroup) {
 	accMidWare := middleware.NewAuthMiddleware()
 	r.Use(accMidWare.AuthRequired())
-	authMethod := config.GetConfig().Auth
-	if authMethod == "onpremise" {
-		NewAccountController().SetRouter(r)
-	} else if authMethod == "firebase" {
-
-	}
+	NewAccountController().SetRouter(r)
 	NewSettingController().SetRouter(r)
 	NewCustomFieldController().SetRouter(r)
 	attCtl := NewAttachmentController()
@@ -94,11 +85,6 @@ func apiPath(r *gin.RouterGroup) {
 	cusCtl := NewCustomerController()
 	pmsCtl := NewPermissionController()
 
-	// socket := ws.NewWebSocketController()
-	//websocket
-
-	// r.GET("/notification", socket.Notification)
-	//restful
 	r.GET("/permissions", pmsCtl.GetPermissions)
 
 	r.GET("/roles", accMidWare.PermissionRequire(_const.PERMISSION_ROLE.Read()), rolCtl.GetRoles)
@@ -113,6 +99,9 @@ func apiPath(r *gin.RouterGroup) {
 	customer := r.Group("/customer", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Read()))
 	{
 		customer.GET("/:id", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Read()), cusCtl.GetCustomer)
+		r.GET("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.GetAttachments)
+		r.POST("/:id/attachments", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), attCtl.Upload)
+
 		customer.PUT("/:id", accMidWare.PermissionRequire(_const.PERMISSION_CUSTOMER.Update()), cusCtl.Update)
 	}
 
@@ -120,7 +109,6 @@ func apiPath(r *gin.RouterGroup) {
 
 func ReverseProxy(target string) gin.HandlerFunc {
 	url, _ := url.Parse(target)
-	// (err)
 	proxy := httputil.NewSingleHostReverseProxy(url)
 	return func(c *gin.Context) {
 		proxy.ServeHTTP(c.Writer, c.Request)

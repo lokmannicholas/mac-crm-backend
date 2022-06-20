@@ -62,26 +62,6 @@ func InitalSystemAcc(migration *gorm.DB) {
 					Setting: _const.ROW_LIMIT,
 					Value:   []byte("500"),
 					Version: 0,
-				}, {
-					Setting: _const.ORDER_NO_PREFIX,
-					Value:   []byte("R"),
-					Version: 0,
-				}, {
-					Setting: _const.INVOICE_NO_PREFIX,
-					Value:   []byte("INV"),
-					Version: 0,
-				}, {
-					Setting: _const.RECEIPT_NO_PREFIX,
-					Value:   []byte("PAY"),
-					Version: 0,
-				}, {
-					Setting: _const.INVOICE_NO_REFUND_PREFIX,
-					Value:   []byte("INF"),
-					Version: 0,
-				}, {
-					Setting: _const.RECEIPT_NO_REFUND_PREFIX,
-					Value:   []byte("PAF"),
-					Version: 0,
 				},
 			}).Error; err != nil {
 			service.SysLog.Fatalln(err)

@@ -3,8 +3,10 @@ package api
 import (
 	"fmt"
 	"io"
+	"path/filepath"
 	"strings"
 
+	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/entities"
 	controller "dmglab.com/mac-crm/pkg/lib/controller"
 	"dmglab.com/mac-crm/pkg/managers"
@@ -30,6 +32,17 @@ func NewAttachmentController() IAttachmentController {
 	}
 }
 
+// Attachment
+// @Summary      Attachments
+// @Description
+// @Tags         Attachments
+// @Produce      json
+// @param 		Authorization header string true "Authorization"
+// @Success      200
+// @Failure      400  {object}  controller.APIErrorResponseBody
+// @Failure      404  {object}  controller.APIErrorResponseBody
+// @Failure      500  {object}  controller.APIErrorResponseBody
+// @Router       /attachment/:id [get]
 func (ctl *AttachmentController) GetAttachment(c *gin.Context) {
 	attID := c.Param("id")
 
@@ -48,7 +61,6 @@ func (ctl *AttachmentController) GetAttachment(c *gin.Context) {
 		}
 		return false
 	})
-	// c.FileAttachment(atts.Path, atts.FileName)
 }
 
 func (ctl *AttachmentController) Delete(c *gin.Context) {
@@ -63,6 +75,19 @@ func (ctl *AttachmentController) Delete(c *gin.Context) {
 	})
 
 }
+
+// Upload
+// @Summary      Upload attachment
+// @Description  Upload attachment
+// @Tags         Customer
+// @Accept multipart/form-data
+// @Produce      json
+// @param Authorization header string true "Authorization"
+// @Param file formData file true "file"
+// @Success 200 {object} swagger.APIResponse{data=swagger.Attachment}
+// @Failure 403 {object} swagger.APIForbiddenError
+// @Failure 500 {object} swagger.APIInternalServerError
+// @Router       /customer/:id/attachments [post]
 func (ctl *AttachmentController) Upload(c *gin.Context) {
 
 	file, err := c.FormFile("file")
@@ -70,7 +95,7 @@ func (ctl *AttachmentController) Upload(c *gin.Context) {
 		controller.ErrorResponse(c, 500, "000000", "get retrieve reference file", err.Error())
 		return
 	}
-	path := strings.TrimPrefix(c.Request.URL.Path, "/api")
+	path := strings.TrimPrefix(c.Request.URL.Path, filepath.Join("/api", config.GetConfig().CompanyID))
 	paths := strings.Split(path, "/")
 	att, err := ctl.attMgr.Upload(c, file, paths...)
 	if err != nil {
@@ -84,7 +109,7 @@ func (ctl *AttachmentController) Upload(c *gin.Context) {
 
 func (ctl *AttachmentController) GetAttachments(c *gin.Context) {
 
-	path := strings.TrimPrefix(c.Request.URL.Path, "/api")
+	path := strings.TrimPrefix(c.Request.URL.Path, filepath.Join("/api", config.GetConfig().CompanyID))
 	paths := strings.Split(path, "/")
 	attachments, err := ctl.attMgr.GetAttachments(c, paths...)
 	if err != nil {

@@ -19,7 +19,6 @@ type Config struct {
 	DB               *DBConfig
 	App              *AppConfig
 	FileStorage      *FileStorage
-	Auth             string
 	Setting          map[string]string
 }
 type FileStorage struct {
@@ -107,10 +106,7 @@ func GetConfig() *Config {
 			service.SysLog.Panicln("file storages to asset")
 		}
 	}
-	auth := "onpremise"
-	if len(os.Getenv("AUTH")) > 0 {
-		auth = os.Getenv("AUTH")
-	}
+
 	conf = &Config{
 		CompanyID:        os.Getenv("COMPANY_ID"),
 		App:              appConfig,
@@ -119,7 +115,6 @@ func GetConfig() *Config {
 		DBDriver:         os.Getenv("DB_DRIVER"),
 		DB:               dbConfig,
 		FileStorage:      fs,
-		Auth:             auth,
 		Setting:          map[string]string{},
 	}
 	return conf
