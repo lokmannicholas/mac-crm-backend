@@ -185,12 +185,14 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		var err error
 
-		customerIds, err := GetCustomerIdsByMetas(ctx, param)
+		customerIds, paramCount, err := GetCustomerIdsByMetas(ctx, param)
 		if err != nil {
 			return err
 		}
-		tx = tx.Where("id IN ?", customerIds)
 
+		if paramCount > 0 {
+			tx = tx.Where("id IN ?", customerIds)
+		}
 		if param.IDNo != nil {
 			keyword := "%" + *param.IDNo + "%"
 			tx = tx.Where("id_no LIKE ?", keyword)
@@ -282,7 +284,7 @@ func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fi
 	return cus, err
 }
 
-func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uuid.UUID, error) {
+func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uuid.UUID, int, error) {
 	customersMetas := []*models.CustomersMeta{}
 	paramCount := 0
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
@@ -346,13 +348,13 @@ func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uu
 
 	customerIds := make([]uuid.UUID, 0)
 	if err != nil {
-		return customerIds, err
+		return customerIds, paramCount, err
 	}
 
 	for _, customersMeta := range customersMetas {
 		customerIds = append(customerIds, customersMeta.CustomerID)
 	}
-	return customerIds, err
+	return customerIds, paramCount, err
 }
 
 func GetCustomerFields(ctx context.Context) []string {
