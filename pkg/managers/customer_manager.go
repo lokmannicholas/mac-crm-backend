@@ -16,25 +16,29 @@ import (
 )
 
 type CustomerCreateParam struct {
-	Name             string            `json:"name"`
-	IDNo             string            `json:"id_no"`
-	Birth            *time.Time        `json:"birth"`
-	CourtFilingDate  *time.Time        `json:"court_filing_date"`
-	CourtOrderDate   *time.Time        `json:"court_order_date"`
-	CourtReleaseDate *time.Time        `json:"court_release_date"`
-	Levels           string            `json:"levels" example:"|1|2|"`
-	Meta             map[string]string `json:"meta"`
+	FirstName           string            `json:"first_name"`
+	LastName            string            `json:"last_name"`
+	IDNo                string            `json:"id_no"`
+	Birth               *time.Time        `json:"birth"`
+	LoanDate            *time.Time        `json:"loan_date"`
+	CourtCaseFilingDate *time.Time        `json:"court_case_filing_date"`
+	CourtOrderDate      *time.Time        `json:"court_order_date"`
+	CourtReleaseDate    *time.Time        `json:"court_release_date"`
+	Levels              string            `json:"levels" example:"|1|2|"`
+	Meta                map[string]string `json:"meta"`
 }
 type CustomerUpdateParam struct {
-	Name             *string           `json:"name"`
-	IDNo             *string           `json:"id_no"`
-	Birth            *time.Time        `json:"birth"`
-	CourtFilingDate  *time.Time        `json:"court_filing_date"`
-	CourtOrderDate   *time.Time        `json:"court_order_date"`
-	CourtReleaseDate *time.Time        `json:"court_release_date"`
-	Status           *string           `json:"status"`
-	Levels           *string           `json:"levels" example:"|1|2|"`
-	Meta             map[string]string `json:"meta"`
+	FirstName           *string           `json:"first_name"`
+	LastName            *string           `json:"last_name"`
+	IDNo                *string           `json:"id_no"`
+	Birth               *time.Time        `json:"birth"`
+	LoanDate            *time.Time        `json:"loan_date"`
+	CourtCaseFilingDate *time.Time        `json:"court_case_filing_date"`
+	CourtOrderDate      *time.Time        `json:"court_order_date"`
+	CourtReleaseDate    *time.Time        `json:"court_release_date"`
+	Status              *string           `json:"status"`
+	Levels              *string           `json:"levels" example:"|1|2|"`
+	Meta                map[string]string `json:"meta"`
 }
 
 type CustomerQueryParam struct {
@@ -76,15 +80,17 @@ func GetCustomerManager() ICustomerManager {
 func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error) {
 
 	cus := &models.Customer{
-		CreatedBy:        &accountID,
-		ID:               uuid.New(),
-		Name:             param.Name,
-		IDNo:             param.IDNo,
-		Birth:            param.Birth,
-		CourtFilingDate:  param.CourtFilingDate,
-		CourtOrderDate:   param.CourtOrderDate,
-		CourtReleaseDate: param.CourtReleaseDate,
-		Levels:           param.Levels,
+		CreatedBy:           &accountID,
+		ID:                  uuid.New(),
+		FirstName:           param.FirstName,
+		LastName:            param.LastName,
+		IDNo:                param.IDNo,
+		Birth:               param.Birth,
+		LoanDate:            param.LoanDate,
+		CourtCaseFilingDate: param.CourtCaseFilingDate,
+		CourtOrderDate:      param.CourtOrderDate,
+		CourtReleaseDate:    param.CourtReleaseDate,
+		Levels:              param.Levels,
 	}
 	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		// save meta
@@ -112,8 +118,11 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 		if err != nil {
 			return err
 		}
-		if param.Name != nil {
-			cus.Name = *param.Name
+		if param.FirstName != nil {
+			cus.FirstName = *param.FirstName
+		}
+		if param.LastName != nil {
+			cus.LastName = *param.LastName
 		}
 		if param.IDNo != nil {
 			cus.IDNo = *param.IDNo
@@ -126,7 +135,8 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 		}
 
 		cus.Birth = param.Birth
-		cus.CourtFilingDate = param.CourtFilingDate
+		cus.LoanDate = param.LoanDate
+		cus.CourtCaseFilingDate = param.CourtCaseFilingDate
 		cus.CourtOrderDate = param.CourtOrderDate
 		cus.CourtReleaseDate = param.CourtReleaseDate
 
@@ -136,21 +146,24 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 		}
 
 		// save meta
-		for k, v := range param.Meta {
-			meta := &models.CustomersMeta{
-				Meta: &models.Meta{
-					Key: k,
-					Val: v,
-				},
-				CustomerID: cus.ID,
-			}
-			cus.Meta = append(cus.Meta, meta)
+		if len(param.Meta) > 0 {
+			for k, v := range param.Meta {
+				meta := &models.CustomersMeta{
+					Meta: &models.Meta{
+						Key: k,
+						Val: v,
+					},
+					CustomerID: cus.ID,
+				}
+				cus.Meta = append(cus.Meta, meta)
 
+			}
+			return tx.Model(cus.Meta).Clauses(clause.OnConflict{
+				Columns:   []clause.Column{{Name: "customer_id"}, {Name: "key"}},
+				DoUpdates: clause.AssignmentColumns([]string{"data_type", "val"})}).
+				Create(cus.Meta).Error
 		}
-		return tx.Model(cus.Meta).Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "customer_id"}, {Name: "key"}},
-			DoUpdates: clause.AssignmentColumns([]string{"data_type", "val"})}).
-			Create(cus.Meta).Error
+		return nil
 	})
 
 	return cus, err

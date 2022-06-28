@@ -11,18 +11,20 @@ import (
 
 type Customer struct {
 	gorm.Model
-	CreatedBy        *uuid.UUID       `json:"created_by"`
-	UpdatedBy        *uuid.UUID       `json:"updated_by"`
-	ID               uuid.UUID        `gorm:"type:varchar(36);primaryKey;" json:"id"`
-	Name             string           `json:"name"`
-	IDNo             string           `gorm:"unique;" json:"id_no"`
-	Birth            *time.Time       `json:"birth"`
-	CourtFilingDate  *time.Time       `json:"court_filing_date"`
-	CourtOrderDate   *time.Time       `json:"court_order_date"`
-	CourtReleaseDate *time.Time       `json:"court_release_date"`
-	Status           string           `json:"status"`
-	Levels           string           `json:"levels"`
-	Meta             []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`
+	CreatedBy           *uuid.UUID       `json:"created_by"`
+	UpdatedBy           *uuid.UUID       `json:"updated_by"`
+	ID                  uuid.UUID        `gorm:"type:varchar(36);primaryKey;" json:"id"`
+	FirstName           string           `json:"first_name"`
+	LastName            string           `json:"last_name"`
+	IDNo                string           `gorm:"unique;" json:"id_no"`
+	Birth               *time.Time       `json:"birth"`
+	LoanDate            *time.Time       `json:"loan_date"`
+	CourtCaseFilingDate *time.Time       `json:"court_case_filing_date"`
+	CourtOrderDate      *time.Time       `json:"court_order_date"`
+	CourtReleaseDate    *time.Time       `json:"court_release_date"`
+	Status              string           `json:"status"`
+	Levels              string           `json:"levels"`
+	Meta                []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`
 }
 
 func (cus *Customer) BeforeCreate(tx *gorm.DB) (err error) {
