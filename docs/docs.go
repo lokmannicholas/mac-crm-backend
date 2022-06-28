@@ -1082,7 +1082,13 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": " ",
-                        "name": "name",
+                        "name": "first_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": " ",
+                        "name": "last_name",
                         "in": "query"
                     },
                     {
@@ -1730,7 +1736,7 @@ const docTemplate = `{
                 "birth": {
                     "type": "string"
                 },
-                "court_filing_date": {
+                "court_case_filing_date": {
                     "type": "string"
                 },
                 "court_order_date": {
@@ -1745,13 +1751,22 @@ const docTemplate = `{
                 "created_by": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
                 "id_no": {
                     "type": "string"
                 },
+                "last_name": {
+                    "type": "string"
+                },
                 "levels": {
+                    "type": "string"
+                },
+                "loan_date": {
                     "type": "string"
                 },
                 "meta": {
@@ -1759,9 +1774,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/entities.Meta"
                     }
-                },
-                "name": {
-                    "type": "string"
                 },
                 "status": {
                     "type": "string",
@@ -1988,7 +2000,7 @@ const docTemplate = `{
                 "birth": {
                     "type": "string"
                 },
-                "court_filing_date": {
+                "court_case_filing_date": {
                     "type": "string"
                 },
                 "court_order_date": {
@@ -1997,21 +2009,27 @@ const docTemplate = `{
                 "court_release_date": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
                 "id_no": {
+                    "type": "string"
+                },
+                "last_name": {
                     "type": "string"
                 },
                 "levels": {
                     "type": "string",
                     "example": "|1|2|"
                 },
+                "loan_date": {
+                    "type": "string"
+                },
                 "meta": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
                     }
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },
@@ -2021,7 +2039,7 @@ const docTemplate = `{
                 "birth": {
                     "type": "string"
                 },
-                "court_filing_date": {
+                "court_case_filing_date": {
                     "type": "string"
                 },
                 "court_order_date": {
@@ -2030,21 +2048,27 @@ const docTemplate = `{
                 "court_release_date": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
                 "id_no": {
+                    "type": "string"
+                },
+                "last_name": {
                     "type": "string"
                 },
                 "levels": {
                     "type": "string",
                     "example": "|1|2|"
                 },
+                "loan_date": {
+                    "type": "string"
+                },
                 "meta": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
                     }
-                },
-                "name": {
-                    "type": "string"
                 },
                 "status": {
                     "type": "string"

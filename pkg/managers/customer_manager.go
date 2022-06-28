@@ -42,7 +42,8 @@ type CustomerUpdateParam struct {
 }
 
 type CustomerQueryParam struct {
-	Name              *string `form:"name" json:"name"`
+	FirstName         *string `form:"first_name" json:"first_name"`
+	LastName          *string `form:"last_name" json:"last_name"`
 	IDNo              *string `form:"id_no" json:"id_no"`
 	CourtOrderDate    *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
 	CourtReleaseDate  *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
@@ -210,9 +211,13 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			keyword := "%" + *param.IDNo + "%"
 			tx = tx.Where("id_no LIKE ?", keyword)
 		}
-		if param.Name != nil {
-			keyword := "%" + *param.Name + "%"
-			tx = tx.Where("name LIKE ?", keyword)
+		if param.FirstName != nil {
+			keyword := "%" + *param.FirstName + "%"
+			tx = tx.Where("first_name LIKE ?", keyword)
+		}
+		if param.LastName != nil {
+			keyword := "%" + *param.LastName + "%"
+			tx = tx.Where("last_name LIKE ?", keyword)
 		}
 		if param.CourtOrderDate != nil {
 			dateSplit := strings.Split(*param.CourtOrderDate, "#")

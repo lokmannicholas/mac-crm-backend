@@ -73,7 +73,7 @@ definitions:
         type: integer
       birth:
         type: string
-      court_filing_date:
+      court_case_filing_date:
         type: string
       court_order_date:
         type: string
@@ -83,18 +83,22 @@ definitions:
         type: string
       created_by:
         type: string
+      first_name:
+        type: string
       id:
         type: string
       id_no:
         type: string
+      last_name:
+        type: string
       levels:
+        type: string
+      loan_date:
         type: string
       meta:
         items:
           $ref: '#/definitions/entities.Meta'
         type: array
-      name:
-        type: string
       status:
         default: Active
         enum:
@@ -246,45 +250,53 @@ definitions:
     properties:
       birth:
         type: string
-      court_filing_date:
+      court_case_filing_date:
         type: string
       court_order_date:
         type: string
       court_release_date:
         type: string
+      first_name:
+        type: string
       id_no:
+        type: string
+      last_name:
         type: string
       levels:
         example: '|1|2|'
+        type: string
+      loan_date:
         type: string
       meta:
         additionalProperties:
           type: string
         type: object
-      name:
-        type: string
     type: object
   managers.CustomerUpdateParam:
     properties:
       birth:
         type: string
-      court_filing_date:
+      court_case_filing_date:
         type: string
       court_order_date:
         type: string
       court_release_date:
         type: string
+      first_name:
+        type: string
       id_no:
+        type: string
+      last_name:
         type: string
       levels:
         example: '|1|2|'
+        type: string
+      loan_date:
         type: string
       meta:
         additionalProperties:
           type: string
         type: object
-      name:
-        type: string
       status:
         type: string
     type: object
@@ -1175,7 +1187,11 @@ paths:
         type: string
       - description: ' '
         in: query
-        name: name
+        name: first_name
+        type: string
+      - description: ' '
+        in: query
+        name: last_name
         type: string
       - description: ' '
         in: query
