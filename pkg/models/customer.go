@@ -17,11 +17,11 @@ type Customer struct {
 	FirstName           string           `json:"first_name"`
 	LastName            string           `json:"last_name"`
 	IDNo                string           `gorm:"unique;" json:"id_no"`
-	Birth               *time.Time       `json:"birth"`
-	LoanDate            *time.Time       `json:"loan_date"`
-	CourtCaseFilingDate *time.Time       `json:"court_case_filing_date"`
-	CourtOrderDate      *time.Time       `json:"court_order_date"`
-	CourtReleaseDate    *time.Time       `json:"court_release_date"`
+	Birth               *time.Time       `gorm:"type:DATETIME" json:"birth"`
+	LoanDate            *time.Time       `gorm:"type:DATETIME" json:"loan_date"`
+	CourtCaseFilingDate *time.Time       `gorm:"type:DATETIME" json:"court_case_filing_date"`
+	CourtOrderDate      *time.Time       `gorm:"type:DATETIME" json:"court_order_date"`
+	CourtReleaseDate    *time.Time       `gorm:"type:DATETIME" json:"court_release_date"`
 	Status              string           `json:"status"`
 	Levels              string           `json:"levels"`
 	Meta                []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`
