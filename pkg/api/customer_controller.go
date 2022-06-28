@@ -33,8 +33,8 @@ func NewCustomerController() ICustomerController {
 // @Param first_name query string false " "
 // @Param last_name query string false " "
 // @Param id_no query string false " "
-// @Param court_order_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
-// @Param court_release_date query string false " " example(2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z)
+// @Param court_order_date query string false " " example(fromTimestampMs-toTimestampMs)
+// @Param court_release_date query string false " " example(fromTimestampMs-toTimestampMs)
 // @Param email query string false " "
 // @Param phone1 query string false " "
 // @Param phone2 query string false " "

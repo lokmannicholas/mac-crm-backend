@@ -4,14 +4,12 @@ import (
 	"time"
 )
 
-func TimeToInt64(t *time.Time) *int64 {
-	if t == nil {
+func timeToMilli(target *time.Time) *int64 {
+	if target == nil {
 		return nil
 	}
-	var i *int64
-	timeStamp := t.Unix()
-	i = &timeStamp
-	return i
+	timeStamp := target.UnixMilli()
+	return &timeStamp
 }
 
 type Entity interface{}

@@ -11,19 +11,19 @@ import (
 )
 
 type Customer struct {
-	CreatedAt           time.Time  `json:"created_at"`
-	UpdatedAt           time.Time  `json:"updated_at"`
+	CreatedAt           int64      `json:"created_at"`
+	UpdatedAt           int64      `json:"updated_at"`
 	CreatedBy           *uuid.UUID `json:"created_by"`
 	UpdatedBy           *uuid.UUID `json:"updated_by"`
 	ID                  string     `json:"id"`
 	FirstName           string     `json:"first_name"`
 	LastName            string     `json:"last_name"`
 	IDNo                string     `json:"id_no"`
-	Birth               *time.Time `json:"birth"`
-	LoanDate            *time.Time `json:"loan_date"`
-	CourtCaseFilingDate *time.Time `json:"court_case_filing_date"`
-	CourtOrderDate      *time.Time `json:"court_order_date"`
-	CourtReleaseDate    *time.Time `json:"court_release_date"`
+	Birth               *int64     `json:"birth"`
+	LoanDate            *int64     `json:"loan_date"`
+	CourtCaseFilingDate *int64     `json:"court_case_filing_date"`
+	CourtOrderDate      *int64     `json:"court_order_date"`
+	CourtReleaseDate    *int64     `json:"court_release_date"`
 	Age                 *int       `json:"age"`
 	Status              string     `json:"status" enums:"Active,Disable" default:"Active"`
 	Levels              string     `json:"levels"`
@@ -54,19 +54,19 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		metaArray[i] = ent
 	}
 	return &Customer{
-		CreatedAt:           customer.CreatedAt,
-		UpdatedAt:           customer.UpdatedAt,
+		CreatedAt:           customer.CreatedAt.UnixMilli(),
+		UpdatedAt:           customer.UpdatedAt.UnixMilli(),
 		CreatedBy:           customer.CreatedBy,
 		UpdatedBy:           customer.UpdatedBy,
 		ID:                  customer.ID.String(),
 		FirstName:           customer.FirstName,
 		LastName:            customer.LastName,
 		IDNo:                customer.IDNo,
-		Birth:               customer.Birth,
-		CourtCaseFilingDate: customer.CourtCaseFilingDate,
-		CourtOrderDate:      customer.CourtOrderDate,
-		CourtReleaseDate:    customer.CourtReleaseDate,
-		LoanDate:            customer.LoanDate,
+		Birth:               timeToMilli(customer.Birth),
+		CourtCaseFilingDate: timeToMilli(customer.CourtCaseFilingDate),
+		CourtOrderDate:      timeToMilli(customer.CourtOrderDate),
+		CourtReleaseDate:    timeToMilli(customer.CourtReleaseDate),
+		LoanDate:            timeToMilli(customer.LoanDate),
 		Age:                 age,
 		Status:              customer.Status,
 		Levels:              customer.Levels,

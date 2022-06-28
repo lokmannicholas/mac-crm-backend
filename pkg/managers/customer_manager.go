@@ -3,6 +3,7 @@ package managers
 import (
 	"context"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
@@ -45,8 +46,8 @@ type CustomerQueryParam struct {
 	FirstName         *string `form:"first_name" json:"first_name"`
 	LastName          *string `form:"last_name" json:"last_name"`
 	IDNo              *string `form:"id_no" json:"id_no"`
-	CourtOrderDate    *string `form:"court_order_date" json:"court_order_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
-	CourtReleaseDate  *string `form:"court_release_date" json:"court_release_date" example:"2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z"`
+	CourtOrderDate    *string `form:"court_order_date" json:"court_order_date"`
+	CourtReleaseDate  *string `form:"court_release_date" json:"court_release_date"`
 	Email             *string `form:"email" json:"email"`
 	Phone1            *string `form:"phone1" json:"phone1"`
 	Phone2            *string `form:"phone2" json:"phone2"`
@@ -220,12 +221,20 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			tx = tx.Where("last_name LIKE ?", keyword)
 		}
 		if param.CourtOrderDate != nil {
-			dateSplit := strings.Split(*param.CourtOrderDate, "#")
-			tx = tx.Where("court_order_date BETWEEN ? AND ?", dateSplit[0], dateSplit[1])
+			dateSplit := strings.Split(*param.CourtOrderDate, "-")
+			fromStr, _ := strconv.ParseInt(dateSplit[0], 10, 64)
+			toStr, _ := strconv.ParseInt(dateSplit[1], 10, 64)
+			fromTime := time.UnixMilli(fromStr)
+			toTime := time.UnixMilli(toStr)
+			tx = tx.Where("court_order_date BETWEEN ? AND ?", fromTime, toTime)
 		}
 		if param.CourtReleaseDate != nil {
-			dateSplit := strings.Split(*param.CourtReleaseDate, "#")
-			tx = tx.Where("court_release_date BETWEEN ? AND ?", dateSplit[0], dateSplit[1])
+			dateSplit := strings.Split(*param.CourtReleaseDate, "-")
+			fromStr, _ := strconv.ParseInt(dateSplit[0], 10, 64)
+			toStr, _ := strconv.ParseInt(dateSplit[1], 10, 64)
+			fromTime := time.UnixMilli(fromStr)
+			toTime := time.UnixMilli(toStr)
+			tx = tx.Where("court_release_date BETWEEN ? AND ?", fromTime, toTime)
 		}
 
 		// check field permission

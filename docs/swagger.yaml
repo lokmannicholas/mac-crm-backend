@@ -72,15 +72,15 @@ definitions:
       age:
         type: integer
       birth:
-        type: string
+        type: integer
       court_case_filing_date:
-        type: string
+        type: integer
       court_order_date:
-        type: string
+        type: integer
       court_release_date:
-        type: string
+        type: integer
       created_at:
-        type: string
+        type: integer
       created_by:
         type: string
       first_name:
@@ -94,7 +94,7 @@ definitions:
       levels:
         type: string
       loan_date:
-        type: string
+        type: integer
       meta:
         items:
           $ref: '#/definitions/entities.Meta'
@@ -106,7 +106,7 @@ definitions:
         - Disable
         type: string
       updated_at:
-        type: string
+        type: integer
       updated_by:
         type: string
     type: object
@@ -1198,12 +1198,12 @@ paths:
         name: id_no
         type: string
       - description: ' '
-        example: 2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z
+        example: fromTimestampMs-toTimestampMs
         in: query
         name: court_order_date
         type: string
       - description: ' '
-        example: 2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z
+        example: fromTimestampMs-toTimestampMs
         in: query
         name: court_release_date
         type: string

@@ -1099,14 +1099,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "example": "2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z",
+                        "example": "fromTimestampMs-toTimestampMs",
                         "description": " ",
                         "name": "court_order_date",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "example": "2022-05-14T00:00:00.000Z#2022-07-14T00:00:00.000Z",
+                        "example": "fromTimestampMs-toTimestampMs",
                         "description": " ",
                         "name": "court_release_date",
                         "in": "query"
@@ -1734,19 +1734,19 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "birth": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "court_case_filing_date": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "court_order_date": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "court_release_date": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "created_at": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "created_by": {
                     "type": "string"
@@ -1767,7 +1767,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "loan_date": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "meta": {
                     "type": "array",
@@ -1784,7 +1784,7 @@ const docTemplate = `{
                     ]
                 },
                 "updated_at": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "updated_by": {
                     "type": "string"
