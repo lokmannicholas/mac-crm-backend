@@ -1,6 +1,8 @@
 package util
 
 import (
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/lokmannicholas/goplus/timeplus"
@@ -8,6 +10,21 @@ import (
 )
 
 var loc = location.HongKong()
+
+func StrToTimeRange(target string) (time.Time, time.Time, error) {
+	dateSplit := strings.Split(target, "-")
+	fromStr, err := strconv.ParseInt(dateSplit[0], 10, 64)
+	if err != nil {
+		return time.Time{}, time.Time{}, err
+	}
+	toStr, err2 := strconv.ParseInt(dateSplit[1], 10, 64)
+	if err2 != nil {
+		return time.Time{}, time.Time{}, err
+	}
+	fromTime := time.Unix(0, fromStr*int64(time.Millisecond))
+	toTime := time.Unix(0, toStr*int64(time.Millisecond))
+	return fromTime, toTime, nil
+}
 
 func TimestampToTime(ts int64) *time.Time {
 	if ts == 0 {

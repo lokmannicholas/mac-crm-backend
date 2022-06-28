@@ -8,7 +8,7 @@ func timeToMilli(target *time.Time) *int64 {
 	if target == nil {
 		return nil
 	}
-	timeStamp := target.UnixMilli()
+	timeStamp := target.UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
 	return &timeStamp
 }
 

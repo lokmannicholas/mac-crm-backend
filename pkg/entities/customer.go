@@ -54,8 +54,8 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		metaArray[i] = ent
 	}
 	return &Customer{
-		CreatedAt:           customer.CreatedAt.UnixMilli(),
-		UpdatedAt:           customer.UpdatedAt.UnixMilli(),
+		CreatedAt:           customer.CreatedAt.Unix() * 1000,
+		UpdatedAt:           customer.UpdatedAt.Unix() * 1000,
 		CreatedBy:           customer.CreatedBy,
 		UpdatedBy:           customer.UpdatedBy,
 		ID:                  customer.ID.String(),

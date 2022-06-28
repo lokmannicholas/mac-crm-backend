@@ -3,7 +3,6 @@ package managers
 import (
 	"context"
 	"reflect"
-	"strconv"
 	"strings"
 	"time"
 
@@ -221,19 +220,17 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			tx = tx.Where("last_name LIKE ?", keyword)
 		}
 		if param.CourtOrderDate != nil {
-			dateSplit := strings.Split(*param.CourtOrderDate, "-")
-			fromStr, _ := strconv.ParseInt(dateSplit[0], 10, 64)
-			toStr, _ := strconv.ParseInt(dateSplit[1], 10, 64)
-			fromTime := time.UnixMilli(fromStr)
-			toTime := time.UnixMilli(toStr)
+			fromTime, toTime, err := util.StrToTimeRange(*param.CourtOrderDate)
+			if err != nil {
+				return err
+			}
 			tx = tx.Where("court_order_date BETWEEN ? AND ?", fromTime, toTime)
 		}
 		if param.CourtReleaseDate != nil {
-			dateSplit := strings.Split(*param.CourtReleaseDate, "-")
-			fromStr, _ := strconv.ParseInt(dateSplit[0], 10, 64)
-			toStr, _ := strconv.ParseInt(dateSplit[1], 10, 64)
-			fromTime := time.UnixMilli(fromStr)
-			toTime := time.UnixMilli(toStr)
+			fromTime, toTime, err := util.StrToTimeRange(*param.CourtReleaseDate)
+			if err != nil {
+				return err
+			}
 			tx = tx.Where("court_release_date BETWEEN ? AND ?", fromTime, toTime)
 		}
 
