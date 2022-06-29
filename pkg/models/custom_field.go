@@ -9,6 +9,7 @@ import (
 
 type CustomField struct {
 	ID           uuid.UUID `gorm:"type:varchar(36);primaryKey;"`
+	Section      string    `gorm:"type:varchar(80);"`
 	CustomObject string
 	UniqueKey    string         `gorm:"type:varchar(18);unique;"`
 	FieldName    *MultiLangText `gorm:"embedded;embeddedPrefix:field_name_"`

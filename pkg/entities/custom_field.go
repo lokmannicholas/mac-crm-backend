@@ -6,6 +6,7 @@ import (
 
 type CustomField struct {
 	ID           string         `json:"id"`
+	Section      string         `json:"section"`
 	UniqueKey    string         `json:"unique_key"`
 	CustomObject string         `json:"custom_object"`
 	FieldName    *MultiLangText `json:"field_name"`
@@ -23,6 +24,7 @@ func NewCustomFieldEntity(cus *models.CustomField) *CustomField {
 
 	return &CustomField{
 		ID:           cus.ID.String(),
+		Section:      cus.Section,
 		CustomObject: cus.CustomObject,
 		FieldName:    NewMultiLangTextEntity(cus.FieldName),
 		FieldType:    cus.FieldType,

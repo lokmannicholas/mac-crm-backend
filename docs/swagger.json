@@ -1699,6 +1699,9 @@
                 "remarks": {
                     "type": "string"
                 },
+                "section": {
+                    "type": "string"
+                },
                 "sorting": {
                     "type": "integer"
                 },
@@ -1937,6 +1940,9 @@
                 "remarks": {
                     "type": "string"
                 },
+                "section": {
+                    "type": "string"
+                },
                 "sorting": {
                     "type": "integer"
                 },
@@ -1965,6 +1971,9 @@
                     ]
                 },
                 "remarks": {
+                    "type": "string"
+                },
+                "section": {
                     "type": "string"
                 },
                 "sorting": {

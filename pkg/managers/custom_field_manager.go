@@ -13,6 +13,7 @@ import (
 
 type CustomFieldCreateParam struct {
 	CustomObject string              `json:"custom_object,omitempty"`
+	Section      string              `json:"section,omitempty"`
 	UniqueKey    string              `json:"unique_key,omitempty"`
 	FieldName    *MultiLangText      `json:"field_name,omitempty"`
 	FieldType    string              `json:"field_type,omitempty" enums:"string,multiple"`
@@ -22,6 +23,7 @@ type CustomFieldCreateParam struct {
 }
 type CustomFieldUpdateParam struct {
 	FieldName *MultiLangText       `json:"field_name,omitempty"`
+	Section   *string              `json:"section,omitempty"`
 	UniqueKey *string              `json:"unique_key,omitempty"`
 	FieldType *string              `json:"field_type,omitempty" enums:"string,multiple"`
 	Remarks   *string              `json:"remarks,omitempty"`
@@ -57,6 +59,7 @@ func (m *CustomFieldManager) Create(ctx context.Context, param *CustomFieldCreat
 
 	cus := &models.CustomField{
 		ID:           uuid.New(),
+		Section:      param.Section,
 		CustomObject: param.CustomObject,
 		FieldType:    param.FieldType,
 		Remarks:      param.Remarks,
@@ -111,6 +114,9 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 				Ch: param.FieldName.Ch,
 			}
 		}
+		if param.Section != nil {
+			cus.Section = *param.Section
+		}
 		if param.Sorting != nil {
 			cus.Sorting = *param.Sorting
 		}
@@ -155,8 +161,10 @@ func (m *CustomFieldManager) Update(ctx context.Context, id string, param *Custo
 		return nil
 	})
 
-	cus, err = GetCustomField(ctx, id)
-	return cus, err
+	if err != nil {
+		return nil, err
+	}
+	return GetCustomField(ctx, id)
 }
 
 func (m *CustomFieldManager) GetCustomFields(ctx context.Context, param *CustomFieldQueryParam) ([]*models.CustomField, *util.Pagination, error) {
