@@ -24,8 +24,6 @@ func main() {
 	service.SysLog.Infoln(_const.INIT_LOGO)
 	collections.GetCollection().Migrate(func(tx *gorm.DB) error {
 		collections.Migration(tx)
-		collections.InitalSystemAcc(tx)
-		collections.InitalAccount(tx)
 		return nil
 	})
 

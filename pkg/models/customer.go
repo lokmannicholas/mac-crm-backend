@@ -15,7 +15,6 @@ type Customer struct {
 	CreatedBy           *uuid.UUID       `json:"created_by"`
 	UpdatedBy           *uuid.UUID       `json:"updated_by"`
 	ID                  uuid.UUID        `gorm:"type:varchar(36);primaryKey;" json:"id"`
-	Code                int64            `gorm:"not null;autoIncrement;unique;" json:"code"`
 	FirstName           string           `json:"first_name"`
 	LastName            string           `json:"last_name"`
 	IDNo                string           `gorm:"unique;" json:"id_no"`

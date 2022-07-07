@@ -17,7 +17,6 @@ type Customer struct {
 	CreatedBy           *uuid.UUID `json:"created_by"`
 	UpdatedBy           *uuid.UUID `json:"updated_by"`
 	ID                  string     `json:"id"`
-	Code                int64      `json:"code"`
 	FirstName           string     `json:"first_name"`
 	LastName            string     `json:"last_name"`
 	IDNo                string     `json:"id_no"`
@@ -62,7 +61,6 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		CreatedBy:           customer.CreatedBy,
 		UpdatedBy:           customer.UpdatedBy,
 		ID:                  customer.ID.String(),
-		Code:                customer.Code,
 		FirstName:           customer.FirstName,
 		LastName:            customer.LastName,
 		IDNo:                customer.IDNo,
