@@ -40,6 +40,9 @@ func (date *Date) UnmarshalJSON(bytes []byte) error {
 		fmt.Printf("error decoding timestamp: %s\n", err)
 		return err
 	}
+	if raw > 9999999999 {
+		raw = raw / 1000
+	}
 	date.Time = time.Unix(raw, 0)
 	return nil
 }
