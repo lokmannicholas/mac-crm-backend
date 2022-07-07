@@ -24,14 +24,11 @@ type Customer struct {
 	CourtOrderDate      *time.Time       `gorm:"type:DATETIME" json:"court_order_date"`
 	CourtReleaseDate    *time.Time       `gorm:"type:DATETIME" json:"court_release_date"`
 	Status              string           `json:"status"`
-	Levels              string           `gorm:"type:json" json:"levels"`
+	Levels              *string          `gorm:"type:json" json:"levels"`
 	Meta                []*CustomersMeta `gorm:"foreignKey:CustomerID;references:ID" json:"meta"`
 }
 
 func (cus *Customer) BeforeCreate(tx *gorm.DB) error {
-	if len(cus.Levels) == 0 {
-		cus.Levels = "[]"
-	}
 	var count int64
 	err := tx.Model(&Customer{}).Count(&count).Error
 	if err != nil {

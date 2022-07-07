@@ -80,24 +80,38 @@ func GetCustomerManager() ICustomerManager {
 }
 
 func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error) {
-	lvs, err := json.Marshal(param.Levels)
-	if err != nil {
-		return nil, err
-	}
 	cus := &models.Customer{
-		CreatedBy:           &accountID,
-		ID:                  uuid.New(),
-		FirstName:           param.FirstName,
-		LastName:            param.LastName,
-		IDNo:                param.IDNo,
-		Birth:               &param.Birth.Time,
-		LoanDate:            &param.LoanDate.Time,
-		CourtCaseFilingDate: &param.CourtCaseFilingDate.Time,
-		CourtOrderDate:      &param.CourtOrderDate.Time,
-		CourtReleaseDate:    &param.CourtReleaseDate.Time,
-		Levels:              string(lvs),
+		CreatedBy: &accountID,
+		ID:        uuid.New(),
+		FirstName: param.FirstName,
+		LastName:  param.LastName,
+		IDNo:      param.IDNo,
 	}
-	err = util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+	if cus.Birth = nil; param.Birth != nil {
+		cus.Birth = &param.Birth.Time
+	}
+	if cus.LoanDate = nil; param.LoanDate != nil {
+		cus.LoanDate = &param.LoanDate.Time
+	}
+	if cus.CourtCaseFilingDate = nil; param.CourtCaseFilingDate != nil {
+		cus.CourtCaseFilingDate = &param.CourtCaseFilingDate.Time
+	}
+	if cus.CourtOrderDate = nil; param.CourtOrderDate != nil {
+		cus.CourtOrderDate = &param.CourtOrderDate.Time
+	}
+	if cus.CourtReleaseDate = nil; param.CourtReleaseDate != nil {
+		cus.CourtReleaseDate = &param.CourtReleaseDate.Time
+	}
+	if cus.Levels = nil; param.Levels != nil {
+		lvs, err := json.Marshal(param.Levels)
+		if err != nil {
+			return nil, err
+		}
+		levels := string(lvs)
+		cus.Levels = &levels
+	}
+
+	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		// save meta
 		for k, v := range param.Meta {
 			meta := &models.CustomersMeta{
@@ -135,19 +149,30 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 		if param.Status != nil {
 			cus.Status = *param.Status
 		}
-		if param.Levels != nil {
-			lvs, err := json.Marshal(*param.Levels)
+
+		if cus.Birth = nil; param.Birth != nil {
+			cus.Birth = &param.Birth.Time
+		}
+		if cus.LoanDate = nil; param.LoanDate != nil {
+			cus.LoanDate = &param.LoanDate.Time
+		}
+		if cus.CourtCaseFilingDate = nil; param.CourtCaseFilingDate != nil {
+			cus.CourtCaseFilingDate = &param.CourtCaseFilingDate.Time
+		}
+		if cus.CourtOrderDate = nil; param.CourtOrderDate != nil {
+			cus.CourtOrderDate = &param.CourtOrderDate.Time
+		}
+		if cus.CourtReleaseDate = nil; param.CourtReleaseDate != nil {
+			cus.CourtReleaseDate = &param.CourtReleaseDate.Time
+		}
+		if cus.Levels = nil; param.Levels != nil {
+			lvs, err := json.Marshal(param.Levels)
 			if err != nil {
 				return err
 			}
-			cus.Levels = string(lvs)
+			levels := string(lvs)
+			cus.Levels = &levels
 		}
-
-		cus.Birth = &param.Birth.Time
-		cus.LoanDate = &param.LoanDate.Time
-		cus.CourtCaseFilingDate = &param.CourtCaseFilingDate.Time
-		cus.CourtOrderDate = &param.CourtOrderDate.Time
-		cus.CourtReleaseDate = &param.CourtReleaseDate.Time
 
 		err = tx.Save(cus).Error
 		if err != nil {

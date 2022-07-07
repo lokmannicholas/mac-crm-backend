@@ -27,7 +27,7 @@ type Customer struct {
 	CourtReleaseDate    *int64     `json:"court_release_date"`
 	Age                 *int       `json:"age"`
 	Status              string     `json:"status" enums:"Active,Disable" default:"Active"`
-	Levels              string     `json:"levels"`
+	Levels              *string    `json:"levels"`
 	Meta                []Meta     `json:"meta"`
 }
 
