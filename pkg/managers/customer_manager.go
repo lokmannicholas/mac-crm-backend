@@ -227,6 +227,10 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 			keyword := "%" + *param.LastName + "%"
 			tx = tx.Where("last_name LIKE ?", keyword)
 		}
+		if param.Department != nil {
+			keyword := "%" + *param.Department + "%"
+			tx = tx.Where("levels LIKE ?", keyword)
+		}
 		if param.CourtOrderDate != nil {
 			fromTime, toTime, err := util.StrToTimeRange(*param.CourtOrderDate)
 			if err != nil {
@@ -382,11 +386,6 @@ func GetCustomerIdsByMetas(ctx context.Context, param *CustomerQueryParam) ([]uu
 			paramCount += 1
 			keyword := "%" + *param.CourtCaseInvolved + "%"
 			tx = tx.Or("`key` = 'court_case_involved' AND val LIKE ?", keyword)
-		}
-		if param.Department != nil {
-			paramCount += 1
-			keyword := "%" + *param.Department + "%"
-			tx = tx.Or("`key` = 'department' AND val LIKE ?", keyword)
 		}
 
 		err := tx.Select("customer_id").Group("customer_id").Having("COUNT(*) >= ?", paramCount).Find(&customersMetas).Error
