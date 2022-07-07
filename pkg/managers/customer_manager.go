@@ -2,9 +2,10 @@ package managers
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"dmglab.com/mac-crm/pkg/config"
 	"dmglab.com/mac-crm/pkg/models"
@@ -19,25 +20,25 @@ type CustomerCreateParam struct {
 	FirstName           string            `json:"first_name"`
 	LastName            string            `json:"last_name"`
 	IDNo                string            `json:"id_no"`
-	Birth               *time.Time        `json:"birth"`
-	LoanDate            *time.Time        `json:"loan_date"`
-	CourtCaseFilingDate *time.Time        `json:"court_case_filing_date"`
-	CourtOrderDate      *time.Time        `json:"court_order_date"`
-	CourtReleaseDate    *time.Time        `json:"court_release_date"`
-	Levels              string            `json:"levels" example:"|1|2|"`
+	Birth               *models.Date      `json:"birth"`
+	LoanDate            *models.Date      `json:"loan_date"`
+	CourtCaseFilingDate *models.Date      `json:"court_case_filing_date"`
+	CourtOrderDate      *models.Date      `json:"court_order_date"`
+	CourtReleaseDate    *models.Date      `json:"court_release_date"`
+	Levels              []string          `json:"levels" example:"|1|2|"`
 	Meta                map[string]string `json:"meta"`
 }
 type CustomerUpdateParam struct {
 	FirstName           *string           `json:"first_name"`
 	LastName            *string           `json:"last_name"`
 	IDNo                *string           `json:"id_no"`
-	Birth               *time.Time        `json:"birth"`
-	LoanDate            *time.Time        `json:"loan_date"`
-	CourtCaseFilingDate *time.Time        `json:"court_case_filing_date"`
-	CourtOrderDate      *time.Time        `json:"court_order_date"`
-	CourtReleaseDate    *time.Time        `json:"court_release_date"`
+	Birth               *models.Date      `json:"birth"`
+	LoanDate            *models.Date      `json:"loan_date"`
+	CourtCaseFilingDate *models.Date      `json:"court_case_filing_date"`
+	CourtOrderDate      *models.Date      `json:"court_order_date"`
+	CourtReleaseDate    *models.Date      `json:"court_release_date"`
 	Status              *string           `json:"status"`
-	Levels              *string           `json:"levels" example:"|1|2|"`
+	Levels              *[]string         `json:"levels" example:"|1|2|"`
 	Meta                map[string]string `json:"meta"`
 }
 
@@ -79,21 +80,24 @@ func GetCustomerManager() ICustomerManager {
 }
 
 func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param *CustomerCreateParam) (*models.Customer, error) {
-
+	lvs, err := json.Marshal(param.Levels)
+	if err != nil {
+		return nil, err
+	}
 	cus := &models.Customer{
 		CreatedBy:           &accountID,
 		ID:                  uuid.New(),
 		FirstName:           param.FirstName,
 		LastName:            param.LastName,
 		IDNo:                param.IDNo,
-		Birth:               param.Birth,
-		LoanDate:            param.LoanDate,
-		CourtCaseFilingDate: param.CourtCaseFilingDate,
-		CourtOrderDate:      param.CourtOrderDate,
-		CourtReleaseDate:    param.CourtReleaseDate,
-		Levels:              param.Levels,
+		Birth:               &param.Birth.Time,
+		LoanDate:            &param.LoanDate.Time,
+		CourtCaseFilingDate: &param.CourtCaseFilingDate.Time,
+		CourtOrderDate:      &param.CourtOrderDate.Time,
+		CourtReleaseDate:    &param.CourtReleaseDate.Time,
+		Levels:              string(lvs),
 	}
-	err := util.GetCtxTx(ctx, func(tx *gorm.DB) error {
+	err = util.GetCtxTx(ctx, func(tx *gorm.DB) error {
 		// save meta
 		for k, v := range param.Meta {
 			meta := &models.CustomersMeta{
@@ -132,14 +136,18 @@ func (m *CustomerManager) Update(ctx context.Context, accountID uuid.UUID, custo
 			cus.Status = *param.Status
 		}
 		if param.Levels != nil {
-			cus.Levels = *param.Levels
+			lvs, err := json.Marshal(*param.Levels)
+			if err != nil {
+				return err
+			}
+			cus.Levels = string(lvs)
 		}
 
-		cus.Birth = param.Birth
-		cus.LoanDate = param.LoanDate
-		cus.CourtCaseFilingDate = param.CourtCaseFilingDate
-		cus.CourtOrderDate = param.CourtOrderDate
-		cus.CourtReleaseDate = param.CourtReleaseDate
+		cus.Birth = &param.Birth.Time
+		cus.LoanDate = &param.LoanDate.Time
+		cus.CourtCaseFilingDate = &param.CourtCaseFilingDate.Time
+		cus.CourtOrderDate = &param.CourtOrderDate.Time
+		cus.CourtReleaseDate = &param.CourtReleaseDate.Time
 
 		err = tx.Save(cus).Error
 		if err != nil {
@@ -253,13 +261,27 @@ func (m *CustomerManager) GetCustomers(ctx context.Context, param *CustomerQuery
 		}
 
 		// check level permission
-		userLevels := strings.Split(levels, ";")
-		if levels != "*" {
-			query := "levels = ''"
+		if len(levels) > 0 {
+			userLevels := strings.Split(levels, ";")
+			query := []string{}
 			for _, v := range userLevels {
-				query = query + " OR levels LIKE '%|" + v + "|%'"
+				query = append(query, fmt.Sprintf("JSON_CONTAINS(levels,'\"%s\"')", v))
 			}
-			tx = tx.Where(query)
+			if len(query) > 0 {
+				tx = tx.Where("levels is null OR " + strings.Join(query, " OR "))
+			} else {
+				tx = tx.Where("levels is null")
+			}
+		}
+		if param.Department != nil {
+			userLevels := strings.Split(*param.Department, ",")
+			query := []string{}
+			for _, v := range userLevels {
+				query = append(query, fmt.Sprintf("JSON_CONTAINS(levels,'\"%s\"')", v))
+			}
+			if len(query) > 0 {
+				tx = tx.Where(strings.Join(query, " OR "))
+			}
 		}
 
 		err = tx.Distinct().Find(&cuss).Error
@@ -291,18 +313,22 @@ func (m *CustomerManager) GetCustomer(ctx context.Context, customerID string, fi
 			}
 			tx = tx.Preload("Meta", "`key` IN ?", metaFields).Select(customerFields)
 		}
-
+		tx = tx.Where("id = ?", customerID)
 		// check level permission
-		userLevels := strings.Split(levels, ";")
-		if levels != "*" {
-			query := "levels = ''"
+		if len(levels) > 0 {
+			userLevels := strings.Split(levels, ";")
+			query := []string{}
 			for _, v := range userLevels {
-				query = query + " OR levels LIKE '%|" + v + "|%'"
+				query = append(query, fmt.Sprintf("JSON_CONTAINS(levels,'\"%s\"')", v))
 			}
-			tx = tx.Where(query)
-		}
+			if len(query) > 0 {
+				tx = tx.Where("levels is null OR " + strings.Join(query, " OR "))
+			} else {
+				tx = tx.Where("levels is null")
+			}
 
-		return tx.Where("id = ?", customerID).First(cus).Error
+		}
+		return tx.First(cus).Error
 	})
 
 	return cus, err

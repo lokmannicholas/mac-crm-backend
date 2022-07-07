@@ -11,6 +11,7 @@ import (
 )
 
 type Customer struct {
+	Code                int64      `json:"code"`
 	CreatedAt           int64      `json:"created_at"`
 	UpdatedAt           int64      `json:"updated_at"`
 	CreatedBy           *uuid.UUID `json:"created_by"`
@@ -54,6 +55,7 @@ func NewCustomerEntity(customer *models.Customer, ctx context.Context) *Customer
 		metaArray[i] = ent
 	}
 	return &Customer{
+		Code:                customer.Code,
 		CreatedAt:           customer.CreatedAt.Unix() * 1000,
 		UpdatedAt:           customer.UpdatedAt.Unix() * 1000,
 		CreatedBy:           customer.CreatedBy,
