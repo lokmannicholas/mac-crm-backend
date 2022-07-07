@@ -105,7 +105,13 @@ func (m *CustomerManager) Create(ctx context.Context, accountID uuid.UUID, param
 			}
 			cus.Meta = append(cus.Meta, meta)
 		}
-		return tx.Create(cus).Error
+		err := tx.Omit("code").Create(cus).Error
+		if err != nil {
+			return err
+		}
+		customerID := cus.ID
+		cus = &models.Customer{}
+		return tx.Where("id = ?", customerID).First(cus).Error
 	})
 	if err != nil {
 		return nil, err
