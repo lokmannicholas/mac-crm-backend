@@ -36,7 +36,7 @@ func GetFirebaseService(ctx context.Context) *FirebaseApp {
 	}
 	var app *f.App
 	// ctx := context.Background()
-	configFile := filepath.Join("asset", " firebase.json")
+	configFile := filepath.Join("asset", "firebase.json")
 
 	if _, err := os.Stat(configFile); errors.Is(err, os.ErrNotExist) {
 		app, err = f.NewApp(ctx, nil)

@@ -36,9 +36,14 @@ func (cus *Customer) BeforeCreate(tx *gorm.DB) error {
 	}
 	cus.Code = count
 	cus.SetActive()
+	cus.CreatedAt = time.Now()
+	cus.UpdatedAt = time.Now()
 	return nil
 }
-
+func (cus *Customer) BeforeSave(tx *gorm.DB) (err error) {
+	cus.UpdatedAt = time.Now()
+	return
+}
 func (cus *Customer) AfterCreate(tx *gorm.DB) (err error) {
 	service.GetAuditLogger().InfoLog(tx.Statement.Context, _const.AUDIT_CREATE, cus)
 	return

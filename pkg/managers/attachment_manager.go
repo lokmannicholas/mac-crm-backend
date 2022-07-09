@@ -61,7 +61,6 @@ func (m *AttachmentManager) Upload(ctx context.Context, multipartFile *multipart
 			return nil, err
 		}
 	} else if m.config.FileStorage.Driver == _const.GCP_STORAGE {
-		path = filepath.Join(path, id.String())
 		err = firebase.GetFirebaseService(ctx).UploadFile(path, id.String(), f)
 		if err != nil {
 			return nil, err
@@ -111,7 +110,9 @@ func (m *AttachmentManager) GetAttachment(ctx context.Context, id string) (*mode
 		attachment.Reader = file
 		return attachment, err
 	} else if m.config.FileStorage.Driver == _const.GCP_STORAGE {
-		file, err := firebase.GetFirebaseService(ctx).DownloadFile(attachment.Path)
+
+		path := filepath.Join(attachment.Path, attachment.ID.String())
+		file, err := firebase.GetFirebaseService(ctx).DownloadFile(path)
 		if err != nil {
 			return nil, err
 		}
