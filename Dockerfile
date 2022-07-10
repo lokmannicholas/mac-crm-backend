@@ -13,10 +13,13 @@ RUN CGO_ENABLED=0 GO11MODULE=on  go build -mod=readonly -v -a -o mac .
 
 FROM alpine:latest
 
+ENV MNT_DIR /asset
+
 WORKDIR /
+RUN mkdir -p $MNT_DIR
 COPY --from=build_base /app/mac /
 COPY --from=build_base /usr/local/go/lib/time/zoneinfo.zip /
 ENV TZ=Asia/Hong_Kong
 ENV ZONEINFO=/zoneinfo.zip
-
+COPY /asset $MNT_DIR
 CMD ["/mac"]
