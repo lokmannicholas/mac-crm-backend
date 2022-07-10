@@ -34,7 +34,7 @@ func (cus *Customer) BeforeCreate(tx *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-	cus.Code = count
+	cus.Code = count + 1
 	cus.SetActive()
 	cus.CreatedAt = time.Now()
 	cus.UpdatedAt = time.Now()
