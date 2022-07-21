@@ -442,6 +442,7 @@ func GetCustomerFields(ctx context.Context) []string {
 			fields = append(fields, fieldName)
 		}
 	}
+	fields = append(fields, "created_at", "updated_at")
 	return fields
 }
 
